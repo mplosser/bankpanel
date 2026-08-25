@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bankpanel"
+version = "0.1.0.dev0"
+description = "Time-consistent panels from US bank regulatory reports (FFIEC Call Report; FR Y-9C planned)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Matthew Plosser" }]
+keywords = [
+    "FFIEC", "Call Report", "FR Y-9C", "MDRM", "banking",
+    "bank regulatory data", "panel data", "economics", "finance",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "pandas>=2.0",
+    "pyarrow>=12.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "ruff>=0.5", "hypothesis>=6.90"]
+
+[project.scripts]
+bankpanel = "bankpanel.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/mplosser/bankpanel"
+Documentation = "https://github.com/mplosser/bankpanel/tree/main/docs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bankpanel"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"configs" = "bankpanel/_bundled/configs"
+"reference_data" = "bankpanel/_bundled/reference_data"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "realdata: requires BANKPANEL_RAW_DIR pointing at real quarterly parquets",
+]

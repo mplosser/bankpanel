@@ -1,0 +1,39 @@
+# Schedule RC-C Part I -- Loans and Lease Financing Receivables.
+#
+# Demonstrates the canonical era stitch, and why an era chain must be verified against
+# MEASURED coverage rather than trusted from MDRM start/end dates.
+#
+# Construction and land development lending was reported as one combined item
+# (RCON1415) and was split into two (RCONF158 1-4 family residential construction,
+# RCONF159 other construction and land development) from 2007Q1. Measured coverage:
+#   RCON1415   100% from 1985 through 2010Q4, then absent from 2011Q1.
+#   F158/F159  absent before 2007Q1; 59% during 2007; 100% from 2008Q1.
+# The 2007 partial year is a phase-in, not a data defect: every form-031 filer reports
+# the split from 2007Q1, but only ~59% of form-041 filers do until 2008Q1.
+# Where both are present the split sums to the combined item in 100% of rows.
+#
+# NB MDRM gives RCON1415 an end date of 2007-12-31, but our source carries it through
+# 2010Q4. The disappearance coincides exactly with the upstream provider change from
+# the Chicago Fed extract to the FFIEC CDR bulk files at 2011Q1, so the item's true
+# retirement date and its availability in this source are not the same thing. era_end
+# below records what is MEASURABLE here.
+[META]
+key,value
+panel_name,rc_c_loans
+schedule,RC-C
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCON1415,ln_condev_pre07,RC-C,stock,all,,2010-12-31,,Combined construction and land development; present in source through 2010Q4
+RCONF158,ln_condev_res_1_4,RC-C,stock,all,2007-03-31,,,1-4 family residential construction
+RCONF159,ln_condev_other,RC-C,stock,all,2007-03-31,,,Other construction and all land development
+RCON5367,ln_famres_first,RC-C,stock,all,,,,1-4 family residential first liens
+RCON5368,ln_famres_junior,RC-C,stock,all,,,,1-4 family residential junior liens
+RCFD1766,ln_commercial_industrial,RC-C,stock,all,,,,Commercial and industrial loans
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ln_condev_post07,RC-C,stock,Construction and land development rebuilt from the 2007 split,ln_condev_res_1_4 + ln_condev_other,thousands_usd,
+ln_condev,RC-C,stock,Construction and land development on a consistent basis 1985-present,ln_condev_post07.fillna(ln_condev_pre07),thousands_usd,
+ln_famres_closed,RC-C,stock,Closed-end 1-4 family residential loans,ln_famres_first + ln_famres_junior,thousands_usd,
