@@ -1,0 +1,39 @@
+# Schedule RC-B -- Securities.
+#
+# The balance-sheet configs already carry securities FAIR VALUES in depth. What they do
+# not carry is AMORTIZED COST, and the difference between the two IS the unrealised gain
+# or loss -- the quantity that defined 2023. These items supply the missing side.
+#
+# Deliberately limited to the TOP-LEVEL categories (Treasury, agency, GSE, states, other
+# domestic, other foreign, ABS, structured notes). The 39-item amortized-cost detail for
+# MBS pass-throughs, CMOs and structured financial products by underlying collateral
+# (G302-G374, K144-K156, HT52/HT60, PU98/PV00) is NOT included yet: naming it well needs
+# the same care the RC-N families got. `bankpanel propose --schedule RC-B` drafts it.
+#
+# NOTE ac_afs_tot_toplevel sums only what is listed here and is therefore NOT the
+# reported AFS total. Use it for composition, not for footing.
+
+[META]
+key,value
+panel_name,rc_b_securities
+schedule,RC-B
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD1286,ac_afs_ust,RC-B,stock,all,1994-03-31,,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. TREASURY SECURITIES
+RCFD1291,ac_afs_usagency_9418,RC-B,stock,all,1994-03-31,2018-03-31,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT AGEN
+RCFD1297,ac_afs_usgse_9418,RC-B,stock,all,1994-03-31,2018-03-31,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT- SPO
+RCFD8498,ac_afs_states,RC-B,stock,all,1994-03-31,,,AMORTIZED COST OF AVAILABLE-FOR-SALE SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+RCFD1739,ac_afs_oth_dom,RC-B,stock,all,1994-03-31,,,AMORTIZED COST OF OTHER AVAILABLE-FOR-SALE DOMESTIC DEBT SECURITIES
+RCFD1744,ac_afs_oth_fgn,RC-B,stock,all,1994-03-31,,,AMORTIZED COST OF AVAILABLE-FOR-SALE OTHER FOREIGN DEBT SECURITIES
+RCFDA510,ac_afs_mutual_funds_9720,RC-B,stock,all,1997-03-31,2020-09-30,,AMORTIZED COST OF AVAILABLE-FOR-SALE INVESTMENTS IN MUTUAL FUNDS AND OTHER EQUITY SECURITIES WITH READILY DETERMINABLE
+RCFDC989,ac_afs_abs,RC-B,stock,all,2006-03-31,,,ASSET-BACKED SECURITIES: AVAILABLE-FOR-SALE AMORTIZED COST
+RCFD8782,ac_structured_notes,RC-B,stock,all,1995-03-31,,,AMORTIZED COST OF STRUCTURED NOTES
+RCFD1778,ac_htm_sold_or_transferred_ytd,RC-B,stock,all,1994-03-31,2025-06-30,,AMORTIZED COST OF HELD-TO-MATURITY SECURITIES SOLD OR TRANSFERRED TO AVAILABLE-FOR-SALE OR TRADING SECURITIES DURING T
+RCFD0416,pledged_sec,RC-B,stock,all,,,,PLEDGED SECURITIES
+RCFDA248,debtsec_mat_repr_lte1yr,RC-B,stock,all,1996-03-31,,,FIXED RATE AND FLOATING RATE DEBT SECURITIES WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ac_afs_tot_toplevel,RC-B,stock,Amortized cost of AFS securities across the top-level categories carried here; see docs/schedules/RC-B.md on what is and is not included,ac_afs_ust.fillna(0) + ac_afs_states.fillna(0) + ac_afs_oth_dom.fillna(0) + ac_afs_oth_fgn.fillna(0) + ac_afs_abs.fillna(0),thousands_usd,

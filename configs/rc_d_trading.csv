@@ -1,0 +1,39 @@
+# Schedule RC-D -- Trading Assets and Liabilities.
+#
+# Reported only by banks with material trading books, so most cells are legitimately
+# empty: a NaN here overwhelmingly means "this bank does not trade", not "missing".
+# Coverage peaks around 2-6% of filers, which is why these items are proposed at a much
+# lower density threshold than other schedules.
+#
+# form_scope is mostly 031+041 and several items are 031-only -- trading is concentrated
+# in the banks that file the consolidated form. Check expected_mask() before treating a
+# blank as a non-report.
+
+[META]
+key,value
+panel_name,rc_d_trading
+schedule,RC-D
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD3531,trad_ust,RC-D,stock,031+041,,,,TRADING ASSETS - U.S. TREASURY SECURITIES
+RCFD3532,trad_usagency,RC-D,stock,031+041,,,,TRADING ASSETS - U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS
+RCFD3533,trad_states,RC-D,stock,031+041,,,,TRADING ASSETS - SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+RCFD3541,trad_oth_dom_off,RC-D,stock,031+041,,,,OTHER TRADING ASSETS (IN DOMESTIC OFFICES)
+RCFD3543,trad_revaluation_gains,RC-D,stock,031+041,,,,REVALUATION GAINS ON INTEREST RATE; FOREIGN EXCHANGE RATE; AND OTHER COMMODITY AND EQUITY CONTRACTS
+RCFD3547,trad_revaluation_losses,RC-D,stock,031+041,,,,REVALUATION LOSSES ON INTEREST RATE; FOREIGN EXCHANGE RATE; AND OTHER COMMODITY AND EQUITY CONTRACTS
+RCFD3546,trad_liab_short_positions,RC-D,stock,031+041,,,,LIABILITY FOR SHORT POSITIONS
+RCFDF614,trad_ln_ci,RC-D,stock,031+041,2008-03-31,,,TRADING ASSETS - COMMERCIAL AND INDUSTRIAL LOANS
+RCFDF618,trad_ln_oth,RC-D,stock,031+041,2008-03-31,,,TRADING ASSETS - OTHER LOANS
+RCFDF624,trad_liab_oth,RC-D,stock,031+041,2008-03-31,,,OTHER TRADING LIABILITIES
+RCFDF610,trad_ln_re_0818,RC-D,stock,031,2008-03-31,2018-03-31,,TRADING ASSETS - LOANS SECURED BY REAL ESTATE
+RCFDF615,trad_ln_indiv_a_0818,RC-D,stock,031,2008-03-31,2018-03-31,,TRADING ASSETS - LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES - CREDIT CARD
+RCFDF616,trad_ln_indiv_b_0818,RC-D,stock,031,2008-03-31,2018-03-31,,TRADING ASSETS - LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES - OTHER REVOLVING CREDIT 
+RCFDF632,trad_upb_ln_0818,RC-D,stock,031+041,2008-03-31,,,UNPAID PRINCIPAL BALANCES OF LOANS MEASURED AT FAIR VALUE - COMMERCIAL AND INDUSTRIAL LOANS
+RCFDF636,trad_upb_ln_oth,RC-D,stock,031+041,2008-03-31,,,UNPAID PRINCIPAL BALANCES OF LOANS MEASURED AT FAIR VALUE - OTHER LOANS
+RCFDF643,trad_abs_0810,RC-D,stock,031,2008-03-31,2010-12-31,,TRADING ASSETS: ASSET-BACKED SECURITIES:  CREDIT CARD RECEIVABLES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+trad_revaluation_net,RC-D,stock,Net revaluation gains less losses on trading positions,trad_revaluation_gains - trad_revaluation_losses,thousands_usd,
