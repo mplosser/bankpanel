@@ -20,6 +20,8 @@ from .io import (
     PanelTooLargeError,
     columns_for_schedule,
     dictionary,
+    expectations,
+    expected_mask,
     info,
     list_variables,
     read_header,
@@ -32,5 +34,6 @@ __all__ = [
     "build", "read_panel", "read_header", "dictionary", "list_variables",
     "columns_for_schedule", "search_variables", "info",
     "ConfigSet", "ConfigError", "PanelTooLargeError", "PanelNotFoundError",
-    "ReportProfile", "FFIEC_CALL", "get_profile", "__version__",
+    "ReportProfile", "FFIEC_CALL", "get_profile",
+    "expected_mask", "expectations", "__version__",
 ]

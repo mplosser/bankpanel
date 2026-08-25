@@ -221,6 +221,38 @@ def search_variables(pattern: str, root: str | Path | None = None) -> pd.DataFra
     return df[hit].reset_index(drop=True)
 
 
+EXPECTATIONS_FILE = "reporting_expectations.parquet"
+
+
+def expectations(root: str | Path | None = None) -> pd.DataFrame:
+    """The reporting-expectations matrix built from this panel."""
+    from ..reference.expectations import read_expectations
+
+    panel_root = _resolve_root(root)
+    path = panel_root / EXPECTATIONS_FILE
+    if not path.exists():
+        raise PanelNotFoundError(
+            f"no {EXPECTATIONS_FILE} in {panel_root}. Run 'bankpanel expectations build' "
+            f"first -- without it a NaN cannot be told apart from an item that was never "
+            f"collected."
+        )
+    return read_expectations(path)
+
+
+def expected_mask(
+    df: pd.DataFrame, column: str, root: str | Path | None = None
+) -> pd.Series:
+    """Was each cell of ``column`` supposed to be reported?
+
+    Separates "not collected" from "reported as missing" -- the distinction that makes a
+    NaN interpretable. Needs ``form_type`` and ``REPORTING_PERIOD`` in ``df``, both of
+    which :func:`read_panel` always returns.
+    """
+    from ..reference.expectations import expected_mask as _mask
+
+    return _mask(df, column, expectations(root))
+
+
 def info(root: str | Path | None = None) -> dict:
     panel_root = _resolve_root(root)
     return BuildManifest.read(panel_root).__dict__

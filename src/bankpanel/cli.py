@@ -72,6 +72,113 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_for_validation(panel_root, columns=None):
+    """Load the panel plus form_type, for a validator."""
+    import pyarrow.dataset as ds
+
+    from .io.reader import _resolve_root
+
+    root = _resolve_root(panel_root)
+    dataset = ds.dataset(root / "panel", partitioning="hive")
+    reserved = {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
+    cols = columns or [c for c in dataset.schema.names if c not in reserved]
+    frame = dataset.to_table(
+        columns=["RSSD_ID", "REPORTING_PERIOD", "form_type", *cols]
+    ).to_pandas()
+    return root, frame, cols
+
+
+def cmd_expectations(args: argparse.Namespace) -> int:
+    from .reference.expectations import build_expectations, read_expectations, write_expectations
+
+    root, df, cols = _load_for_validation(args.panel_root)
+    # The matrix describes THIS panel, so it lives beside it rather than in a shared
+    # directory that could drift out of step with the data it describes.
+    out = Path(args.out) if args.out else root / "reporting_expectations.parquet"
+    if args.action == "build":
+        exp = build_expectations(df, cols)
+        write_expectations(exp, out)
+        print(f"{len(exp):,} expectation rows for {exp.column.nunique():,} columns -> {out}")
+        print(exp.frequency.value_counts().to_string())
+    else:
+        exp = read_expectations(out)
+        non_quarterly = exp[~exp.frequency.isin(["quarterly", "absent"])]
+        print(f"{len(exp):,} rows; {non_quarterly.column.nunique():,} columns are collected")
+        print("less often than quarterly for at least one form type:")
+        print()
+        print(
+            non_quarterly[["column", "form_type", "era_start", "era_end", "frequency"]]
+            .sort_values(["form_type", "column"]).to_string(index=False)
+        )
+    return 0
+
+
+def cmd_validate(args: argparse.Namespace) -> int:
+    import pandas as pd
+
+    from .config import ConfigSet
+    from .reference.expectations import read_expectations
+
+    root, df, cols = _load_for_validation(args.panel_root)
+    exit_code = 0
+    saved: dict[str, pd.DataFrame] = {}
+
+    if args.check in ("coverage", "all"):
+        from .validate.coverage import coverage_scan, format_report
+
+        expectations = None
+        exp_path = Path(args.expectations) if args.expectations else root / "reporting_expectations.parquet"
+        if exp_path.exists():
+            expectations = read_expectations(exp_path)
+        else:
+            print(f"[warn] no expectations at {exp_path}; run 'bankpanel expectations build'.")
+            print("[warn] without it, FFIEC 051 semiannual items will dominate the output.")
+        new, approved = coverage_scan(
+            df, cols, panel="panel", expectations=expectations, ledger_path=args.ledger
+        )
+        print(format_report(new, approved))
+        saved["coverage_findings"] = new
+        if args.strict and not new.empty:
+            exit_code = 1
+
+    if args.check in ("breaks", "all"):
+        from .validate.breaks import check_latest_quarter, format_report, gate
+
+        findings = check_latest_quarter(df, cols)
+        latest = str(pd.DatetimeIndex(df.REPORTING_PERIOD).max().date())
+        print()
+        print(format_report(findings, latest))
+        saved["series_breaks"] = findings
+        exit_code = max(exit_code, gate(findings))
+
+    if args.check in ("quarterize", "all"):
+        from .validate.quarterize_audit import attribute, audit, format_report
+
+        cs = ConfigSet.load(args.config_dir)
+        nonneg = [
+            v.variable_name for v in (*cs.base, *cs.derived)
+            if v.sign == "nonneg" and v.flow_type == "ytd"
+        ]
+        flags = [v.variable_name for v in cs.base if "structflag" in v.variable_name]
+        summary, flagged = audit(df, nonneg, flag_columns=flags)
+        causes = attribute(flagged, flags)
+        print()
+        print(format_report(summary, flagged, causes, len(df)))
+        saved["quarterize_summary"] = summary
+        saved["quarterize_flagged"] = flagged
+
+    if args.save:
+        out = root / "validation"
+        out.mkdir(parents=True, exist_ok=True)
+        for name, frame in saved.items():
+            if frame is not None and not frame.empty:
+                frame.to_csv(out / f"{name}.csv", index=False)
+        print()
+        print(f"[saved] {out}")
+
+    return exit_code
+
+
 def cmd_info(args: argparse.Namespace) -> int:
     from .io.reader import info
 
@@ -133,6 +240,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_build.add_argument("--strict-lint", action="store_true")
     p_build.set_defaults(func=cmd_build)
+
+    p_exp = sub.add_parser("expectations", help="build or report the reporting-expectations matrix")
+    p_exp.add_argument("action", choices=("build", "report"))
+    p_exp.add_argument("--panel-root", default=None)
+    p_exp.add_argument("--out", default=None, help="default: <panel-root>/reporting_expectations.parquet")
+    p_exp.set_defaults(func=cmd_expectations)
+
+    p_val = sub.add_parser("validate", help="run a validator against a built panel")
+    p_val.add_argument("check", choices=("coverage", "breaks", "quarterize", "all"))
+    p_val.add_argument("--panel-root", default=None)
+    _add_common(p_val)
+    p_val.add_argument("--expectations", default=None)
+    p_val.add_argument("--ledger", default="configs/coverage_expected.csv")
+    p_val.add_argument("--strict", action="store_true", help="exit non-zero on new findings")
+    p_val.add_argument("--save", action="store_true")
+    p_val.set_defaults(func=cmd_validate)
 
     p_info = sub.add_parser("info", help="show a panel's build manifest")
     p_info.add_argument("--panel-root", default=None)

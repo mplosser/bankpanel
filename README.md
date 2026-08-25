@@ -62,6 +62,8 @@ parses the Chicago Fed and FFIEC CDR bulk files.
 ```bash
 bankpanel lint                              # validate configs; reads no data
 bankpanel build --raw-dir /path/to/FFIEC_031_041 --out panel_root --jobs 8
+bankpanel expectations build --panel-root panel_root
+bankpanel validate all --panel-root panel_root --save
 bankpanel info --panel-root panel_root
 bankpanel dictionary --schedule RC-C
 ```
@@ -71,6 +73,7 @@ import bankpanel as bp
 
 bp.search_variables("construction")
 bp.columns_for_schedule("RC-C")
+bp.expected_mask(df, "custody_assets")     # was this cell supposed to be reported?
 
 df = bp.read_panel(
     columns=["assets_total", "ln_condev", "net_interest_income"],
@@ -103,9 +106,11 @@ absorbed. On a full 1985–2025 build these affect 13,822 bank-quarters, about 1
 including the pre-2011 era where it must be derived. This is what lets you tell
 "not collected" apart from "reported as missing".
 
-**Validation.** Coverage discontinuities, latest-quarter series breaks, and impossible
-negative flows, each with an approvals ledger so a known, explained transition stops
-being reported.
+**Validation.** Three checks — coverage discontinuities across all history, a
+latest-quarter break gate, and impossible negative flows — all driven by a measured
+**reporting-expectations matrix** so that FFIEC 051 semiannual items are not mistaken for
+breaks. On the full panel that suppresses 73% of findings while still catching genuine
+ones, including a code retirement in 2025Q3. See [`docs/VALIDATION.md`](docs/VALIDATION.md).
 
 **Cleaning is opt-in and last.** The panel on disk is exactly what the configs produced.
 Repair functions are pure, importable, and return an audit frame of every changed cell,
@@ -133,7 +138,7 @@ so a cleaning decision is reproducible and reviewable rather than baked in.
 | Version | Contents |
 | --- | --- |
 | 0.1 | Engine: config layer, build, quarterization, reader, dictionary, CLI. Parity verified against the source pipeline (688/688 columns exact) |
-| 0.2 | Form-type bridge, reporting-expectations matrix, the three validators |
+| 0.2 | Form-type bridge, reporting-expectations matrix, the three validators — **done** |
 | 0.3 | Schedules RC-C, RC-E |
 | 0.4 | Schedules RC-B, RC-D, RC-N |
 | 0.5 | Schedules RC-K, RC-R Part I, RC-O headline, RI-A, RI-B |

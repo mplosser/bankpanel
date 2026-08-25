@@ -50,8 +50,22 @@ STRUCTFLAG_CODES = {
 }
 
 #: Gross additive income items, which cannot be negative over a quarter. Net items --
-#: gains on sales, trading revenue, taxes -- legitimately can be, and are left as "any".
-NONNEG_MARKERS = ("int_inc", "int_exp", "nonint_exp", "fiduc_inc")
+#: gains on sales, trading revenue, taxes -- legitimately can be, and stay "any".
+#:
+#: Matched as a PREFIX on the quarterized name, never as a substring, because
+#: "nonint_inc" CONTAINS "int_inc": non-interest income subcategories are net items and
+#: would otherwise be marked non-negative, which floods the audit with false positives.
+#: (Measured: substring matching flagged 16.4% of bank-quarters, 95.7% "unexplained".)
+NONNEG_PREFIXES = ("qint_inc", "qint_exp", "qnonint_exp", "qfiduc_inc")
+
+
+def _quarterized_name(name: str) -> str:
+    """The name the legacy pipeline gave this column after quarterization."""
+    if name.startswith("ytd_"):
+        return "q" + name[4:]
+    if name.startswith("ytd"):
+        return "q" + name[3:]
+    return name
 
 
 def _sections(text: str) -> dict[str, list[list[str]]]:
@@ -200,7 +214,11 @@ def migrate(legacy_dir: Path, out_dir: Path, schedule_map_path: Path) -> None:
                 continue
             all_names[name] = fname
             flow = _flow_type(name)
-            sign = "nonneg" if flow == "ytd" and any(m in name for m in NONNEG_MARKERS) else ""
+            sign = (
+                "nonneg"
+                if flow == "ytd" and _quarterized_name(name).startswith(NONNEG_PREFIXES)
+                else ""
+            )
             lines.append(",".join([
                 code, name, _schedule_for(code, schedule_map), flow, "all", "", "", sign, "",
             ]))
