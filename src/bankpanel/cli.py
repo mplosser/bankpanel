@@ -179,6 +179,146 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return exit_code
 
 
+def _schedule_codes(schedule: str, map_path: str) -> list[str]:
+    import pandas as pd
+
+    smap = pd.read_csv(map_path)
+    return smap.loc[smap.schedule.str.upper() == schedule.upper(), "mdrm_code"].tolist()
+
+
+def cmd_propose(args: argparse.Namespace) -> int:
+    """Draft config rows for codes in a schedule that no config currently claims."""
+    import pandas as pd
+
+    from .build.source import discover_quarters
+    from .config import ConfigSet
+    from .profiles import get_profile
+    from .reference.enrich import measure_codes, propose_rows, summarize, to_config_csv
+    from .reference.mdrm import load_mdrm
+
+    profile = get_profile(args.profile)
+    cs = ConfigSet.load(args.config_dir)
+    existing_names = {v.variable_name for v in (*cs.base, *cs.derived)}
+
+    # A claimed code also claims its coalesce sibling. RCON1766 is the domestic twin of
+    # RCFD1766, and the builder already fills one from the other per row, so proposing
+    # the sibling as a separate variable would produce two columns for one concept --
+    # nearly identical, and silently different only for banks with foreign offices.
+    claimed = {v.mdrm_code for v in cs.base}
+    for code in list(claimed):
+        for primary, fallback in profile.coalesce_rules:
+            if code.startswith(primary):
+                claimed.add(fallback + code[len(primary):])
+            elif code.startswith(fallback):
+                claimed.add(primary + code[len(fallback):])
+
+    in_schedule = _schedule_codes(args.schedule, args.schedule_map)
+    codes = [c for c in in_schedule if c not in claimed]
+    print(
+        f"{args.schedule}: {len(codes)} code(s) unclaimed of {len(in_schedule)} in the "
+        f"schedule ({len(in_schedule) - len(codes)} already covered, counting coalesce siblings)"
+    )
+    if not codes:
+        return 0
+
+    quarters = discover_quarters(args.raw_dir, profile, years=_parse_years(args.years))
+    measured = measure_codes(quarters, codes, profile)
+    summary = summarize(measured)
+    if summary.empty:
+        print("none of those codes carry data in this source")
+        return 0
+
+    # Collapse coalesce pairs within the proposal set too. If neither RCFD1563 nor
+    # RCON1563 is claimed, both get proposed -- but one variable pointing at the primary
+    # already picks up the other per row, so proposing both would create two columns for
+    # one concept.
+    measured_codes = set(summary.mdrm_code)
+    indexed = summary.set_index("mdrm_code")
+    drop = set()
+    for code in measured_codes:
+        for primary, fallback in profile.coalesce_rules:
+            if not code.startswith(primary):
+                continue
+            sibling = fallback + code[len(primary):]
+            if sibling not in measured_codes:
+                continue
+            # The built column is the union of the pair, so it must be MEASURED as the
+            # union too. Otherwise a domestic item whose RCFD twin exists but is filed
+            # only by the ~1.6% of banks on form 031 looks sparse, and the density filter
+            # discards a variable that would in fact be near-universal.
+            a, b = indexed.loc[code], indexed.loc[sibling]
+            indexed.loc[code, "peak_coverage"] = max(a.peak_coverage, b.peak_coverage)
+            indexed.loc[code, "first_quarter"] = min(
+                x for x in (a.first_quarter, b.first_quarter) if pd.notna(x)
+            ) if pd.notna(a.first_quarter) or pd.notna(b.first_quarter) else pd.NaT
+            indexed.loc[code, "last_quarter"] = max(
+                x for x in (a.last_quarter, b.last_quarter) if pd.notna(x)
+            ) if pd.notna(a.last_quarter) or pd.notna(b.last_quarter) else pd.NaT
+            for form in (31, 41, 51):
+                col = f"cov_{form}"
+                indexed.loc[code, col] = max(
+                    a.get(col, float("nan")) or 0, b.get(col, float("nan")) or 0
+                )
+            drop.add(sibling)
+    summary = indexed.reset_index()
+    if drop:
+        summary = summary[~summary.mdrm_code.isin(drop)]
+        print(f"{len(drop)} coalesce sibling(s) merged into their primary code")
+
+    confidential = summary[summary.get("confidential", False).fillna(False)]
+    if not confidential.empty:
+        print(
+            f"{len(confidential)} code(s) are collected but NOT PUBLISHED (every cell is "
+            f'the literal "CONF"); excluded: {sorted(confidential.mdrm_code)[:6]}'
+            + (" ..." if len(confidential) > 6 else "")
+        )
+        summary = summary[~summary.mdrm_code.isin(confidential.mdrm_code)]
+
+    mdrm = load_mdrm(args.mdrm)
+    proposed = propose_rows(
+        summary, args.schedule, mdrm,
+        existing_names=existing_names, dense_threshold=args.min_coverage,
+    )
+    print(
+        f"{len(summary)} measured; {len(proposed)} reach {args.min_coverage:.0%} coverage "
+        f"in at least one quarter"
+    )
+    text = to_config_csv(proposed)
+    if args.out:
+        Path(args.out).write_text(text + "\n", encoding="utf-8")
+        print(f"-> {args.out}   (review, rename, then paste into a config)")
+    else:
+        print()
+        print(text)
+    return 0
+
+
+def cmd_enrich(args: argparse.Namespace) -> int:
+    """Fill blank era/form_scope/notes on an existing config from measured data."""
+    from .build.source import discover_quarters
+    from .config import parse_config_file
+    from .profiles import get_profile
+    from .reference.enrich import fill_blanks, measure_codes, summarize
+    from .reference.mdrm import load_mdrm
+
+    profile = get_profile(args.profile)
+    cfg = parse_config_file(args.config)
+    codes = [v.mdrm_code for v in cfg.base]
+    print(f"{Path(args.config).name}: measuring {len(codes)} code(s)")
+
+    quarters = discover_quarters(args.raw_dir, profile, years=_parse_years(args.years))
+    summary = summarize(measure_codes(quarters, codes, profile))
+    if summary.empty:
+        print("no data measured; nothing to fill")
+        return 0
+
+    text = fill_blanks(args.config, summary, load_mdrm(args.mdrm))
+    out = Path(args.out) if args.out else Path(args.config)
+    out.write_text(text, encoding="utf-8")
+    print(f"-> {out}   (only blank fields were filled; existing values untouched)")
+    return 0
+
+
 def cmd_info(args: argparse.Namespace) -> int:
     from .io.reader import info
 
@@ -256,6 +396,27 @@ def main(argv: list[str] | None = None) -> int:
     p_val.add_argument("--strict", action="store_true", help="exit non-zero on new findings")
     p_val.add_argument("--save", action="store_true")
     p_val.set_defaults(func=cmd_validate)
+
+    p_prop = sub.add_parser("propose", help="draft config rows for an uncovered schedule")
+    _add_common(p_prop)
+    p_prop.add_argument("--schedule", required=True, help="e.g. RC-C")
+    p_prop.add_argument("--raw-dir", required=True)
+    p_prop.add_argument("--profile", default="ffiec_call")
+    p_prop.add_argument("--schedule-map", default="reference_data/mdrm_to_schedule.csv")
+    p_prop.add_argument("--mdrm", default=None)
+    p_prop.add_argument("--years", default=None)
+    p_prop.add_argument("--min-coverage", type=float, default=0.50)
+    p_prop.add_argument("--out", default=None)
+    p_prop.set_defaults(func=cmd_propose)
+
+    p_enr = sub.add_parser("enrich", help="fill blank metadata on a config from measured data")
+    p_enr.add_argument("--config", required=True)
+    p_enr.add_argument("--raw-dir", required=True)
+    p_enr.add_argument("--profile", default="ffiec_call")
+    p_enr.add_argument("--mdrm", default=None)
+    p_enr.add_argument("--years", default=None)
+    p_enr.add_argument("--out", default=None, help="default: edit the config in place")
+    p_enr.set_defaults(func=cmd_enrich)
 
     p_info = sub.add_parser("info", help="show a panel's build manifest")
     p_info.add_argument("--panel-root", default=None)

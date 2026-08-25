@@ -71,7 +71,7 @@ bankpanel dictionary --schedule RC-C
 ```python
 import bankpanel as bp
 
-bp.search_variables("construction")
+bp.search_variables("sweep_dep")
 bp.columns_for_schedule("RC-C")
 bp.expected_mask(df, "custody_assets")     # was this cell supposed to be reported?
 
@@ -139,7 +139,7 @@ so a cleaning decision is reproducible and reviewable rather than baked in.
 | --- | --- |
 | 0.1 | Engine: config layer, build, quarterization, reader, dictionary, CLI. Parity verified against the source pipeline (688/688 columns exact) |
 | 0.2 | Form-type bridge, reporting-expectations matrix, the three validators — **done** |
-| 0.3 | Schedules RC-C, RC-E |
+| 0.3 | Schedules [RC-C](docs/schedules/RC-C.md), [RC-E](docs/schedules/RC-E.md) — **done** |
 | 0.4 | Schedules RC-B, RC-D, RC-N |
 | 0.5 | Schedules RC-K, RC-R Part I, RC-O headline, RI-A, RI-B |
 | 0.6 | Cleaning layer |

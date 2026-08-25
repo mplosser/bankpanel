@@ -216,3 +216,35 @@ def test_dictionary_covers_every_panel_column(synth_panel):
         and n not in {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
     ]
     assert not undocumented
+
+
+# --- boolean-valued items ------------------------------------------------------------
+
+
+def test_boolean_text_is_coerced_to_one_and_zero():
+    """The Call Report publishes genuine yes/no items as "true"/"false" text.
+
+    A numeric-only panel would silently drop them: to_numeric turns the whole column to
+    NaN, and a parity check comparing two all-NaN columns then calls them identical.
+    That is how a missing column hid here until an all-NaN audit found it.
+    """
+    from bankpanel.build.quarter import to_numeric
+
+    series = pd.Series(["true", "false", "FALSE", "True", None, "yes", "no"])
+    assert to_numeric(series).tolist()[:4] == [1.0, 0.0, 0.0, 1.0]
+    assert np.isnan(to_numeric(series).tolist()[4])
+    assert to_numeric(series).tolist()[5:] == [1.0, 0.0]
+
+
+def test_mixed_boolean_and_numeric_keeps_the_numbers():
+    from bankpanel.build.quarter import to_numeric
+
+    out = to_numeric(pd.Series(["true", "1234", "false", "0"]))
+    assert out.tolist() == [1.0, 1234.0, 0.0, 0.0]
+
+
+def test_non_boolean_text_still_becomes_nan():
+    """Confidential items are published as the literal string "CONF"."""
+    from bankpanel.build.quarter import to_numeric
+
+    assert to_numeric(pd.Series(["CONF", "CONF"])).isna().all()

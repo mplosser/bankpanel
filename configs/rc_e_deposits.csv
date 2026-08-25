@@ -1,0 +1,53 @@
+# Schedule RC-E -- Deposit Liabilities.
+#
+# Covers the deposit-composition memoranda that the core balance-sheet configs do not:
+# depositor type (government, state and local, foreign official), brokered and time
+# deposit maturity tiers, reciprocal deposits, and sweep deposits.
+#
+# TWO THRESHOLD CHANGES make the maturity tiers era-dependent. Both are recorded in the
+# era bounds below and explained in docs/schedules/RC-E.md:
+#   2011Q1  the $100,000 split becomes a three-way split at $100k and $250k
+#   2017Q1  the tiers collapse to a single "$250,000 or less" item (HK06 / HK11)
+# Base items therefore carry era suffixes (_9716, _1116) and the derived series stitches
+# them. Do not sum across eras without reading the note.
+#
+# Sweep deposits (MT87-MT95) begin 2021Q3 and are the post-2023 deposit-stability items.
+
+[META]
+key,value
+panel_name,rc_e_deposits
+schedule,RC-E
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCON2202,dep_usgovt_trans,RC-E,stock,all,,,,TOTAL TRANSACTION ACCOUNTS - DEPOSITS OF U.S. GOVERNMENT
+RCON2203,dep_statelocal_trans,RC-E,stock,all,,,,TOTAL TRANSACTION ACCOUNTS - DEPOSITS OF STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+RCON2210,demand_dep_tot,RC-E,stock,all,,,,TOTAL DEMAND DEPOSITS (SEE NOTE BELOW)
+RCON2216,dep_forgovt_trans,RC-E,stock,all,,,,TOTAL TRANSACTION ACCOUNTS - DEPOSITS OF FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+RCON2377,dep_forgovt_nontrans,RC-E,stock,all,,,,TOTAL NONTRANSACTION ACCOUNTS - DEPOSITS OF FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+RCON2520,dep_usgovt_nontrans,RC-E,stock,all,,,,TOTAL NONTRANSACTION ACCOUNTS OF UNITED STATES GOVERNMENT
+RCON2530,dep_statelocal_nontrans,RC-E,stock,all,,,,TOTAL NONTRANSACTION ACCOUNTS OF STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+RCON5590,preferred_dep,RC-E,stock,all,1993-03-31,2024-12-31,,PREFERRED DEPOSITS
+RCONA241,time_dep_lt100k_mat_lte1yr_9716,RC-E,stock,031+041,1996-03-31,2016-12-31,,FIXED RATE AND FLOATING RATE TIME DEPOSITS OF LESS THAN $100;000 WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCONA243,brokered_dep_lt100k_mat_lte1yr_9716,RC-E,stock,031+041,1996-03-31,2016-12-31,,BROKERED DEPOSITS ISSUED IN DENOMINATIONS OF LESS THAN $100;000 WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCONHK06,brokered_dep_lte250k_mat_lte1yr,RC-E,stock,all,2017-03-31,,,SELECTED COMPONENTS OF TOTAL DEPOSITS; BROKERED DEPOSITS OF 250000 OR LESS WITH A REMAINING MATURITY OF ONE YE
+RCONHK11,time_dep_lte250k_mat_lte1yr,RC-E,stock,all,2017-03-31,,,TIME DEPOSITS OF 250000 OR LESS WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCONJH84,reciprocal_dep_jun2018,RC-E,stock,all,2018-09-30,2018-09-30,,Total reciprocal deposits as of June 30; 2018
+RCONK219,brokered_dep_100k_250k_mat_lte1yr_1116,RC-E,stock,031+041,2011-03-31,2016-12-31,,BROKERED DEPOSITS OF $100;000 THROUGH $250;000 WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCONK220,brokered_dep_gt250k_mat_lte1yr,RC-E,stock,all,2011-03-31,,,BROKERED DEPOSITS OF MORE THAN $250;000 WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCONK221,time_dep_100k_250k_mat_lte1yr_1116,RC-E,stock,031+041,2011-03-31,2016-12-31,,TIME DEPOSITS OF $100;000 THROUGH $250;000 WITH A REMAINING MATURITY OF ONE OR YEAR LESS
+RCONK222,time_dep_gt250k_mat_lte1yr,RC-E,stock,all,2011-03-31,,,TIME DEPOSITS OF  MORE THAN $250;000 WITH A REMAINING MATURITY OF ONE OR YEAR LESS
+RCONMT87,sweep_dep_affiliate_insured,RC-E,stock,all,2021-09-30,,,Sweep deposits: Fully insured; affiliate sweep deposits
+RCONMT89,sweep_dep_affiliate_uninsured,RC-E,stock,all,2021-09-30,,,Sweep deposits: Not fully insured; affiliate sweep deposits
+RCONMT91,sweep_dep_nonaffiliate_insured,RC-E,stock,all,2021-09-30,,,Sweep deposits: Fully insured; non-affiliate sweep deposits
+RCONMT93,sweep_dep_nonaffiliate_uninsured,RC-E,stock,all,2021-09-30,,,Sweep deposits: Not fully insured; non-affiliate sweep deposits
+RCONMT95,sweep_dep_not_brokered_tot,RC-E,stock,all,2021-09-30,,,Total sweep deposits that are not brokered deposits
+RCONP752,offers_consumer_dep_products,RC-E,flag,all,2014-03-31,,,DOES YOUR INSTITUTION OFFER ONE OR MORE CONSUMER DEPOSIT ACCOUNT  I.E.  TRANSACTION ACCOUNT OR NONTRANSACTION 
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+sweep_dep_insured,RC-E,stock,Fully insured sweep deposits; affiliate and non-affiliate (2021Q3 onward),sweep_dep_affiliate_insured + sweep_dep_nonaffiliate_insured,thousands_usd,
+sweep_dep_uninsured,RC-E,stock,Not-fully-insured sweep deposits; affiliate and non-affiliate (2021Q3 onward),sweep_dep_affiliate_uninsured + sweep_dep_nonaffiliate_uninsured,thousands_usd,
+sweep_dep_tot,RC-E,stock,All sweep deposits reported in Schedule RC-E memoranda (2021Q3 onward),sweep_dep_insured + sweep_dep_uninsured,thousands_usd,
+brokered_dep_mat_lte1yr,RC-E,stock,Brokered deposits maturing within one year; see docs/schedules/RC-E.md on the 2011 and 2017 threshold changes,brokered_dep_lte250k_mat_lte1yr.fillna(brokered_dep_lt100k_mat_lte1yr_9716.fillna(0) + brokered_dep_100k_250k_mat_lte1yr_1116.fillna(0)) + brokered_dep_gt250k_mat_lte1yr.fillna(0),thousands_usd,

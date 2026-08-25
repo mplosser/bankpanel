@@ -1,0 +1,76 @@
+# Schedule RC-C -- Loans and Lease Financing Receivables.
+#
+# Extends the loan detail already carried by the balance-sheet configs with the parts of
+# RC-C that support lending research: the Part II small business and small farm size
+# buckets, fair-value-option loans, pledged loans, and the Section 4013 COVID relief items.
+#
+# The Part II size buckets (n_ln_* / amt_ln_*) have a FORM-DEPENDENT frequency, measured
+# rather than assumed:
+#   forms 031 and 041   quarterly      (~0.94 coverage in every quarter)
+#   form  051           Q2 and Q4 only (~0.001 in Q1/Q3, ~0.93 in Q2/Q4)
+# So a pooled quarterly series over 2017+ silently becomes long-form-only in Q1 and Q3.
+# `bankpanel expectations build` records the pattern and expected_mask() will tell you
+# which cells were ever asked for. Note also that the farmland and agricultural-production
+# buckets top out at $500,000 while the C&I and nonfarm-nonresidential buckets top out at
+# $1,000,000; they are not directly comparable.
+#
+# Long tail deliberately not covered yet: the purchased-impaired acquisition-date detail
+# (G092-G102, GW46/GW47) and the reverse-mortgage sub-items (J466-J471, PR04/PR06). Both
+# are narrow-use, and a poorly chosen name is harder to undo than a missing column.
+
+[META]
+key,value
+panel_name,rc_c_loans
+schedule,RC-C
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD2081,ln_forgovt,RC-C,stock,031+041,,,,LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+RCFD2107,ln_statelocal_oblig,RC-C,stock,all,,,,OBLIGATIONS (OTHER THAN SECURITIES AND LEASES) OF STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+RCFD2123,unearned_income_ln,RC-C,stock,all,,,,UNEARNED INCOME ON LOANS
+RCON2165,lease_fin_recv_net,RC-C,stock,all,,,,LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME)
+RCFD1563,ln_oth_1563,RC-C,stock,031+041,,2024-09-30,,OTHER LOANS
+RCONJ464,ln_oth_j464,RC-C,stock,all,2010-03-31,,,OTHER LOANS
+RCFDJ454,ln_nondep_fin_inst,RC-C,stock,all,2010-03-31,,,LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS AND OTHER LOANS: LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS
+RCFD2746,ln_finance_cre_constr,RC-C,stock,all,1991-03-31,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS 1766;
+RCON5370,ln_famres_first_adjrate,RC-C,stock,all,1991-03-31,,,ADJUSTABLE RATE CLOSED-END LOANS SECURED BY FIRST LIENS ON 1-4 FAMILY RESIDENTIAL PROPERTIES
+RCONF577,ln_famres_in_foreclosure,RC-C,stock,all,2008-03-31,,,LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES IN DOMESTIC OFFICES IN PROCESS OF FORECLOSURE (INCLUDED IN 
+RCONG376,ln_condev_interest_reserve,RC-C,stock,all,2009-06-30,,,CONSTRUCTION; LAND DEVELOPMENT; AND OTHER LAND LOANS IN DOMESTIC OFFICES WITH INTEREST RESERVES: AMOUNT OF LOA
+RCONLE75,ln_famres_heloc_converted_to_term,RC-C,stock,all,2021-03-31,,,Revolving; open-end lines of credit secured by 1-4 family residential properties that have converted to non-re
+RCFDC391,credit_card_fees_finance_charges_outstanding,RC-C,stock,031+041,2003-03-31,2025-06-30,,OUTSTANDING CREDIT CARD FEES & FINANCE CHARGES
+RCONF230,ln_closedend_negative_amortization,RC-C,stock,all,2007-03-31,2025-06-30,,TOTAL CARRYING AMOUNT OF CLOSED-END LOANS WITH NEGATIVE AMORTIZATION FEATURES SECURE BY 1-4 FAMILY RESIDENTIAL
+RCON5564,n_ln_nfnres_lte100k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF $1
+RCON5565,amt_ln_nfnres_lte100k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH 
+RCON5566,n_ln_nfnres_100k_250k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF MO
+RCON5567,amt_ln_nfnres_100k_250k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH 
+RCON5568,n_ln_nfnres_250k_1m,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF MO
+RCON5569,amt_ln_nfnres_250k_1m,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH 
+RCON5570,n_ln_ci_lte100k,RC-C,count,all,1993-06-30,,,NUMBER OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF $1
+RCON5571,amt_ln_ci_lte100k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH 
+RCON5572,n_ln_ci_100k_250k,RC-C,count,all,1993-06-30,,,NUMBER OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF MO
+RCON5573,amt_ln_ci_100k_250k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH 
+RCON5574,n_ln_ci_250k_1m,RC-C,count,all,1993-06-30,,,NUMBER OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF MO
+RCON5575,amt_ln_ci_250k_1m,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES (IN DOMESTIC OFFICES) WITH 
+RCON5578,n_ln_farmland_lte100k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) (IN DOMESTIC OFFICES) 
+RCON5579,amt_ln_farmland_lte100k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) 
+RCON5580,n_ln_farmland_100k_250k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) (IN DOMESTIC OFFICES) 
+RCON5581,amt_ln_farmland_100k_250k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) 
+RCON5582,n_ln_farmland_250k_500k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) (IN DOMESTIC OFFICES) 
+RCON5583,amt_ln_farmland_250k_500k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY FARMLAND (INCLUDING FARM RESIDENTIAL AND OTHER IMPROVEMENTS) 
+RCON5584,n_ln_agprod_lte100k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMESTIC OFFICES) WITH ORIGI
+RCON5585,amt_ln_agprod_lte100k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMEST
+RCON5586,n_ln_agprod_100k_250k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMESTIC OFFICES) WITH ORIGI
+RCON5587,amt_ln_agprod_100k_250k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMEST
+RCON5588,n_ln_agprod_250k_500k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMESTIC OFFICES) WITH ORIGI
+RCON5589,amt_ln_agprod_250k_500k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS (IN DOMEST
+RCFDF597,upb_ln_ci_fv,RC-C,stock,031+041,2008-03-31,,,UNPAID PRINCIPAL BALANCE OF COMMERICIAL AND INDUSTRIAL LOANS MEASURED AT FAIR VALUE:
+RCFDF601,upb_ln_oth_fv,RC-C,stock,031+041,2008-03-31,,,UNPAID PRINCIPAL BALANCE OF OTHER LOANS
+RCFDG378,ln_pledged,RC-C,stock,all,2009-06-30,,,PLEDGED LOANS AND LEASES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+amt_ln_smallbiz_ci,RC-C,stock,Amount outstanding of small commercial and industrial loans (all size buckets),amt_ln_ci_lte100k + amt_ln_ci_100k_250k + amt_ln_ci_250k_1m,thousands_usd,
+amt_ln_smallbiz_nfnres,RC-C,stock,Amount outstanding of small nonfarm nonresidential real estate loans,amt_ln_nfnres_lte100k + amt_ln_nfnres_100k_250k + amt_ln_nfnres_250k_1m,thousands_usd,
+amt_ln_smallbiz_tot,RC-C,stock,Total small business lending: small C&I plus small nonfarm nonresidential CRE,amt_ln_smallbiz_ci + amt_ln_smallbiz_nfnres,thousands_usd,
+amt_ln_smallfarm_tot,RC-C,stock,Total small farm lending: farmland plus agricultural production,amt_ln_farmland_lte100k + amt_ln_farmland_100k_250k + amt_ln_farmland_250k_500k + amt_ln_agprod_lte100k + amt_ln_agprod_100k_250k + amt_ln_agprod_250k_500k,thousands_usd,

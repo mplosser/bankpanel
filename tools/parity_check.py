@@ -16,11 +16,15 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pyarrow.dataset as ds
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from bankpanel.build.quarter import to_numeric  # noqa: E402
 
 KEYS = ["RSSD_ID", "REPORTING_PERIOD"]
 
@@ -41,15 +45,29 @@ def legacy_name(name: str) -> str:
 
 
 def compare_column(ours: pd.Series, theirs: pd.Series) -> dict:
-    """Cell-by-cell comparison treating NaN as equal to NaN."""
-    a = pd.to_numeric(ours, errors="coerce").to_numpy(dtype="float64")
-    b = pd.to_numeric(theirs, errors="coerce").to_numpy(dtype="float64")
+    """Cell-by-cell comparison treating NaN as equal to NaN.
+
+    Both sides go through the builder's own coercion, which maps boolean text to 1/0.
+    Plain ``to_numeric`` would turn a "true"/"false" column into all-NaN on both sides
+    and then declare the two identical -- a false pass that hid a genuinely missing
+    column here until an all-NaN audit caught it. ``lost_to_coercion`` records any cell
+    that had a value before coercion and none after, so the failure mode cannot recur
+    silently.
+    """
+    a_series, b_series = to_numeric(ours), to_numeric(theirs)
+    lost = int(
+        ((ours.notna() & a_series.isna()).sum())
+        + ((theirs.notna() & b_series.isna()).sum())
+    )
+    a = a_series.to_numpy(dtype="float64")
+    b = b_series.to_numpy(dtype="float64")
     both_nan = np.isnan(a) & np.isnan(b)
     equal = (a == b) | both_nan
     n_diff = int((~equal).sum())
     out = {
         "n": len(a),
         "n_diff": n_diff,
+        "lost_to_coercion": lost,
         "ours_nonnull": int((~np.isnan(a)).sum()),
         "theirs_nonnull": int((~np.isnan(b)).sum()),
     }
@@ -117,6 +135,11 @@ def report(df: pd.DataFrame) -> None:
     print("\n" + "=" * 78)
     print(f"PARITY: {exact}/{total} columns match exactly ({exact / total:.2%})")
     print("=" * 78)
+    lost = df[df.get("lost_to_coercion", 0) > 0]
+    if not lost.empty:
+        print(f"\n{len(lost)} column(s) lost values to numeric coercion on one side:")
+        print(lost[["panel", "column", "lost_to_coercion"]].to_string(index=False))
+
     bad = df[df.n_diff > 0].sort_values("n_diff", ascending=False)
     if bad.empty:
         print("no differences")
