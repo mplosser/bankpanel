@@ -5,9 +5,9 @@ from .graph import DependencyGraph, build_graph
 from .lint import LintIssue, has_errors, lint_configs
 from .model import (
     FLOW_TYPES,
-    SEVERITIES,
     FORM_SCOPES,
     SCHEDULES,
+    SEVERITIES,
     SIGNS,
     ZERO_FILL_SCOPES,
     BaseVar,
