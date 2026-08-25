@@ -1,0 +1,51 @@
+# Data-quality checks: assertions about VALUES.
+#
+# The coverage, breaks and quarterize validators ask whether an item was REPORTED as
+# expected. These ask whether what was reported can be TRUE -- a capital ratio above 1,
+# a component larger than its total, reserves exceeding the loans they cover.
+#
+# Each check is a boolean expression in the same language as a derived formula, so
+# bounds, orderings and accounting identities are all the same kind of object and pass
+# through the same AST gate. A check is evaluated ONLY on rows where every input is
+# present; a missing input is out of scope, not a failure.
+#
+# severity=error fails `bankpanel validate quality --strict`; warning and info report.
+#
+# A check that fires is not automatically evidence of bad data -- the first version of
+# tier1_ratio_bounded asserted a capital ratio must be <= 1, which sounds obviously true
+# and is false. See docs/QUALITY.md for how that was diagnosed and why the check, not the
+# data, was wrong.
+#
+# This file declares no variables of its own -- it exists to hold cross-schedule
+# assertions that belong to no single schedule.
+
+[META]
+key,value
+panel_name,quality_checks
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula
+
+[CHECKS]
+name,expression,severity,description
+loan_reserve_le_loans,ll_res <= ll_tot,error,Loan loss reserves cannot exceed the loans they are held against
+reserve_nonneg,ll_res >= 0,error,The allowance for loan and lease losses is a contra-asset and cannot be negative
+loans_le_assets,ll_tot <= assets,error,Loans are a component of assets and cannot exceed the total
+nonaccrual_le_loans,pdl_tot_non <= ll_tot,error,Nonaccrual loans are a subset of loans
+assets_nonneg,assets >= 0,error,Total assets cannot be negative
+tier1_ratio_nonneg,tier1_rbc_ratio >= 0,error,A capital ratio cannot be negative
+tier1_ratio_plausible,tier1_rbc_ratio <= 10,info,A tier 1 ratio above 1000pct is legitimate but rare -- a small bank holding almost only zero-risk-weight assets. NOT an error: the regulator's own reported ratio exceeds 1 for every one of these banks. See docs/QUALITY.md
+total_rbc_ge_tier1,total_rbc_ratio >= tier1_rbc_ratio,error,Total capital includes tier 1 so its ratio cannot be smaller
+cet1_le_tier1,cet1 <= tier1_capital,error,Common equity tier 1 is a component of tier 1 capital
+rwa_le_assets_x2,rwa <= 2 * assets,warning,Risk-weighted assets far above total assets suggests a units or era-stitch error
+chargeoff_ci_le_total,co_ci <= co_tot,warning,Category charge-offs cannot exceed total charge-offs
+recovery_ci_le_total,rec_ci <= rec_tot,warning,Category recoveries cannot exceed total recoveries
+pastdue30_ci_le_total,pd30_ci <= pd30_tot,warning,Category past-due cannot exceed the schedule total
+npl_le_loans,npl_tot <= ll_tot,warning,Nonperforming loans are a subset of loans
+smallbiz_le_loans,amt_ln_smallbiz_tot <= ll_tot,warning,Small business lending is a subset of total loans
+sweep_le_deposits,sweep_dep_tot <= dep_tot_dom,info,Sweep deposits sit inside the domestic deposit base and cannot exceed it
+deposits_le_assets,dep_tot_dom <= assets,error,Deposits are a liability funded by assets and cannot exceed total assets

@@ -46,6 +46,9 @@ FORM_SCOPES = frozenset({"031", "041", "051", "031+041", "041+051", "all"})
 #: which collection of the item actually began.
 ZERO_FILL_SCOPES = frozenset({"always", "in_era"})
 
+#: How loudly a failed data-quality check speaks.
+SEVERITIES = frozenset({"error", "warning", "info"})
+
 #: Names the builder owns. A config may not bind any of these.
 RESERVED_NAMES = frozenset({
     "RSSD_ID", "REPORTING_PERIOD", "year", "quarter", "form_type", "form_type_source",
@@ -118,6 +121,28 @@ class ZeroFillRule:
     era_start: str | None = None
 
 
+@dataclass(frozen=True)
+class Check:
+    """A data-quality assertion over panel columns.
+
+    ``expression`` is a boolean expression in the same language as a derived formula, and
+    must hold for every row where its inputs are all present. Writing checks as ordinary
+    boolean expressions -- rather than a bespoke rule grammar -- means bounds, orderings,
+    accounting identities and cross-item consistency are all the same kind of thing, and
+    all validated by the same AST gate::
+
+        (tier1_rbc_ratio >= 0) & (tier1_rbc_ratio <= 1)
+        co_ci <= co_tot
+        (assets - liabilities_total - equity_all).abs() <= 0.001 * assets.abs()
+    """
+
+    name: str
+    expression: str
+    severity: str
+    description: str
+    origin: Origin
+
+
 @dataclass
 class Config:
     """One parsed config file."""
@@ -127,6 +152,7 @@ class Config:
     base: list[BaseVar] = field(default_factory=list)
     derived: list[DerivedVar] = field(default_factory=list)
     zero_fill: list[ZeroFillRule] = field(default_factory=list)
+    checks: list[Check] = field(default_factory=list)
 
     @property
     def name(self) -> str:

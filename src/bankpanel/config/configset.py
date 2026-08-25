@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .graph import DependencyGraph, build_graph
 from .lint import LintIssue, has_errors, lint_configs
-from .model import BaseVar, Config, ConfigError, DerivedVar, ZeroFillRule
+from .model import BaseVar, Check, Config, ConfigError, DerivedVar, ZeroFillRule
 from .parser import parse_config_file
 
 #: Files that live in ``configs/`` but are ledgers, not variable definitions.
@@ -52,6 +52,10 @@ class ConfigSet:
     @property
     def zero_fill(self) -> list[ZeroFillRule]:
         return [r for cfg in self.configs for r in cfg.zero_fill]
+
+    @property
+    def checks(self) -> list[Check]:
+        return [c for cfg in self.configs for c in cfg.checks]
 
     @property
     def graph(self) -> DependencyGraph:

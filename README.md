@@ -63,7 +63,7 @@ parses the Chicago Fed and FFIEC CDR bulk files.
 bankpanel lint                              # validate configs; reads no data
 bankpanel build --raw-dir /path/to/FFIEC_031_041 --out panel_root --jobs 8
 bankpanel expectations build --panel-root panel_root
-bankpanel validate all --panel-root panel_root --save
+bankpanel validate all --panel-root panel_root --save   # coverage, breaks, quality, quarterize
 bankpanel info --panel-root panel_root
 bankpanel dictionary --schedule RC-C
 ```
@@ -112,9 +112,16 @@ latest-quarter break gate, and impossible negative flows — all driven by a mea
 breaks. On the full panel that suppresses 73% of findings while still catching genuine
 ones, including a code retirement in 2025Q3. See [`docs/VALIDATION.md`](docs/VALIDATION.md).
 
-**Cleaning is opt-in and last.** The panel on disk is exactly what the configs produced.
-Repair functions are pure, importable, and return an audit frame of every changed cell,
-so a cleaning decision is reproducible and reviewable rather than baked in.
+**Data-quality checks.** Declarative boolean assertions about *values* — component ≤
+total, ratios non-negative, accounting identities — declared in config and validated by
+the same AST gate as formulas. See [`docs/QUALITY.md`](docs/QUALITY.md), including a
+worked case where the check turned out to be wrong and the data right.
+
+**Cleaning is opt-in and last.** The panel on disk is exactly what the configs produced —
+enforced by a test that `build/` and `io/` cannot import `clean/`. Repair functions are
+pure and importable, and `apply_plan` returns an audit frame of every changed cell, so a
+cleaning decision is reproducible and reviewable rather than baked in. See
+[`docs/CLEANING.md`](docs/CLEANING.md).
 
 ---
 
@@ -142,7 +149,7 @@ so a cleaning decision is reproducible and reviewable rather than baked in.
 | 0.3 | Schedules [RC-C](docs/schedules/RC-C.md), [RC-E](docs/schedules/RC-E.md) — **done** |
 | 0.4 | Schedules [RC-B](docs/schedules/RC-B.md), [RC-D](docs/schedules/RC-D.md), [RC-N](docs/schedules/RC-N.md) — **done** |
 | 0.5 | Schedules [RC-K](docs/schedules/RC-K.md), [RC-R Part I](docs/schedules/RC-R-I.md), [RC-O](docs/schedules/RC-O.md), [RI-A](docs/schedules/RI-A.md), [RI-B](docs/schedules/RI-B.md) — **done** |
-| 0.6 | Cleaning layer |
+| 0.6 | [Cleaning layer](docs/CLEANING.md) + [data-quality checks](docs/QUALITY.md) — **done** |
 | 1.0 | Docs, examples, DOI, PyPI |
 
 FR Y-9C support is designed for — the engine takes a `ReportProfile` — but not built.

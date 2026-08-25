@@ -21,6 +21,7 @@ profile,ffiec_call
 
 [BASE_VARIABLES]
 mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCON2200,dep_tot_dom,RC-E,stock,all,,,,TOTAL DEPOSITS (domestic offices) -- the headline deposit total
 RCON2202,dep_usgovt_trans,RC-E,stock,all,,,,TOTAL TRANSACTION ACCOUNTS - DEPOSITS OF U.S. GOVERNMENT
 RCON2203,dep_statelocal_trans,RC-E,stock,all,,,,TOTAL TRANSACTION ACCOUNTS - DEPOSITS OF STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
 RCON2210,demand_dep_tot,RC-E,stock,all,,,,TOTAL DEMAND DEPOSITS (SEE NOTE BELOW)

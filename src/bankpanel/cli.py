@@ -151,6 +151,16 @@ def cmd_validate(args: argparse.Namespace) -> int:
         saved["series_breaks"] = findings
         exit_code = max(exit_code, gate(findings))
 
+    if args.check in ("quality", "all"):
+        from .validate.quality import format_report, gate, run_checks
+
+        cs = ConfigSet.load(args.config_dir)
+        results = run_checks(df, cs.checks)
+        print()
+        print(format_report(results))
+        saved["quality_checks"] = results
+        exit_code = max(exit_code, gate(results))
+
     if args.check in ("quarterize", "all"):
         from .validate.quarterize_audit import attribute, audit, format_report
 
@@ -388,7 +398,7 @@ def main(argv: list[str] | None = None) -> int:
     p_exp.set_defaults(func=cmd_expectations)
 
     p_val = sub.add_parser("validate", help="run a validator against a built panel")
-    p_val.add_argument("check", choices=("coverage", "breaks", "quarterize", "all"))
+    p_val.add_argument("check", choices=("coverage", "breaks", "quarterize", "quality", "all"))
     p_val.add_argument("--panel-root", default=None)
     _add_common(p_val)
     p_val.add_argument("--expectations", default=None)

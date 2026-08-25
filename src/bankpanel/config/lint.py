@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 
+from ..expr import FormulaError, dependencies
 from .graph import DependencyGraph
 from .model import RESERVED_NAMES, Config, Origin
 
@@ -145,6 +146,36 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
                         f"undescribed column is an undocumented one.",
                     )
                 )
+
+    # --- data-quality checks ----------------------------------------------------------
+    seen_checks: dict[str, Origin] = {}
+    for cfg in configs:
+        for check in cfg.checks:
+            if check.name in seen_checks:
+                issues.append(LintIssue(
+                    "error",
+                    f"{check.origin}: check name {check.name!r} is already used at "
+                    f"{seen_checks[check.name]}.",
+                ))
+            seen_checks[check.name] = check.origin
+            try:
+                deps = dependencies(check.expression, where=str(check.origin))
+            except FormulaError as exc:
+                issues.append(LintIssue("error", str(exc).splitlines()[0]))
+                continue
+            unknown = sorted(deps - known)
+            if unknown:
+                issues.append(LintIssue(
+                    "error",
+                    f"{check.origin}: check {check.name!r} references unknown "
+                    f"variable(s) {unknown}.",
+                ))
+            if not check.description.strip():
+                issues.append(LintIssue(
+                    "warning",
+                    f"{check.origin}: check {check.name!r} has no description. A failing "
+                    f"check nobody can interpret gets ignored.",
+                ))
 
     # --- flow-type sanity -----------------------------------------------------------
     for cfg in configs:

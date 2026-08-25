@@ -16,9 +16,11 @@ from .model import (
     FLOW_TYPES,
     FORM_SCOPES,
     SCHEDULES,
+    SEVERITIES,
     SIGNS,
     ZERO_FILL_SCOPES,
     BaseVar,
+    Check,
     Config,
     ConfigError,
     DerivedVar,
@@ -38,6 +40,7 @@ _SECTION_SPEC: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
         ("unit", "sign"),
     ),
     "ZERO_FILL": (("column", "scope", "reason"), ("era_start",)),
+    "CHECKS": (("name", "expression", "severity", "description"), ()),
 }
 
 
@@ -258,6 +261,21 @@ def parse_config_file(path: str | Path) -> Config:
                     scope=_check_enum(origin, "scope", rec["scope"], ZERO_FILL_SCOPES),
                     reason=rec["reason"],
                     era_start=_opt(rec, "era_start"),
+                    origin=origin,
+                )
+            )
+
+    if "CHECKS" in sections:
+        for origin, rec in sections["CHECKS"].records:
+            for req in ("name", "expression"):
+                if not rec[req]:
+                    raise ConfigError(f"{origin}: check is missing {req!r}")
+            cfg.checks.append(
+                Check(
+                    name=rec["name"],
+                    expression=rec["expression"],
+                    severity=_check_enum(origin, "severity", rec.get("severity") or "warning", SEVERITIES),
+                    description=rec.get("description", ""),
                     origin=origin,
                 )
             )
