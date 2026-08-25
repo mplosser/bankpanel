@@ -91,11 +91,13 @@ column projection means asking for what you need is cheap.
 engine. Genuine definition changes are *knowledge* and live in config formulas.
 
 **Year-to-date conversion.** Every RIAD income item is year-to-date and resets each Q1.
-`bankpanel` differences within bank-years, and — unlike the naive version — detects the
-two cases where that silently goes wrong: a bank missing an intra-year quarter (whose
-next difference spans two quarters), and a bank whose first filing of a year is not Q1
-(whose year-to-date would otherwise be recorded as one quarter's flow). Both are reported
-and handled by an explicit `--gap-policy`.
+`bankpanel` differences within bank-years, and — unlike the naive version — catches the
+three cases where that silently goes wrong: a bank missing an intra-year quarter (whose
+next difference spans two quarters), a bank whose first filing of a year is not Q1 (whose
+year-to-date would otherwise be booked as one quarter's flow), and a bank whose previous
+quarter was filed but left the item blank (same effect, and invisible to any check based
+on the reporting calendar). Handled by an explicit `--gap-policy` and reported rather than
+absorbed. On a full 1985–2025 build these affect 13,822 bank-quarters, about 1 in 100.
 
 **Form awareness.** Every row carries `form_type` (31/41/51) across the whole panel,
 including the pre-2011 era where it must be derived. This is what lets you tell
