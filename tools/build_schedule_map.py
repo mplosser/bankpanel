@@ -34,11 +34,15 @@ TAG_TO_SCHEDULE = {
     "RC": "RC", "RCA": "RC-A", "RCB": "RC-B", "RCCI": "RC-C", "RCCII": "RC-C",
     "RCD": "RC-D", "RCE": "RC-E", "RCEI": "RC-E", "RCEII": "RC-E", "RCF": "RC-F",
     "RCG": "RC-G", "RCH": "RC-H", "RCK": "RC-K", "RCL": "RC-L", "RCM": "RC-M",
-    "RCN": "RC-N", "RCO": "RC-O", "RCP": "RC-P", "RCQ": "RC-Q", "RCR": "RC-R",
-    "RCRI": "RC-R", "RCRIA": "RC-R", "RCRIB": "RC-R", "RCRII": "RC-R",
+    "RCN": "RC-N", "RCO": "RC-O", "RCP": "RC-P", "RCQ": "RC-Q",
+    # RC-R Parts I and II are kept apart. Part I is the ~150 capital and ratio items
+    # everyone uses; Part II is the ~740-cell risk-weighted-asset grid. Collapsing them
+    # into one label makes it impossible to ask for just the useful half.
+    "RCR": "RC-R-I", "RCRI": "RC-R-I", "RCRIA": "RC-R-I", "RCRIB": "RC-R-I",
+    "RCRII": "RC-R-II",
     "RCS": "RC-S", "RCT": "RC-T", "RCV": "RC-V",
     "RI": "RI", "RIA": "RI-A", "RIB": "RI-B", "RIBI": "RI-B", "RIBII": "RI-B",
-    "RIC": "RI-C", "RID": "RI-D", "RIE": "RI-E",
+    "RIC": "RI-C", "RICI": "RI-C", "RICII": "RI-C", "RID": "RI-D", "RIE": "RI-E",
 }
 
 

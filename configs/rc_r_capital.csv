@@ -1,0 +1,57 @@
+# Schedule RC-R Part I -- Regulatory Capital.
+#
+# Two things about this schedule are easy to get wrong, and both are handled here.
+#
+# 1. THE BASEL I -> BASEL III CHANGE IS A PREFIX CHANGE. The same MDRM item codes carry
+#    the same concepts on either side, under a different prefix:
+#        tier 1 capital   RCFD8274 (through 2014Q4)  ->  RCOA8274 (2015Q1 onward)
+#        tier 2 capital   RCFD5311                   ->  RCOA5311
+#        RWA              RCFDA223                   ->  RCOAA223
+#    A variable pointed at either one alone goes blank for half the panel. The base items
+#    below are era-suffixed and the derived series stitch them.
+#
+# 2. THE REPORTED RATIOS ARE CONFIDENTIAL FROM 2015Q1. RCOA7204 / 7205 / 7206 and
+#    RCOAP793 have ~98% coverage but every cell is the literal string "CONF". The ratios
+#    are therefore COMPUTED from the published amounts, which are not confidential.
+#    The pre-2015 reported ratios are kept as *_reported_baselI so the computed series
+#    can be validated against them in the overlap.
+#
+# Part II -- the ~740-cell risk-weighted-asset grid -- is not covered.
+
+[META]
+key,value
+panel_name,rc_r_capital
+schedule,RC-R-I
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD8274,tier1_capital_baselI,RC-R-I,stock,031+041,1996-03-31,2014-12-31,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
+RCFD5311,tier2_capital_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,TIER 2 (SUPPLEMENTARY) CAPITAL
+RCFDA223,rwa_baselI,RC-R-I,stock,031+041,1996-03-31,2014-12-31,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
+RCFD7204,leverage_ratio_reported_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,TIER 1 LEVERAGE CAPITAL RATIO
+RCFD7205,total_rbc_ratio_reported_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,TOTAL RISK-BASED CAPITAL RATIO
+RCFD7206,tier1_rbc_ratio_reported_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,TIER 1 RISK-BASED CAPITAL RATIO
+RCFDB704,rwa_before_excess_allowance,RC-R-I,stock,all,2001-03-31,,,RISK-WEIGHTED ASSETS BEFORE DEDUCTIONS FOR EXCESS ALLOWANCE FOR LOAN AND LEASE LOSSES AND ALLOCATED TRANSFER RISK RESE
+RCFDB700,rwa_bucket_0pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 0%
+RCFDB701,rwa_bucket_20pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 20%
+RCFDB702,rwa_bucket_50pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 50%
+RCFDB703,rwa_bucket_100pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 100%
+RCFDL138,assets_for_leverage_baselI,RC-R-I,stock,031+041,2012-03-31,2014-12-31,,TOTAL ASSETS FOR LEVERAGE CAPITAL PURPOSES
+RCOA8274,tier1_capital_baselIII,RC-R-I,stock,041+051,2015-03-31,,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
+RCOA5311,tier2_capital_baselIII,RC-R-I,stock,041+051,2015-03-31,,,TIER 2 (SUPPLEMENTARY) CAPITAL
+RCOAA223,rwa_baselIII,RC-R-I,stock,041+051,2015-03-31,,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
+RCOAP742,cet1_common_stock_surplus,RC-R-I,stock,041+051,2015-03-31,,,COMMON EQUITY TIER 1 CAPITAL: COMMON STOCK PLUS RELATED SURPLUS; NET OF TREASURY STOCK AND UNEARNED EMPLOYEE STOCK OWN
+RCOAP839,cet1_minority_interest,RC-R-I,stock,041+051,2015-03-31,,,COMMON EQUITY TIER 1 MINORITY INTEREST INCLUDABLE IN COMMON EQUITY TIER 1 CAPITAL
+RCOAP858,cet1_adjustments_deductions,RC-R-I,stock,041+051,2015-03-31,,,TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL
+RCOAP862,tier1_minority_interest_not_cet1,RC-R-I,stock,041+051,2015-03-31,,,TIER 1 MINORITY INTEREST NOT INCLUDED IN COMMON EQUITY TIER 1 CAPITAL
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+tier1_capital,RC-R-I,stock,Tier 1 capital on a consistent basis; Basel III (RCOA8274) from 2015Q1 falling back to Basel I (RCFD8274) before,tier1_capital_baselIII.fillna(tier1_capital_baselI),thousands_usd,
+tier2_capital,RC-R-I,stock,Tier 2 capital on a consistent basis across the Basel I / Basel III change,tier2_capital_baselIII.fillna(tier2_capital_baselI),thousands_usd,
+rwa,RC-R-I,stock,Risk-weighted assets on a consistent basis across the Basel I / Basel III change,rwa_baselIII.fillna(rwa_baselI),thousands_usd,
+total_capital,RC-R-I,stock,Total regulatory capital: tier 1 plus tier 2,tier1_capital + tier2_capital,thousands_usd,
+tier1_rbc_ratio,RC-R-I,rate,Tier 1 risk-based capital ratio; COMPUTED as tier 1 capital over risk-weighted assets. Computed rather than read because the reported ratio is confidential from 2015Q1; see docs/schedules/RC-R-I.md,tier1_capital / rwa,ratio,
+total_rbc_ratio,RC-R-I,rate,Total risk-based capital ratio; COMPUTED as total capital over risk-weighted assets,total_capital / rwa,ratio,
+cet1_ratio,RC-R-I,rate,Common equity tier 1 ratio; COMPUTED as cet1 over risk-weighted assets. Basel III only; so NaN before 2015Q1,cet1 / rwa,ratio,

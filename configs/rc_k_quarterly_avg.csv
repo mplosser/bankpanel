@@ -1,0 +1,38 @@
+# Schedule RC-K -- Quarterly Averages.
+#
+# Averages of balance-sheet items over the quarter, as reported by the bank. These matter
+# out of proportion to their number: an income ratio built on a two-endpoint average of a
+# stock is wrong in exactly the quarters that move -- mergers, divestitures, rapid growth
+# -- whereas RC-K reports what the bank actually averaged.
+#
+# This is the input the cleaning layer's denominator-repair functions need
+# (rescale_denominator_reported_avg, implied_rate_floored), so it is a prerequisite for
+# v0.6 rather than an end in itself.
+#
+# CAVEAT for large filers: the reported average total assets (RCFD3368, already carried)
+# runs materially BELOW the end-of-quarter balance for some FFIEC 031 filers -- a
+# reporting artifact of foreign-office and RAL treatment, not growth. Do not assume the
+# reported average and the endpoint measure the same population.
+
+[META]
+key,value
+panel_name,rc_k_quarterly_avg
+schedule,RC-K
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD3365,qavg_ffsold_resell,RC-K,stock,all,,,,QUARTERLY AVERAGE OF FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+RCFD3353,qavg_ffpurch_repo,RC-K,stock,all,,,,QUARTERLY AVERAGE OF FEDERAL FUNDS PURCHASED AND SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE
+RCFD3355,qavg_othbor,RC-K,stock,all,,,,QUARTERLY AVERAGE OF OTHER BORROWED MONEY
+RCFD3381,qavg_ibb,RC-K,stock,all,,,,QUARTERLY AVERAGE OF INTEREST-BEARING BALANCES DUE FROM DEPOSITORY INSTITUTIONS
+RCFD3401,qavg_trading_assets,RC-K,stock,all,,,,QUARTERLY AVERAGE OF ASSETS HELD IN TRADING ACCOUNTS
+RCFDB558,qavg_sec_ust_agency,RC-K,stock,all,2001-03-31,,,U.S. TREASURY SECURITIES AND U.S. GOVERNMENT AGENCY OBLIGATIONS (EXCLUDING MORTGAGE-BACKED SECURITIES)
+RCFDB559,qavg_sec_mbs,RC-K,stock,all,2001-03-31,,,MORTGAGE-BACKED SECURITIES
+RCFDB560,qavg_sec_oth,RC-K,stock,all,2001-03-31,,,ALL OTHER SECURITIES
+RCONB561,qavg_ln_indiv_cc,RC-K,stock,all,2001-03-31,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: CREDIT CARDS
+RCONB562,qavg_ln_indiv_oth,RC-K,stock,all,2001-03-31,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: OTHER
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+qavg_sec_tot,RC-K,stock,Quarterly average of securities across the three reported categories (2001Q1 onward),qavg_sec_ust_agency + qavg_sec_mbs + qavg_sec_oth,thousands_usd,

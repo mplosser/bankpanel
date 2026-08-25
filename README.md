@@ -10,8 +10,8 @@ file which omits some items entirely and collects others only twice a year.
 
 > **Status: v0.1.** The engine is complete and verified: the shipped configs reproduce
 > the panels of the research pipeline this was extracted from — **688 of 688 columns
-> match exactly** across 1,415,045 bank-quarters. The panel now carries **967 columns**
-> across nine schedules. See [Roadmap](#roadmap).
+> match exactly** across 1,415,045 bank-quarters. The panel now carries **1,071 columns**
+> across fourteen schedules. See [Roadmap](#roadmap).
 
 ---
 
@@ -141,7 +141,7 @@ so a cleaning decision is reproducible and reviewable rather than baked in.
 | 0.2 | Form-type bridge, reporting-expectations matrix, the three validators — **done** |
 | 0.3 | Schedules [RC-C](docs/schedules/RC-C.md), [RC-E](docs/schedules/RC-E.md) — **done** |
 | 0.4 | Schedules [RC-B](docs/schedules/RC-B.md), [RC-D](docs/schedules/RC-D.md), [RC-N](docs/schedules/RC-N.md) — **done** |
-| 0.5 | Schedules RC-K, RC-R Part I, RC-O headline, RI-A, RI-B |
+| 0.5 | Schedules [RC-K](docs/schedules/RC-K.md), [RC-R Part I](docs/schedules/RC-R-I.md), [RC-O](docs/schedules/RC-O.md), [RI-A](docs/schedules/RI-A.md), [RI-B](docs/schedules/RI-B.md) — **done** |
 | 0.6 | Cleaning layer |
 | 1.0 | Docs, examples, DOI, PyPI |
 

@@ -1,0 +1,36 @@
+# Schedule RC-O -- Other Data for Deposit Insurance Assessments.
+#
+# Only 11 of this schedule's 433 codes are usable, and the reason is worth stating: 165
+# of them are collected but NOT PUBLISHED -- every populated cell is the literal string
+# "CONF". The assessment-scorecard detail the FDIC uses to price deposit insurance is
+# confidential, so RC-O reduces to its headline items whether or not one intends to scope
+# it that way.
+#
+# What survives is genuinely useful: the assessment base (total deposit liabilities less
+# allowable exclusions), unsecured borrowings by maturity, and the quarterly averages of
+# consolidated assets and tangible equity that the assessment rate is applied to.
+#
+# RCFDK653 (averaging method used) and RCONA545 (legal title of parent) are excluded as
+# non-numeric identifiers rather than measures.
+
+[META]
+key,value
+panel_name,rc_o_assessments
+schedule,RC-O
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFDF236,assessable_dep_liabilities,RC-O,stock,all,2007-03-31,,,TOTAL DEPOSIT LIABILITIES AS DEFINED IN SECTION 3(1) OF THE FEDERAL DEPOSIT INSURANCE ACT BEFORE EXCLUSIONS
+RCFDF237,assessable_allowable_exclusions,RC-O,stock,all,2007-03-31,,,TOTAL ALLOWABLE EXCLUSIONS; INCLUDING INTEREST ACCRUED AND UNPAID ON ALLOWABLE EXCLUSIONS (INCLUDING FOREIGN DEPOSITS)
+RCFDG465,unsecured_othbor_lte1yr,RC-O,stock,all,2009-06-30,,,UNSECURED OTHER BORROWINGS WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+RCFDG466,unsecured_othbor_1_3yr,RC-O,stock,all,2009-06-30,,,UNSECURED OTHER BORROWINGS WITH A REMAINING MATURITY OF OVER ONE YEAR THROUGH THREE YEARS
+RCFDG467,unsecured_othbor_3_5yr,RC-O,stock,all,2009-06-30,,,UNSECURED OTHER BORROWINGS WITH A REMAINING MATURITY OF OVER THREE YEARS THROUGH FIVE YEARS
+RCFDG468,unsecured_othbor_gt5yr,RC-O,stock,all,2009-06-30,,,UNSECURED OTHER BORROWINGS WITH A REMAINING MATURITY OF OVER FIVE YEARS
+RCFDK652,qavg_consolidated_assets,RC-O,stock,all,2011-06-30,,,AVERAGE CONSOLIDATED TOTAL ASSETS FOR THE CALENDAR QUARTER
+RCFDK654,qavg_tangible_equity,RC-O,stock,all,2011-06-30,,,AVERAGE TANGIBLE EQUITY FOR THE CALENDAR QUARTER
+RCFDK655,holdings_ltd_other_insured_insts,RC-O,stock,all,2011-06-30,,,HOLDINGS OF LONG-TERM UNSECURED DEBT ISSUED BY OTHER FDIC INSURED INSTITUTIONS
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+unsecured_othbor_tot,RC-O,stock,Unsecured other borrowings across all maturity buckets (2009Q2 onward),unsecured_othbor_lte1yr + unsecured_othbor_1_3yr + unsecured_othbor_3_5yr + unsecured_othbor_gt5yr,thousands_usd,

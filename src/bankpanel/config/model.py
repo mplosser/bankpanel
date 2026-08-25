@@ -31,7 +31,8 @@ SIGNS = frozenset({"any", "nonneg", "nonpos"})
 #: inputs from more than one schedule.
 SCHEDULES = frozenset({
     "RC", "RC-A", "RC-B", "RC-C", "RC-D", "RC-E", "RC-F", "RC-G", "RC-H", "RC-K",
-    "RC-L", "RC-M", "RC-N", "RC-O", "RC-P", "RC-Q", "RC-R", "RC-S", "RC-T", "RC-V",
+    "RC-L", "RC-M", "RC-N", "RC-O", "RC-P", "RC-Q", "RC-R", "RC-R-I", "RC-R-II",
+    "RC-S", "RC-T", "RC-V",
     "RI", "RI-A", "RI-B", "RI-C", "RI-D", "RI-E",
     "CROSS",
 })
