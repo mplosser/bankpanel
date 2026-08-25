@@ -110,6 +110,24 @@ def test_duplicate_bank_quarter_rejected():
         quarterize(_frame(CLEAN + [(1, "2020Q2", 99.0)]), ["ytd"], policy="nan")
 
 
+def test_missing_predecessor_value_is_nan_by_default():
+    """The third failure mode: the previous row exists but its value is missing.
+
+    Legacy computed ytd(Q4) - NaN = NaN and then fell back to the raw year-to-date,
+    booking a whole year of income as one quarter's flow. It is not detectable from the
+    reporting calendar, because no quarter is actually absent.
+    """
+    rows = [(4, "2020Q3", None), (4, "2020Q4", 509.0)]
+    out, _ = quarterize(_frame(rows), ["ytd"], policy="nan")
+    assert np.isnan(_values(out, 4)[1])
+
+
+def test_missing_predecessor_value_keep_reproduces_legacy():
+    rows = [(4, "2020Q3", None), (4, "2020Q4", 509.0)]
+    out, _ = quarterize(_frame(rows), ["ytd"], policy="keep")
+    assert _values(out, 4)[1] == 509.0
+
+
 def test_unknown_policy_rejected():
     with pytest.raises(QuarterizeError, match="unknown gap policy"):
         quarterize(_frame(CLEAN), ["ytd"], policy="invent")

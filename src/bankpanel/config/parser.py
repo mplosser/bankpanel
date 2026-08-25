@@ -225,7 +225,10 @@ def parse_config_file(path: str | Path) -> Config:
         )
 
     for origin, rec in sections["DERIVED_VARIABLES"].records:
-        for req in ("variable_name", "formula", "description"):
+        # description is checked by lint, not here: the parser validates structure, and
+        # a missing description is a documentation gap rather than a malformed file. It
+        # must not block importing an otherwise-valid legacy config.
+        for req in ("variable_name", "formula"):
             if not rec[req]:
                 raise ConfigError(f"{origin}: derived variable is missing {req!r}")
         cfg.derived.append(

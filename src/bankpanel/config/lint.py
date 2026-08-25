@@ -133,6 +133,19 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
                     )
                 )
 
+    # --- documentation ----------------------------------------------------------------
+    for cfg in configs:
+        for var in cfg.derived:
+            if not var.description.strip():
+                issues.append(
+                    LintIssue(
+                        "warning",
+                        f"{var.origin}: derived variable {var.variable_name!r} has no "
+                        f"description. The dictionary ships with the panel, so an "
+                        f"undescribed column is an undocumented one.",
+                    )
+                )
+
     # --- flow-type sanity -----------------------------------------------------------
     for cfg in configs:
         for var in cfg.base:

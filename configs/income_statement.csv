@@ -1,0 +1,103 @@
+# Migrated from bec_migration/data_preparation/config/income_statement.csv.
+# Formulas and output column names are unchanged. Added: schedule, flow_type,
+# sign, and the zero-fill rules that were previously hardcoded in Python.
+
+[META]
+key,value
+panel_name,income_statement
+profile,ffiec_call
+source,bec_migration/income_statement.csv
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RIADJH93,ytd_cecl_htm_dsec_cp_bal,RI-B,ytd,all,,,,
+RIADF551,ytd_net_gain_ass_fv,RI,ytd,all,,,,
+RCFDJJ04,cecl_ln_const_am_cost,RI-C,stock,all,,,,
+RCFDJJ05,cecl_ln_cre_am_cost,RI-C,stock,all,,,,
+RCFDJJ06,cecl_ln_rre_am_cost,RI-C,stock,all,,,,
+RCFDJJ07,cecl_ln_com_am_cost,RI-C,stock,all,,,,
+RCFDJJ08,cecl_ln_cc_am_cost,RI-C,stock,all,,,,
+RCFDJJ09,cecl_ln_oth_cons_am_cost,RI-C,stock,all,,,,
+RCFDJJ11,cecl_ln_tot_inv_am_cost,RI-C,stock,all,,,,
+RCFDJJ12,cecl_ln_const_allow_bal,RI-C,stock,all,,,,
+RCFDJJ13,cecl_ln_cre_allow_bal,RI-C,stock,all,,,,
+RCFDJJ14,cecl_ln_rre_allow_bal,RI-C,stock,all,,,,
+RCFDJJ15,cecl_ln_com_allow_bal,RI-C,stock,all,,,,
+RCFDJJ16,cecl_ln_cc_allow_bal,RI-C,stock,all,,,,
+RCFDJJ17,cecl_ln_oth_cons_allow_bal,RI-C,stock,all,,,,
+RCFDJJ18,cecl_ln_unalloctd_allow_bal,RI-C,stock,all,,,,
+RCFDJJ19,cecl_ln_tot_inv_allow_bal,RI-C,stock,all,,,,
+RIAD4010,ytd_int_inc_ln,RI,ytd,all,,,nonneg,
+RIAD4011,ytd_int_inc_lndom_re_agg_031032,RI,ytd,all,,,nonneg,
+RIAD4435,ytd_int_inc_ln_rre,RI,ytd,all,,,nonneg,
+RIAD4436,ytd_int_inc_ln_oth_re,RI,ytd,all,,,nonneg,
+RIAD4054,ytd_int_inc_ln_cc_pre01_031032,RI,ytd,all,,,nonneg,
+RIAD4055,ytd_int_inc_ln_cons_pre01,RI,ytd,all,,,nonneg,
+RIAD4012,ytd_int_inc_ln_ci,RI,ytd,all,,,nonneg,
+RIAD4508,ytdint_exp_trans_accts_dom,RI,ytd,all,,,nonneg,
+RIAD0093,ytdint_exp_savings_dep_dom_01,RI,ytd,all,,,nonneg,
+RIADHK03,ytdint_exp_time_lt250k_dom,RI,ytd,all,,,nonneg,
+RIADHK04,ytdint_exp_time_gt250k_dom,RI,ytd,all,,,nonneg,
+RIAD4172,ytdint_exp_for,RI,ytd,all,,,nonneg,
+RIADA518,ytdint_exp_time_lt100k_dom,RI,ytd,all,,,nonneg,
+RIAD4185,ytdint_exp_trad_othbor,RI,ytd,all,,,nonneg,
+RIAD4200,ytdint_exp_subdebt,RI,ytd,all,,,nonneg,
+RIAD4176,ytdint_exp_oth_dep,RI,ytd,all,,,nonneg,
+RIAD4512,ytdint_exp_oth_time_dep,RI,ytd,all,,,nonneg,
+RIAD4070,ytdfiduc_inc,RC-T,ytd,all,,,nonneg,
+RIAD4080,ytdnonint_inc_srv_chrg_dep,RI,ytd,all,,,nonneg,
+RIADA220,ytdtradrev_inc,RI,ytd,all,,,,
+RIADC886,ytdnonint_inc_sb,RI,ytd,all,,,nonneg,
+RIADC888,ytdnonint_inc_fees_adv,RI,ytd,all,,,nonneg,
+RIADC887,ytdnonint_inc_fees_annu,RI,ytd,all,,,nonneg,
+RIADC386,ytdnonint_inc_ins_underw,RI,ytd,all,,,nonneg,
+RIADC387,ytdnonint_inc_oth_ins_act,RI,ytd,all,,,nonneg,
+RIADB493,ytdsectn_inc,RI,ytd,all,,,,
+RIADB497,ytdnonint_inc_oth,RI,ytd,all,,,nonneg,
+RIAD4079,ytdnonint_inc,RI,ytd,all,,,nonneg,
+RIAD5407,ytdnonint_inc_oth_fee,RI,ytd,all,,,nonneg,
+RIAD5408,ytdnonint_inc_all_oth,RI,ytd,all,,,nonneg,
+RIADB494,ytdnonint_inc_ins_fee,RI,ytd,all,,,nonneg,
+RIADB490,ytdnonint_inc_ib_adv_fee,RI,ytd,all,,,nonneg,
+RIAD4078,ytdnonint_inc_oth_pre2001,RI,ytd,all,,,nonneg,
+RIAD5416,ytdnonint_inc_net_gain_ll,RI,ytd,all,,,nonneg,
+RIAD5415,ytdnonint_inc_oreo,RI,ytd,all,,,nonneg,
+RIADB496,ytdnonint_inc_net_gain_oth_ass,RI,ytd,all,,,nonneg,
+RIAD4135,ytdnonint_exp_comp,RI,ytd,all,,,nonneg,
+RIAD4217,ytdnonint_exp_fass,RI,ytd,all,,,nonneg,
+RIAD4092,ytdnonint_exp_oth,RI,ytd,all,,,nonneg,
+RIAD4093,ytdnonint_exp,RI,ytd,all,,,nonneg,
+RIAD4302,ytdtaxes_inc,RI,ytd,all,,,,
+RIAD4107,ytdint_inc,RI,ytd,all,,,nonneg,
+RIAD4073,ytdint_exp,RI,ytd,all,,,nonneg,
+RIAD4509,ytdint_exp_savings_dep_dom_1_pre01,RI,ytd,all,,,nonneg,
+RIAD4511,ytdint_exp_savings_dep_dom_2_pre01,RI,ytd,all,,,nonneg,
+RIAD4246,ytd_int_inc_lndom_re_agg_033,RI,ytd,all,,,nonneg,
+RIADB485,ytd_int_inc_ln_cc,RI,ytd,all,,,nonneg,
+RIADB486,ytd_int_inc_ln_cons,RI,ytd,all,,,nonneg,
+RIAD4077,ytdtradrev_inc_1_pre01,RI,ytd,all,,,,
+RIAD4075,ytdtradrev_inc_2_pre01,RI,ytd,all,,,,
+RIAD4248,ytd_int_inc_ln_cc_pre01_033034,RI,ytd,all,,,nonneg,
+RIAD4174,ytdint_exp_time_gt100k_dom_pre97,RI,ytd,all,,,nonneg,
+RIADA517,ytdint_exp_time_gt100k_dom_97,RI,ytd,all,,,nonneg,
+RIAD4356,ytd_structflag_business_combo,RI-A,ytd,all,,,,
+RIADB507,ytd_structflag_restatement,RI-A,ytd,all,,,,
+RIADFT28,ytd_structflag_discontinued_ops,RI,ytd,all,,,,
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_int_inc_ln_cc_pre01,CROSS,ytd,"Interest Income on Credit Cards (pre-2001) [RIAD4054, RIAD4248]",ytd_int_inc_ln_cc_pre01_031032.fillna(ytd_int_inc_ln_cc_pre01_033034),thousands_usd,
+ytd_int_inc_lndom_re_agg,CROSS,ytd,"Interest Income on Domestic RE Loans (Aggregate) [RIAD4011, RIAD4246]",ytd_int_inc_lndom_re_agg_031032.fillna(ytd_int_inc_lndom_re_agg_033),thousands_usd,
+ytd_int_inc_ln_indiv_pre01,CROSS,ytd,Interest Income on Individual Loans (pre-2001) [RIAD4054/RIAD4248+RIAD4055],ytd_int_inc_ln_cc_pre01+ ytd_int_inc_ln_cons_pre01,thousands_usd,
+ytdint_exp_savings_dep_dom,CROSS,ytd,"Interest Expense on Savings Deposits [pre-2001 RIAD4509+RIAD4511, post-2001 RIAD0093]",(ytdint_exp_savings_dep_dom_1_pre01+ytdint_exp_savings_dep_dom_2_pre01).fillna(ytdint_exp_savings_dep_dom_01),thousands_usd,
+ytd_int_inc_ln_indiv,CROSS,ytd,Interest Income on Individual Loans [RIADB486+RIADB485],ytd_int_inc_ln_cc+ ytd_int_inc_ln_cons,thousands_usd,
+ytdtradrev_inc_pre01,CROSS,ytd,Trading Revenue [RIAD4077 + RIA54075],ytdtradrev_inc_1_pre01+ytdtradrev_inc_2_pre01,thousands_usd,
+ytdnonint_inc_oth_pre01,CROSS,ytd,Noninterest Income Other [RIAD5407 + RIAD5408],ytdnonint_inc_oth_fee+ytdnonint_inc_all_oth,thousands_usd,
+ytdnonint_inc_sales,CROSS,ytd,Noninterest Income on Sales [RIAD5416+RIAD5415+RIADB496],ytdnonint_inc_net_gain_ll+ytdnonint_inc_oreo+ytdnonint_inc_net_gain_oth_ass,thousands_usd,
+ytdint_exp_time_gt100k_dom,CROSS,ytd,"Interest on Time Deposits of $100,000 or more [RIADA517 / RIAD4174]",ytdint_exp_time_gt100k_dom_97.fillna(ytdint_exp_time_gt100k_dom_pre97),thousands_usd,
+
+[ZERO_FILL]
+column,scope,reason
+ytd_structflag_business_combo,in_era,"Schedule RI-A business combinations: a blank means no event once collection began, but means not collected before it did."
+ytd_structflag_restatement,in_era,"Schedule RI-A restatements: a blank means no event once collection began, but means not collected before it did."
+ytd_structflag_discontinued_ops,in_era,"Schedule RI-A discontinued operations: a blank means no event once collection began, but means not collected before it did."

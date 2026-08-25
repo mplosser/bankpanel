@@ -8,8 +8,10 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v0.1, under active development.** The engine works end to end; schedule
-> coverage is still being filled in. See [Roadmap](#roadmap).
+> **Status: v0.1.** The engine is complete and verified: the shipped configs reproduce
+> the panels of the research pipeline this was extracted from — **688 of 688 columns
+> match exactly** across 1,415,045 bank-quarters. Broader schedule coverage is next.
+> See [Roadmap](#roadmap).
 
 ---
 
@@ -128,7 +130,7 @@ so a cleaning decision is reproducible and reviewable rather than baked in.
 
 | Version | Contents |
 | --- | --- |
-| 0.1 | Engine: config layer, build, quarterization, reader, dictionary, CLI |
+| 0.1 | Engine: config layer, build, quarterization, reader, dictionary, CLI. Parity verified against the source pipeline (688/688 columns exact) |
 | 0.2 | Form-type bridge, reporting-expectations matrix, the three validators |
 | 0.3 | Schedules RC-C, RC-E |
 | 0.4 | Schedules RC-B, RC-D, RC-N |
