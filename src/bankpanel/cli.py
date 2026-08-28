@@ -159,6 +159,15 @@ def cmd_validate(args: argparse.Namespace) -> int:
         print()
         print(format_report(results))
         saved["quality_checks"] = results
+
+        from .validate.quality import find_fabricated_values, format_fabricated
+
+        fabricated = find_fabricated_values(df, cs)
+        print(format_fabricated(fabricated))
+        saved["fabricated_values"] = fabricated
+        # Reported, not gated: the remaining cases are legacy columns kept bit-identical
+        # for parity with the source pipeline, so failing the build on them would make the
+        # gate unusable rather than useful.
         exit_code = max(exit_code, gate(results))
 
     if args.check in ("quarterize", "all"):

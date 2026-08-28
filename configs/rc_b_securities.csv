@@ -12,6 +12,11 @@
 #
 # NOTE ac_afs_tot_toplevel sums only what is listed here and is therefore NOT the
 # reported AFS total. Use it for composition, not for footing.
+#
+# The .fillna(0) chain tolerates a missing COMPONENT within the era; the trailing
+# .where(... .notna() | ...) guard stops it fabricating a zero where NONE of the
+# components exist. Without the guard it read 0.0 for all 480,259 pre-1994 rows, before
+# AFS amortized cost was collected at all.
 
 [META]
 key,value
@@ -36,4 +41,4 @@ RCFDA248,debtsec_mat_repr_lte1yr,RC-B,stock,all,1996-03-31,,,FIXED RATE AND FLOA
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
-ac_afs_tot_toplevel,RC-B,stock,Amortized cost of AFS securities across the top-level categories carried here; see docs/schedules/RC-B.md on what is and is not included,ac_afs_ust.fillna(0) + ac_afs_states.fillna(0) + ac_afs_oth_dom.fillna(0) + ac_afs_oth_fgn.fillna(0) + ac_afs_abs.fillna(0),thousands_usd,
+ac_afs_tot_toplevel,RC-B,stock,Amortized cost of AFS securities across the top-level categories carried here; see docs/schedules/RC-B.md on what is and is not included,(ac_afs_ust.fillna(0) + ac_afs_states.fillna(0) + ac_afs_oth_dom.fillna(0) + ac_afs_oth_fgn.fillna(0) + ac_afs_abs.fillna(0)).where(ac_afs_ust.notna() | ac_afs_states.notna() | ac_afs_oth_dom.notna() | ac_afs_oth_fgn.notna() | ac_afs_abs.notna()),thousands_usd,

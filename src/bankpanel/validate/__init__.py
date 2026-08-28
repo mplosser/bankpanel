@@ -3,11 +3,11 @@
 from .approvals import load_ledger, partition
 from .breaks import check_latest_quarter
 from .coverage import CoverageThresholds, coverage_scan, find_discontinuities
-from .quality import failing_rows, run_checks
+from .quality import failing_rows, find_fabricated_values, run_checks
 from .quarterize_audit import attribute, audit
 
 __all__ = [
     "coverage_scan", "find_discontinuities", "CoverageThresholds",
     "check_latest_quarter", "audit", "attribute", "load_ledger", "partition",
-    "run_checks", "failing_rows",
+    "run_checks", "failing_rows", "find_fabricated_values",
 ]

@@ -118,6 +118,67 @@ def run_checks(df: pd.DataFrame, checks: list[Check]) -> pd.DataFrame:
     return pd.DataFrame([run_check(df, c) for c in checks])
 
 
+def find_fabricated_values(df: pd.DataFrame, configset) -> pd.DataFrame:
+    """Derived columns that carry a value where NONE of their inputs do.
+
+    A structural check rather than a declared one, because it applies to every derived
+    column and needs no author to think of it.
+
+    The failure it catches is easy to write and hard to see. A ``.fillna(0)`` chain is the
+    right way to tolerate one missing component inside an era -- but across an era
+    boundary, where every component is absent, it turns "not collected" into a confident
+    zero. Two series here did exactly that, one of them for 568,102 rows, and both looked
+    perfectly healthy on a coverage report: fabricated zeros IMPROVE coverage.
+
+    The fix is a ``.where(a.notna() | b.notna() | ...)`` guard, not removing the fillna.
+    """
+    # A column with an explicit [ZERO_FILL] rule is excluded: filling it is a recorded
+    # human decision with a written reason, not an accident of a formula.
+    zero_filled = {rule.column for rule in configset.zero_fill}
+    graph = configset.graph
+    rows = []
+    for var in configset.derived:
+        if var.variable_name in zero_filled:
+            continue
+        name = var.variable_name
+        inputs = sorted(graph.deps.get(name, ()))
+        present = [c for c in inputs if c in df.columns]
+        if name not in df.columns or not present:
+            continue
+        any_input = df[present].notna().any(axis=1)
+        fabricated = int((df[name].notna() & ~any_input).sum())
+        if fabricated:
+            values = df.loc[df[name].notna() & ~any_input, name]
+            rows.append({
+                "column": name,
+                "n_fabricated": fabricated,
+                "share_of_panel": round(fabricated / len(df), 4),
+                "all_zero": bool((values == 0).all()),
+                "formula": var.formula[:90],
+                "config": var.origin.path.name,
+            })
+    return pd.DataFrame(rows).sort_values("n_fabricated", ascending=False) if rows else pd.DataFrame(
+        columns=["column", "n_fabricated", "share_of_panel", "all_zero", "formula", "config"]
+    )
+
+
+def format_fabricated(found: pd.DataFrame) -> str:
+    lines = ["", "-" * 78, "FABRICATED VALUES -- derived columns with a value but no inputs", "-" * 78]
+    if found.empty:
+        lines.append("none: every derived value rests on at least one reported input")
+        return "\n".join(lines)
+    lines.append(f"{len(found)} column(s). A fillna(0) chain across an era boundary turns")
+    lines.append('"not collected" into a confident zero, and RAISES coverage while doing it.')
+    lines.append("")
+    for _, row in found.iterrows():
+        lines.append(
+            f"  {row['column']:<32}{row.n_fabricated:>10,} rows "
+            f"({row.share_of_panel:.1%})  all_zero={row.all_zero}"
+        )
+        lines.append(f"      {row.formula}")
+    return "\n".join(lines)
+
+
 def format_report(results: pd.DataFrame, *, limit: int = 40) -> str:
     lines = ["=" * 78, "DATA QUALITY", "=" * 78]
     if results.empty:
