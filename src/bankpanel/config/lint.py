@@ -198,6 +198,39 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
                     )
                 )
 
+    # --- intermediate columns -------------------------------------------------------
+    # Withholding a built column from the panel is safe only if something else consumes
+    # it. An intermediate nothing depends on is not "reduced scope", it is deleted data.
+    known = set(graph.deps) | {v.variable_name for cfg in configs for v in cfg.base}
+    withheld = {r.column for cfg in configs for r in cfg.intermediate}
+    consumed: set[str] = set()
+    for name, deps in graph.deps.items():
+        if name not in withheld:
+            consumed |= set(deps)
+    for cfg in configs:
+        for rule in cfg.intermediate:
+            if rule.column not in known:
+                issues.append(LintIssue(
+                    "error",
+                    f"{rule.origin}: [INTERMEDIATE] names {rule.column!r}, which no config "
+                    f"defines.",
+                ))
+            elif rule.column not in consumed:
+                issues.append(LintIssue(
+                    "error",
+                    f"{rule.origin}: {rule.column!r} is [INTERMEDIATE] but no published "
+                    f"column depends on it, so building it has no effect and the data is "
+                    f"simply dropped. Publish it, or remove it from the config.",
+                ))
+        for rule in cfg.zero_fill:
+            if rule.column in withheld:
+                issues.append(LintIssue(
+                    "warning",
+                    f"{rule.origin}: [ZERO_FILL] targets {rule.column!r}, which is "
+                    f"[INTERMEDIATE] and dropped before zero-fill runs. The rule has no "
+                    f"effect -- move it to the published column that consumes it.",
+                ))
+
     return issues
 
 

@@ -8,7 +8,15 @@ from pathlib import Path
 
 from .graph import DependencyGraph, build_graph
 from .lint import LintIssue, has_errors, lint_configs
-from .model import BaseVar, Check, Config, ConfigError, DerivedVar, ZeroFillRule
+from .model import (
+    BaseVar,
+    Check,
+    Config,
+    ConfigError,
+    DerivedVar,
+    IntermediateRule,
+    ZeroFillRule,
+)
 from .parser import parse_config_file
 
 #: Files that live in ``configs/`` but are ledgers, not variable definitions.
@@ -54,6 +62,10 @@ class ConfigSet:
         return [r for cfg in self.configs for r in cfg.zero_fill]
 
     @property
+    def intermediate(self) -> list[IntermediateRule]:
+        return [r for cfg in self.configs for r in cfg.intermediate]
+
+    @property
     def checks(self) -> list[Check]:
         return [c for cfg in self.configs for c in cfg.checks]
 
@@ -96,8 +108,18 @@ class ConfigSet:
         Deliberately distinct from :attr:`graph.order`. Evaluation must follow the
         dependency DAG, but the *schema* should be stable under formula edits, so that
         rewriting one formula does not reshuffle every partition's column order.
+
+        ``[INTERMEDIATE]`` columns are built and used, then withheld: they exist while the
+        formulas that consume them are evaluated and are dropped before the frame is cast
+        to the frozen schema.
         """
-        return [v.variable_name for v in self.base] + [v.variable_name for v in self.derived]
+        withheld = self.intermediate_columns()
+        names = [v.variable_name for v in self.base] + [v.variable_name for v in self.derived]
+        return [n for n in names if n not in withheld]
+
+    def intermediate_columns(self) -> frozenset[str]:
+        """Columns built as construction inputs but not written to the panel."""
+        return frozenset(r.column for r in self.intermediate)
 
     def flow_types(self) -> dict[str, str]:
         return {v.variable_name: v.flow_type for v in (*self.base, *self.derived)}

@@ -156,3 +156,64 @@ def test_ytd_on_balance_sheet_schedule_warns(write_config):
     text = MINIMAL.replace("RCFD2170,assets_total,RC,stock", "RCFD2170,assets_total,RC,ytd")
     issues = ConfigSet.load(write_config(text)).lint()
     assert any("year-to-date" in i.message.lower() for i in issues)
+
+
+# --- [INTERMEDIATE]: built, used, then withheld ---------------------------------------
+
+WITHHOLDING = MINIMAL + """
+[INTERMEDIATE]
+column,reason
+liabilities_total,Only wanted as an input to equity
+"""
+
+
+def test_intermediate_column_is_built_but_not_published(write_config):
+    """A withheld column stays in the namespace and leaves the output schema."""
+    cs = ConfigSet.load(write_config(WITHHOLDING))
+    cs.lint()
+    assert "liabilities_total" not in cs.output_columns()
+    assert "assets_total" in cs.output_columns()
+    # Still a variable: the formula that consumes it must still resolve.
+    assert cs.variable("liabilities_total").mdrm_code == "RCFD2948"
+    assert "RCFD2948" in cs.mdrm_codes()
+
+
+def test_intermediate_nothing_consumes_is_fatal(write_config):
+    """Withholding an unconsumed column is not reduced scope, it is deleted data."""
+    text = MINIMAL + """
+[INTERMEDIATE]
+column,reason
+equity,Nobody needs it
+"""
+    with pytest.raises(ConfigError, match="no published column depends on it"):
+        ConfigSet.load(write_config(text)).lint()
+
+
+def test_intermediate_unknown_column_is_fatal(write_config):
+    text = MINIMAL + """
+[INTERMEDIATE]
+column,reason
+typo_here,Withhold it
+"""
+    with pytest.raises(ConfigError, match="which no config defines"):
+        ConfigSet.load(write_config(text)).lint()
+
+
+def test_intermediate_requires_a_reason(write_config):
+    text = MINIMAL + """
+[INTERMEDIATE]
+column,reason
+liabilities_total,
+"""
+    with pytest.raises(ConfigError, match="has no reason"):
+        ConfigSet.load(write_config(text))
+
+
+def test_zero_fill_on_withheld_column_warns(write_config):
+    text = WITHHOLDING + """
+[ZERO_FILL]
+column,scope,reason
+liabilities_total,always,Verified absent means zero
+"""
+    issues = ConfigSet.load(write_config(text)).lint()
+    assert any("dropped before zero-fill runs" in str(i) for i in issues)

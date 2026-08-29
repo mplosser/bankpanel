@@ -349,9 +349,12 @@ def cmd_info(args: argparse.Namespace) -> int:
 
 
 def cmd_dictionary(args: argparse.Namespace) -> int:
-    from .io.reader import dictionary
+    from .io.dictionary import measure_dictionary
+    from .io.reader import _resolve_root, dictionary
 
     df = dictionary(args.panel_root)
+    if args.measure:
+        df = measure_dictionary(df, _resolve_root(args.panel_root))
     if args.schedule:
         df = df[df.schedule.str.upper() == args.schedule.upper()]
     out = Path(args.out) if args.out else None
@@ -445,6 +448,11 @@ def main(argv: list[str] | None = None) -> int:
     p_dict.add_argument("--panel-root", default=None)
     p_dict.add_argument("--schedule", default=None)
     p_dict.add_argument("--format", default="table", choices=("table", "csv", "json"))
+    p_dict.add_argument(
+        "--measure",
+        action="store_true",
+        help="scan the panel and append measured coverage, era and emptiness per column",
+    )
     p_dict.add_argument("--out", default=None)
     p_dict.set_defaults(func=cmd_dictionary)
 

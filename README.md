@@ -66,7 +66,18 @@ bankpanel expectations build --panel-root panel_root
 bankpanel validate all --panel-root panel_root --save   # coverage, breaks, quality, quarterize
 bankpanel info --panel-root panel_root
 bankpanel dictionary --schedule RC-C
+bankpanel dictionary --measure --format csv --out variables.csv   # + measured coverage
 ```
+
+`dictionary --measure` scans the built panel and appends, per column, `n_obs`,
+`coverage`, `first_quarter`, `last_quarter`, `pct_zero` (share of *reported* values that
+are exactly zero) and `total`, next to the construction: MDRM code or formula, resolved
+`inputs`, schedule, era bounds, form scope and description. A committed snapshot for the
+current build is [`docs/variables.csv`](docs/variables.csv).
+
+`pct_zero` is there because coverage alone cannot tell a well-reported column from an
+analytically empty one. Several Schedule RC-N itemisations are reported by every 031
+filer for six years and are zero in 99.9% of those cells.
 
 ```python
 import bankpanel as bp

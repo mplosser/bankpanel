@@ -143,6 +143,26 @@ class Check:
     origin: Origin
 
 
+@dataclass(frozen=True)
+class IntermediateRule:
+    """A column that is built but NOT written to the panel.
+
+    Some reported items are only worth having as inputs. Schedule RC-N itemizes past-due
+    and nonaccrual amounts for four small loan categories in three ageing buckets -- a
+    12-column grid whose fullest column has 214 non-zero cells in 148,899 bank-quarters.
+    The analytically meaningful object is the bucket total, not the grid.
+
+    Declaring the grid ``[INTERMEDIATE]`` keeps the construction auditable in the config
+    -- the formula still names every input -- while keeping twelve near-empty columns out
+    of the published panel. That is different from deleting them, which would leave the
+    bucket total as an unexplained number.
+    """
+
+    column: str
+    reason: str
+    origin: Origin
+
+
 @dataclass
 class Config:
     """One parsed config file."""
@@ -153,6 +173,7 @@ class Config:
     derived: list[DerivedVar] = field(default_factory=list)
     zero_fill: list[ZeroFillRule] = field(default_factory=list)
     checks: list[Check] = field(default_factory=list)
+    intermediate: list[IntermediateRule] = field(default_factory=list)
 
     @property
     def name(self) -> str:

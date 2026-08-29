@@ -30,8 +30,8 @@ RCFD2081,ln_forgovt,RC-C,stock,031+041,,,,LOANS TO FOREIGN GOVERNMENTS AND OFFIC
 RCFD2107,ln_statelocal_oblig,RC-C,stock,all,,,,OBLIGATIONS (OTHER THAN SECURITIES AND LEASES) OF STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
 RCFD2123,unearned_income_ln,RC-C,stock,all,,,,UNEARNED INCOME ON LOANS
 RCON2165,lease_fin_recv_net,RC-C,stock,all,,,,LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME)
-RCFD1563,ln_oth_1563,RC-C,stock,031+041,,2024-09-30,,OTHER LOANS
-RCONJ464,ln_oth_j464,RC-C,stock,all,2010-03-31,,,OTHER LOANS
+RCFD1563,ln_oth_consol,RC-C,stock,031+041,,2024-09-30,,OTHER LOANS (consolidated bank; = 1545 loans for purchasing or carrying securities + 1564 all other loans)
+RCONJ464,ln_oth_dom,RC-C,stock,all,2010-03-31,,,OTHER LOANS (domestic offices; = RCON1545 + RCONJ451). Replaces 1563 as the reported total from 2010Q1
 RCFDJ454,ln_nondep_fin_inst,RC-C,stock,all,2010-03-31,,,LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS AND OTHER LOANS: LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS
 RCFD2746,ln_finance_cre_constr,RC-C,stock,all,1991-03-31,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS 1766;
 RCON5370,ln_famres_first_adjrate,RC-C,stock,all,1991-03-31,,,ADJUSTABLE RATE CLOSED-END LOANS SECURED BY FIRST LIENS ON 1-4 FAMILY RESIDENTIAL PROPERTIES
@@ -74,3 +74,9 @@ amt_ln_smallbiz_ci,RC-C,stock,Amount outstanding of small commercial and industr
 amt_ln_smallbiz_nfnres,RC-C,stock,Amount outstanding of small nonfarm nonresidential real estate loans,amt_ln_nfnres_lte100k + amt_ln_nfnres_100k_250k + amt_ln_nfnres_250k_1m,thousands_usd,
 amt_ln_smallbiz_tot,RC-C,stock,Total small business lending: small C&I plus small nonfarm nonresidential CRE,amt_ln_smallbiz_ci + amt_ln_smallbiz_nfnres,thousands_usd,
 amt_ln_smallfarm_tot,RC-C,stock,Total small farm lending: farmland plus agricultural production,amt_ln_farmland_lte100k + amt_ln_farmland_100k_250k + amt_ln_farmland_250k_500k + amt_ln_agprod_lte100k + amt_ln_agprod_100k_250k + amt_ln_agprod_250k_500k,thousands_usd,
+ln_oth,RC-C,stock,"Other loans: loans for purchasing or carrying securities plus all other loans not classified elsewhere in Schedule RC-C. Time-consistent total across the 2010Q1 redefinition -- the consolidated RCFD1563 where reported, otherwise RCONJ464, which from 2010Q1 is the domestic-office total on every form. The two overlap on only 28,490 bank-quarters (031 filers 2010-2024) and the consolidated figure is preferred there. Subcomponents (1545, 1564, J451) are not published separately. Coverage is 100% from 2001; before that only 031 filers report the line, reaching 19% in 1985-89.",ln_oth_consol.fillna(ln_oth_dom),thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+ln_oth_consol,"Era piece of ln_oth: the pre-2010 consolidated reported total. Published only as ln_oth so there is one Other loans column rather than two overlapping definitions."
+ln_oth_dom,"Era piece of ln_oth: the domestic-office total that replaces RCFD1563 from 2010Q1. Published only as ln_oth."

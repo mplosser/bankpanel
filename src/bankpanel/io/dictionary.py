@@ -15,10 +15,15 @@ from ..build.source import QuarterFile, column_descriptions
 from ..config import ConfigSet
 
 DICTIONARY_COLUMNS = [
-    "variable_name", "variable_type", "schedule", "flow_type", "unit", "sign",
-    "mdrm_code", "form_scope", "era_start", "era_end", "description", "formula",
+    "variable_name", "variable_type", "published", "schedule", "flow_type", "unit", "sign",
+    "mdrm_code", "form_scope", "era_start", "era_end", "description", "formula", "inputs",
     "source_config",
 ]
+
+#: Measured columns appended by :func:`measure_dictionary`. Kept separate because they
+#: describe one *built panel*, not the configs -- rebuild with different raw data and
+#: these change while everything above stays put.
+MEASURED_COLUMNS = ["n_obs", "coverage", "first_quarter", "last_quarter", "pct_zero", "total"]
 
 
 def collect_descriptions(quarters: list[QuarterFile], codes: set[str]) -> dict[str, str]:
@@ -38,6 +43,8 @@ def collect_descriptions(quarters: list[QuarterFile], codes: set[str]) -> dict[s
 def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) -> pd.DataFrame:
     """One row per panel column."""
     descriptions = descriptions or {}
+    withheld = cs.intermediate_columns()
+    deps = cs.graph.deps
     rows: list[dict[str, object]] = []
 
     for cfg in cs.configs:
@@ -45,6 +52,7 @@ def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) 
             rows.append({
                 "variable_name": var.variable_name,
                 "variable_type": "base",
+                "published": var.variable_name not in withheld,
                 "schedule": var.schedule,
                 "flow_type": var.flow_type,
                 "unit": "thousands_usd" if var.flow_type in ("stock", "ytd") else "",
@@ -56,12 +64,14 @@ def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) 
                 # Prefer the official MDRM label; fall back to the config's own note.
                 "description": descriptions.get(var.mdrm_code, "") or var.notes,
                 "formula": "",
+                "inputs": "",
                 "source_config": cfg.path.name,
             })
         for var in cfg.derived:
             rows.append({
                 "variable_name": var.variable_name,
                 "variable_type": "derived",
+                "published": var.variable_name not in withheld,
                 "schedule": var.schedule,
                 "flow_type": var.flow_type,
                 "unit": var.unit,
@@ -72,6 +82,7 @@ def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) 
                 "era_end": "",
                 "description": var.description,
                 "formula": var.formula,
+                "inputs": " ".join(sorted(deps.get(var.variable_name, ()))),
                 "source_config": cfg.path.name,
             })
 
@@ -104,3 +115,65 @@ def write_dictionary(df: pd.DataFrame, root: Path) -> tuple[Path, Path]:
     md_path = root / "dictionary.md"
     md_path.write_text("\n".join(lines), encoding="utf-8")
     return csv_path, md_path
+
+
+def measure_dictionary(df: pd.DataFrame, panel_root: str | Path) -> pd.DataFrame:
+    """Append measured coverage to the config-derived dictionary.
+
+    Scans the panel one **year partition at a time** and accumulates counts. Reading the
+    whole panel to describe it would need ~12 GB for a 1,000-column build, which is a
+    silly amount of memory to spend on a summary; per-partition accumulation costs one
+    year's worth at a time and gives identical answers for every statistic here.
+
+    ``total`` is a sum rather than a median for the same reason: sums accumulate across
+    partitions, order statistics do not.
+    """
+    import pyarrow.dataset as pads
+
+    root = Path(panel_root)
+    dataset = pads.dataset(root / "panel", partitioning="hive")
+    available = [c for c in df.variable_name if c in dataset.schema.names]
+
+    n_rows = 0
+    obs = pd.Series(0, index=available, dtype="int64")
+    nonzero = pd.Series(0, index=available, dtype="int64")
+    total = pd.Series(0.0, index=available, dtype="float64")
+    first: dict[str, pd.Period] = {}
+    last: dict[str, pd.Period] = {}
+
+    for fragment in sorted(dataset.get_fragments(), key=lambda f: f.path):
+        part = fragment.to_table(columns=["REPORTING_PERIOD", *available]).to_pandas()
+        n_rows += len(part)
+        period = pd.PeriodIndex(part.REPORTING_PERIOD, freq="Q")
+        filled = part[available].notna()
+        obs += filled.sum()
+        nonzero += (part[available].fillna(0) != 0).sum()
+        total += part[available].sum()
+        for column in available:
+            mask = filled[column].to_numpy()
+            if not mask.any():
+                continue
+            seen = period[mask]
+            lo, hi = seen.min(), seen.max()
+            if column not in first or lo < first[column]:
+                first[column] = lo
+            if column not in last or hi > last[column]:
+                last[column] = hi
+
+    measured = pd.DataFrame({
+        "variable_name": available,
+        "n_obs": obs.reindex(available).to_numpy(),
+        "coverage": (obs.reindex(available) / n_rows).round(4).to_numpy(),
+        "first_quarter": [str(first.get(c, "")) for c in available],
+        "last_quarter": [str(last.get(c, "")) for c in available],
+        # Share of REPORTED values that are exactly zero. A column at 0.99 here is
+        # technically covered and analytically empty -- the distinction coverage alone
+        # cannot make, and the one that decided which RC-N itemisations to publish.
+        # NaN where the column has no observations at all: "share of reported values
+        # that are zero" is undefined, not zero, when nothing was reported.
+        "pct_zero": (
+            1 - nonzero.reindex(available) / obs.reindex(available).where(lambda s: s > 0)
+        ).round(4).to_numpy(),
+        "total": total.reindex(available).round(0).to_numpy(),
+    })
+    return df.merge(measured, on="variable_name", how="left")

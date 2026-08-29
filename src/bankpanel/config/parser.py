@@ -24,6 +24,7 @@ from .model import (
     Config,
     ConfigError,
     DerivedVar,
+    IntermediateRule,
     Origin,
     ZeroFillRule,
 )
@@ -41,6 +42,7 @@ _SECTION_SPEC: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     ),
     "ZERO_FILL": (("column", "scope", "reason"), ("era_start",)),
     "CHECKS": (("name", "expression", "severity", "description"), ()),
+    "INTERMEDIATE": (("column", "reason"), ()),
 }
 
 
@@ -263,6 +265,18 @@ def parse_config_file(path: str | Path) -> Config:
                     era_start=_opt(rec, "era_start"),
                     origin=origin,
                 )
+            )
+
+    if "INTERMEDIATE" in sections:
+        for origin, rec in sections["INTERMEDIATE"].records:
+            if not rec["reason"]:
+                raise ConfigError(
+                    f"{origin}: [INTERMEDIATE] entry for {rec['column']!r} has no reason. "
+                    f"Withholding a reported item from the panel is a scope decision and "
+                    f"must be justified."
+                )
+            cfg.intermediate.append(
+                IntermediateRule(column=rec["column"], reason=rec["reason"], origin=origin)
             )
 
     if "CHECKS" in sections:
