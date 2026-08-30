@@ -126,7 +126,15 @@ def run(panel_root: Path, legacy_dir: Path, limit: int | None = None) -> pd.Data
     return pd.DataFrame(rows)
 
 
-def report(df: pd.DataFrame) -> None:
+def report(df: pd.DataFrame, *, n_unchecked: int = 0) -> None:
+    """Print the comparison, and say plainly what it does NOT cover.
+
+    Parity compares only the columns this panel shares with the legacy panels. Every
+    column defined by a config with no legacy counterpart -- which is where new schedule
+    work happens -- is outside its scope, so "688/688, 100%" holds no matter what that
+    work does. Reporting a match rate without its denominator invites reading a
+    regression guard on inherited columns as a correctness proof for the whole panel.
+    """
     if df.empty:
         print("nothing compared")
         return
@@ -134,6 +142,12 @@ def report(df: pd.DataFrame) -> None:
     exact = int((df.n_diff == 0).sum())
     print("\n" + "=" * 78)
     print(f"PARITY: {exact}/{total} columns match exactly ({exact / total:.2%})")
+    if n_unchecked:
+        covered = total / (total + n_unchecked)
+        print(f"SCOPE:  {total} of {total + n_unchecked} panel columns ({covered:.0%}). "
+              f"{n_unchecked} have no legacy")
+        print("        counterpart and are NOT checked here. Parity is a regression guard")
+        print("        on inherited columns, not a correctness check on new ones.")
     print("=" * 78)
     lost = df[df.get("lost_to_coercion", 0) > 0]
     if not lost.empty:
@@ -163,7 +177,12 @@ if __name__ == "__main__":
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
     result = run(Path(args.panel_root), Path(args.legacy_dir), args.limit)
-    report(result)
+
+    import pyarrow.dataset as _ds
+
+    panel_cols = set(_ds.dataset(Path(args.panel_root) / "panel", partitioning="hive").schema.names)
+    panel_cols -= {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
+    report(result, n_unchecked=len(panel_cols - set(result.column)))
     if args.out:
         result.to_csv(args.out, index=False)
         print(f"\nfull results -> {args.out}")

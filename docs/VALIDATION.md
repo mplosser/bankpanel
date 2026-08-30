@@ -111,3 +111,39 @@ from rows carrying *no* indicator rather than as one minus the rest.
 Report-and-flag, never a hard gate. The right treatment is to NaN the artifact rather than
 pass a negative — or a fabricated zero — into a rate calculation, and that decision belongs
 to the analysis, not to ingest.
+
+## What parity does and does not prove
+
+`tools/parity_check.py` compares this panel against the legacy `bec_migration` panels and
+reports **688/688 columns matching exactly across 1,415,045 rows**. That number has held
+through every release, which is the point: it is a regression guard.
+
+It is not a correctness check on the panel, and the distinction matters because the two are
+easy to conflate:
+
+```
+PARITY: 688/688 columns match exactly (100.00%)
+SCOPE:  688 of 1043 panel columns (66%). 355 have no legacy
+        counterpart and are NOT checked here.
+```
+
+Parity can only compare columns that exist on both sides. Every column defined by a config
+with no legacy counterpart — all of RC-B, RC-C, RC-D, RC-E, RC-K, RC-N, RC-O, RC-R-I, RI-A,
+RI-B — is outside its scope. A release could rename, restructure or break any of those 355
+columns and parity would still print 100%.
+
+That is exactly what happened while consolidating Schedule RC-N: six mislabelled columns
+were renamed, twenty-one were replaced by three bucket totals, and two fabricated-zero bugs
+were fixed. Parity did not move by a single cell, because none of those columns are in the
+comparison.
+
+The corollary is the uncomfortable one. The three legacy columns with known fabricated
+zeros — `pdl_tot_non`, `ffrepo_ass`, `ffrepo_liab` — are *inside* the parity set, which is
+precisely why they have not been fixed: correcting them would change values the legacy
+pipeline depends on. Parity protects them from being changed, including from being
+corrected.
+
+So parity answers "did I break what I inherited". Coverage, breaks, quarterize and quality
+answer "is what I built sound". Neither substitutes for the other, and the scope line is
+printed so the first is never read as the second.
+
