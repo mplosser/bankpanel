@@ -28,6 +28,11 @@ Base columns are a code and a name. Derived columns are a *claim*. Sorted by `ri
 
 `formula` and `inputs` are both shown so a claim can be checked without opening a config.
 
+`zero_fill_evidence` is filled in wherever the construction rests on an assumed zero — a
+component blank *inside* its collection era, where `fillna(0)` cannot tell "had nothing to
+report" from "did not report". Blank in that column means every zero-filled component was
+outside its era, which is the era stitch working rather than an assumption.
+
 `verdict`: `ok` | `fix` | `drop` | `question`
 
 ## 03_domain_calls.csv — judgement calls made without a second opinion
