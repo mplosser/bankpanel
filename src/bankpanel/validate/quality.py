@@ -216,3 +216,101 @@ def gate(results: pd.DataFrame) -> int:
         return 0
     bad = results[(results.severity == "error") & results.status.isin({"fail", "invalid"})]
     return 1 if len(bad) else 0
+
+
+#: A component is treated as collected in a quarter when at least this share of the banks
+#: reporting *any* component of the same sum report it. Deliberately blunt: the question is
+#: only "was this line on the form", and an item on the form is answered by most filers.
+LIVE_THRESHOLD = 0.5
+
+
+def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPORTING_PERIOD"):
+    """Sums that zero-fill a component which WAS being collected that quarter.
+
+    Distinct from :func:`find_fabricated_values`, which catches a total built where no
+    component exists at all. This catches the subtler and far more common case: inside the
+    collection era, one component is blank for one bank, ``fillna(0)`` treats it as zero,
+    and the total is quietly understated.
+
+    The distinction that matters is *why* the cell is blank:
+
+    * outside its collection era -- zero-filling is the era stitch working as intended, and
+      is how a four-piece stitch is written as a sum in the first place;
+    * inside its era -- the bank either had nothing to report or did not report. Those are
+      indistinguishable in the data, so the zero is an assumption, not a measurement.
+
+    So liveness is established per quarter from the cross-section rather than from the
+    config's declared era: what the panel shows banks actually reporting beats what the
+    era bounds claim, and it needs no maintenance as items come and go.
+
+    Reported, never gated. Blank overwhelmingly does mean zero on a Call Report -- banks
+    leave inapplicable lines empty rather than typing 0 -- so failing a build on this would
+    fail every build. The point is that the assumption is counted and visible.
+    """
+    import re
+
+    graph = configset.graph
+    period = pd.PeriodIndex(df[id_col], freq="Q")
+    rows = []
+    for var in configset.derived:
+        name = var.variable_name
+        # `.fillna(other_column)` is an era coalesce, not a zero-fill; only `.fillna(0)`
+        # substitutes a value that was never reported.
+        if name not in df.columns or not re.search(r"\.fillna\(\s*0\s*\)", var.formula):
+            continue
+        inputs = [c for c in sorted(graph.deps.get(name, ())) if c in df.columns]
+        if len(inputs) < 2:
+            continue
+
+        present = df[inputs].notna()
+        any_input = present.any(axis=1)
+        denominator = any_input.groupby(period).sum().replace(0, np.nan)
+        built = df[name].notna().to_numpy()
+
+        affected = np.zeros(len(df), dtype=bool)
+        cells = 0
+        worst_name, worst_share = "", 0.0
+        for column in inputs:
+            coverage = present[column].groupby(period).sum() / denominator
+            live = period.map(coverage >= LIVE_THRESHOLD).to_numpy(dtype=bool)
+            zeroed = live & ~present[column].to_numpy() & built
+            affected |= zeroed
+            cells += int(zeroed.sum())
+            share = zeroed.sum() / max(int(live.sum()), 1)
+            if share > worst_share:
+                worst_name, worst_share = column, float(share)
+
+        if affected.any():
+            rows.append({
+                "column": name,
+                "n_inputs": len(inputs),
+                "n_rows": int(affected.sum()),
+                "share_of_built": round(float(affected.sum() / max(built.sum(), 1)), 4),
+                "n_cells": cells,
+                "worst_input": worst_name,
+                "worst_input_share": round(worst_share, 4),
+            })
+    columns = ["column", "n_inputs", "n_rows", "share_of_built", "n_cells",
+               "worst_input", "worst_input_share"]
+    if not rows:
+        return pd.DataFrame(columns=columns)
+    return pd.DataFrame(rows).sort_values("n_rows", ascending=False)
+
+
+def format_within_era_zerofill(found: pd.DataFrame) -> str:
+    lines = ["", "-" * 78,
+             "ASSUMED ZEROS -- components blank while their line was being collected",
+             "-" * 78]
+    if found.empty:
+        lines.append("none: every zero-filled component was outside its collection era")
+        return "\n".join(lines)
+    lines.append(f"{len(found)} column(s). Outside its era a blank component is a stitch;")
+    lines.append("inside it, the zero is an assumption and the total is understated if wrong.")
+    lines.append("")
+    lines.append(f"  {'column':<28}{'rows':>10}{'of built':>10}{'cells':>10}  worst component")
+    for _, row in found.iterrows():
+        lines.append(
+            f"  {row['column']:<28}{row.n_rows:>10,}{row.share_of_built:>10.1%}"
+            f"{row.n_cells:>10,}  {row.worst_input} ({row.worst_input_share:.1%} of its live rows)"
+        )
+    return "\n".join(lines)

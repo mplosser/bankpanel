@@ -92,3 +92,66 @@ constraints (reserves, assets, capital ratios), and capital-structure orderings 
 tier 1 ≤ total capital). All pass or fail at rates below 0.6%, most below 0.1%.
 
 Add your own: they cost one config line and are checked by `bankpanel lint` immediately.
+
+## Two structural checks nobody has to declare
+
+The 16 checks above are assertions somebody wrote down. Two more run over every derived
+column automatically, because both catch failures an author would have to anticipate to
+write a check for — and both are invisible to every other validator in the repo.
+
+### Fabricated values
+
+A total that carries a value where **none** of its inputs do. Almost always a `.fillna(0)`
+chain crossing an era boundary: right inside an era, where it tolerates one missing
+component; wrong across one, where every component is absent and "not collected" becomes a
+confident zero.
+
+The reason it survives ordinary review is that **a fabricated zero raises coverage**. The
+column looks unusually well reported. Coverage, breaks and the quarterize audit are blind
+to it by construction. Two series here did this — one for 568,102 rows — and both scored
+`coverage 1.0000` on items first collected in 1994 and 1996.
+
+The fix is a guard, not removing the `fillna`:
+
+```
+(a.fillna(0) + b.fillna(0)).where(a.notna() | b.notna())
+```
+
+### Assumed zeros
+
+The subtler case, and the common one: a component blank **inside** its collection era.
+Zero-filling it understates the total, and nothing downstream can tell.
+
+Why a cell is blank is the whole question:
+
+- **outside its collection era** — zero-filling is the era stitch working. This is how a
+  four-piece stitch gets written as a sum, and `brokered_dep_mat_lte1yr` has 846,943 rows
+  where components are missing and **zero** of them are assumptions.
+- **inside its era** — the bank either had nothing to report or did not report, and the
+  data cannot distinguish them. The zero is an assumption.
+
+Liveness is measured per quarter from the cross-section — what share of the banks
+reporting *any* component report this one — rather than from the config's declared era.
+What the panel shows beats what the era bounds claim, and it needs no maintenance.
+
+Reported, never gated. On a Call Report a blank overwhelmingly *does* mean zero: banks
+leave inapplicable lines empty rather than typing 0. Failing a build on this would fail
+every build. The point is that the assumption is counted and visible.
+
+Worked example — `pdl_tot_non`, the 22-term nonaccrual reconstruction, is the only column
+where this is material: 40.3% of the rows where the reconstruction actually runs zero-fill
+a live `na_ag_1583` (agricultural nonaccrual). Testing whether blank means "nothing to
+report":
+
+| | rows | reading |
+|---|---|---|
+| blanks at banks holding **no** agricultural loans | 32,545 (49.8%) | blank means zero |
+| blanks at banks that **do** hold ag loans | 32,841 (50.2%) | zero is an assumption |
+
+For the second half the ag book is a median of $618k, 0.98% of loans, and among banks
+holding ag loans that *did* report the line, 83.4% reported exactly zero. Imputing at the
+reporting banks' own nonaccrual rate bounds the understatement at **0.41%** of
+`pdl_tot_non` on affected rows.
+
+That is the shape of the answer this check is for: not "is the zero right" — unknowable —
+but "how wrong can it be", answered from the panel itself.

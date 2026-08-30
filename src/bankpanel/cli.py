@@ -160,10 +160,16 @@ def cmd_validate(args: argparse.Namespace) -> int:
         print(format_report(results))
         saved["quality_checks"] = results
 
-        from .validate.quality import find_fabricated_values, format_fabricated
+        from .validate.quality import (
+            find_fabricated_values,
+            find_within_era_zerofill,
+            format_fabricated,
+            format_within_era_zerofill,
+        )
 
         fabricated = find_fabricated_values(df, cs)
         print(format_fabricated(fabricated))
+        print(format_within_era_zerofill(find_within_era_zerofill(df, cs)))
         saved["fabricated_values"] = fabricated
         # Reported, not gated: the remaining cases are legacy columns kept bit-identical
         # for parity with the source pipeline, so failing the build on them would make the

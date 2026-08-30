@@ -144,3 +144,73 @@ c,assets >= 0,warning,
 """
     issues = ConfigSet.load(write_config(text)).lint()
     assert any("no description" in i.message for i in issues)
+
+
+# --- assumed zeros: blank while the line was being collected ---------------------------
+
+ERA_SUM = """[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type
+RCFD1000,old_code,RC,stock
+RCFD2000,new_code,RC,stock
+RCFD3000,partner,RC,stock
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula
+total,RC,stock,Stitched total,old_code.fillna(0) + new_code.fillna(0) + partner.fillna(0)
+"""
+
+
+def _frame(periods, old, new, partner):
+    return pd.DataFrame({
+        "REPORTING_PERIOD": pd.to_datetime(periods),
+        "old_code": old, "new_code": new, "partner": partner,
+        "total": [1.0] * len(old),
+    })
+
+
+def test_era_pieces_are_not_assumed_zeros(write_config):
+    """A component outside its era is a stitch, not an assumption."""
+    from bankpanel.config import ConfigSet
+    from bankpanel.validate.quality import find_within_era_zerofill
+
+    cs = ConfigSet.load(write_config(ERA_SUM))
+    # old_code lives only in 2000, new_code only in 2001; never both.
+    df = _frame(
+        ["2000-03-31"] * 4 + ["2001-03-31"] * 4,
+        [1.0, 2.0, 3.0, 4.0] + [None] * 4,
+        [None] * 4 + [1.0, 2.0, 3.0, 4.0],
+        [1.0] * 8,
+    )
+    assert find_within_era_zerofill(df, cs).empty
+
+
+def test_blank_while_live_is_flagged(write_config):
+    """A component most banks report, blank for one, is an assumed zero."""
+    from bankpanel.config import ConfigSet
+    from bankpanel.validate.quality import find_within_era_zerofill
+
+    cs = ConfigSet.load(write_config(ERA_SUM))
+    df = _frame(
+        ["2000-03-31"] * 4,
+        [1.0, 2.0, 3.0, 4.0],
+        [1.0, 2.0, None, 4.0],   # reported by 3 of 4 -> live, and blank for one
+        [1.0] * 4,
+    )
+    found = find_within_era_zerofill(df, cs)
+    assert len(found) == 1
+    assert found.iloc[0]["n_rows"] == 1
+    assert found.iloc[0]["worst_input"] == "new_code"
+
+
+def test_coalesce_is_not_a_zero_fill(write_config):
+    """`.fillna(other)` chooses between eras; only `.fillna(0)` invents a value."""
+    from bankpanel.config import ConfigSet
+    from bankpanel.validate.quality import find_within_era_zerofill
+
+    text = ERA_SUM.replace(
+        "old_code.fillna(0) + new_code.fillna(0) + partner.fillna(0)",
+        "old_code.fillna(new_code).fillna(partner)",
+    )
+    cs = ConfigSet.load(write_config(text))
+    df = _frame(["2000-03-31"] * 4, [1.0, 2.0, None, 4.0], [1.0] * 4, [1.0] * 4)
+    assert find_within_era_zerofill(df, cs).empty
