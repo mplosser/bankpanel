@@ -112,6 +112,62 @@ Report-and-flag, never a hard gate. The right treatment is to NaN the artifact r
 pass a negative — or a fabricated zero — into a rate calculation, and that decision belongs
 to the analysis, not to ingest.
 
+## 4. `stitches` — does the level step when the source changes?
+
+```bash
+bankpanel validate stitches --panel-root panel_root
+```
+
+The three validators above watch **reporting**. This one watches the **handoff**.
+
+An era stitch swaps which MDRM code supplies a column at some quarter: `rwa` moves from
+Basel I to Basel III at 2015Q1, `ln_oth` from `RCFD1563` to `RCONJ464` at 2010Q1, and
+`pdl_tot_non` falls from a reported total to a 22-term sum of subcomponents when
+`RCFD1403` is discontinued. On both sides of that quarter every source reports perfectly.
+Coverage sees nothing, breaks sees nothing, quality sees nothing. What can go wrong is the
+*level* — the two codes may not measure quite the same thing, and the series steps.
+
+Three things make the test trustworthy:
+
+- **Balanced panel.** The jump is measured only over banks reporting the column in both
+  the quarter before and the quarter after. Era boundaries usually change *who* files, and
+  without this the composition shift would look like a level shift.
+- **Level-free threshold.** The step is scored against the column's own quarter-to-quarter
+  volatility in the surrounding ±8 quarters, as a MAD-based robust z. A 20% move is nothing
+  in trading revenue and enormous in total assets; one fixed percentage would either miss
+  the second or drown in the first.
+- **Handoffs are found from the data.** The source of each row is the first link of the
+  coalesce chain that is present, else `<constructed>` for a fallback that is an expression
+  rather than a column. The dominant source per quarter follows, so the check needs no
+  declared era bounds and cannot drift out of step with the configs.
+
+### What it found
+
+57 handoffs move the level more than 2%; **6 exceed 4 robust standard deviations**, and
+every one of them is in the legacy configs:
+
+| column | quarter | jump | z | banks | source change |
+| --- | --- | --- | --- | --- | --- |
+| `pdl_tot_non` | 2017Q1 | **−13.8%** | 11.7 | 5,906 | `<constructed>` → `RCFD1403` |
+| `obm_gt1yr` | 1997Q2 | +15.8% | 9.6 | 9,828 | `_pre97` → `_9701` |
+| `ln_othcons` | 2001Q1 | +7.9% | 5.3 | 8,721 | `_2` → `_01` |
+| `accrued_int` | 2001Q1 | +37.5% | 5.3 | 8,721 | `_pre01` → `_01` |
+| `equitysec` | 2020Q2 | +54.7% | 4.3 | 5,113 | `afs_inv_mf_eqsec` → `_20` |
+| `ac_htm_gnma` | 2009Q2 | +65.9% | 4.0 | 7,462 | `_9409` → `_09` |
+
+That all six sit in the parity-checked set is the point of the section below. Parity
+reports 688/688 on exactly these columns, because both sides of every handoff are
+reproduced faithfully — the legacy pipeline has the same steps. Reproducing a
+discontinuity bit-for-bit is not the same as not having one.
+
+The `pdl_tot_non` finding also sharpens a caveat that was already written down. The
+reconstruction's *dispersion* against the reported total was measured at 6–8% median
+absolute error; this says the aggregate also sits about **16% high** over the banks that
+switched back at 2017Q1. Dispersion and level bias are different defects and the first
+does not imply the second. See [schedules/RC-N.md](schedules/RC-N.md).
+
+`--strict` exits non-zero on a `critical` handoff.
+
 ## What parity does and does not prove
 
 `tools/parity_check.py` compares this panel against the legacy `bec_migration` panels and

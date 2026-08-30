@@ -63,7 +63,7 @@ parses the Chicago Fed and FFIEC CDR bulk files.
 bankpanel lint                              # validate configs; reads no data
 bankpanel build --raw-dir /path/to/FFIEC_031_041 --out panel_root --jobs 8
 bankpanel expectations build --panel-root panel_root
-bankpanel validate all --panel-root panel_root --save   # coverage, breaks, quality, quarterize
+bankpanel validate all --panel-root panel_root --save   # coverage, breaks, quarterize, quality, stitches
 bankpanel info --panel-root panel_root
 bankpanel dictionary --schedule RC-C
 bankpanel dictionary --measure --format csv --out variables.csv   # + measured coverage

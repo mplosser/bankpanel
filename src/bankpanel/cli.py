@@ -176,6 +176,16 @@ def cmd_validate(args: argparse.Namespace) -> int:
         # gate unusable rather than useful.
         exit_code = max(exit_code, gate(results))
 
+    if args.check in ("stitches", "all"):
+        from .validate.stitches import find_stitch_steps
+        from .validate.stitches import format_report as format_stitches
+        from .validate.stitches import gate as gate_stitches
+
+        steps = find_stitch_steps(df, ConfigSet.load("configs"))
+        print(format_stitches(steps))
+        saved["stitches"] = steps
+        exit_code |= gate_stitches(steps) if args.strict else 0
+
     if args.check in ("quarterize", "all"):
         from .validate.quarterize_audit import attribute, audit, format_report
 
@@ -416,7 +426,9 @@ def main(argv: list[str] | None = None) -> int:
     p_exp.set_defaults(func=cmd_expectations)
 
     p_val = sub.add_parser("validate", help="run a validator against a built panel")
-    p_val.add_argument("check", choices=("coverage", "breaks", "quarterize", "quality", "all"))
+    p_val.add_argument(
+        "check", choices=("coverage", "breaks", "quarterize", "quality", "stitches", "all")
+    )
     p_val.add_argument("--panel-root", default=None)
     _add_common(p_val)
     p_val.add_argument("--expectations", default=None)

@@ -99,6 +99,15 @@ banks' own nonaccrual rate bounds the understatement at **0.41%** of `pdl_tot_no
 affected rows. The bias is one-directional — the formula is a pure sum of non-negative
 quantities, so a missing term can only push the total down.
 
+**It is also biased, not just noisy.** `bankpanel validate stitches` measures the level
+step at the quarter the source changes back, over a panel balanced across that quarter:
+at 2017Q1, across 5,906 banks, `pdl_tot_non` falls **13.8%** (robust z = 11.7 against the
+series' own 1.3% quarterly volatility) as `RCFD1403` resumes. So the reconstruction runs
+roughly **16% above** the reported total in aggregate, not merely scattered around it.
+Dispersion and level bias are separate defects; the 6–8% figure above measures only the
+first. The likely cause is double counting among the 22 terms -- several RC-N nonaccrual
+items nest inside one another -- and it is not yet root-caused.
+
 **What this means for `npl_tot` and `pastdue_tot`.** Both inherit it. For 88.5% of rows they
 rest on a reported total; on the rest, expect ~6–8% dispersion and a ≤0.41% downward bias.
 That is fine for cross-sectional and time-series work and not fine for reconciling a single
