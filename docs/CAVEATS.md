@@ -170,3 +170,28 @@ These originate in `data_call_report`, not in `bankpanel`, and are passed throug
   `float64` and is **99.98% null** (2-letter state codes fail numeric coercion). Other
   identity fields — name, city, FDIC certificate number — are intact. Do not use the
   header dataset's `state` column until this is fixed upstream.
+
+## 9. Some totals rest on an assumed zero
+
+A derived total that sums components has to decide what a blank component means. On a Call
+Report a blank overwhelmingly means "nothing to report" — banks leave inapplicable lines
+empty rather than typing 0 — so summing with `fillna(0)` is right far more often than not.
+But it cannot distinguish *had nothing* from *did not report*, and where it guesses wrong
+the total comes out low.
+
+Two cases, and only one is a problem:
+
+- **The component was outside its collection era.** Zero-filling is the era stitch working.
+  `brokered_dep_mat_lte1yr` has 846,943 rows with missing components and **zero**
+  assumptions.
+- **The component was being collected that quarter and this bank left it blank.** The zero
+  is an assumption.
+
+`bankpanel validate quality` reports the second case per column, with liveness measured
+per quarter from the cross-section. Currently six columns are affected and one is material:
+`pdl_tot_non` (64,164 rows, 4.5%), which propagates to `npl_tot` and `pastdue_tot`. See
+[schedules/RC-N.md](schedules/RC-N.md), where the resulting bias is bounded at 0.41%.
+
+Because these formulas are pure sums of non-negative quantities with no subtraction, the
+bias is one-directional: affected totals are too low, never too high.
+

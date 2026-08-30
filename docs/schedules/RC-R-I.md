@@ -24,6 +24,19 @@ stitch them. Coverage across the boundary:
 | `tier1_capital` | 0.997 | 0.987 |
 | `rwa` | 1.000 | 0.987 |
 
+### Only the stitched series is published
+
+`tier1_capital`, `tier2_capital` and `rwa` are published; the six `*_baselI` / `*_baselIII`
+era pieces behind them are not. In the 48 bank-quarters that filed under both regimes the
+ratio of the two is **1.0000 at the median and at p10 and p90**, so the stitch is not a
+compromise between two different measures — it is one measure reported under two code
+prefixes. Publishing both would be two names for one series.
+
+This does *not* extend to Basel-I content with no Basel III counterpart. The risk-weight
+buckets (`rwa_bucket_0pct_baselI` … `_100pct_baselI`), `assets_for_leverage_baselI`, and the
+pre-2015 reported ratios are all still published — the last of these are what the computed
+ratios below were validated against, so removing them would remove the audit trail.
+
 ## 2. The reported ratios are confidential from 2015Q1
 
 `RCOA7204` / `7205` / `7206` and `RCOAP793` have ~98% coverage — and every populated cell

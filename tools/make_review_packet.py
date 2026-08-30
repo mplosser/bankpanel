@@ -122,8 +122,26 @@ def _stats(panel_root: Path, columns: list[str]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _decisions(out: Path) -> dict:
+    """Verdicts already recorded, keyed (file, item).
+
+    The packet is regenerated whenever the configs move, which would otherwise discard
+    every verdict already given and ask for them again. Decisions live in their own file
+    for exactly that reason: the questions are derived from the configs, the answers are not.
+    """
+    path = out / "decisions.csv"
+    if not path.exists():
+        return {}
+    prior = pd.read_csv(path, keep_default_na=False)
+    return {
+        (row.file, row.item): (row.verdict, row.note)
+        for row in prior.itertuples()
+    }
+
+
 def build(panel_root: Path, out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
+    decided = _decisions(out)
     cs = ConfigSet.load("configs")
     dictionary = pd.read_csv(panel_root / "dictionary.csv", keep_default_na=False)
     desc = dict(zip(dictionary.variable_name, dictionary.description, strict=True))
@@ -163,9 +181,9 @@ def build(panel_root: Path, out: Path) -> None:
             "era_end": var.era_end or "",
             "flow_type": var.flow_type,
             "config": filename,
-            "verdict": "",       # ok | rename | drop | question
+            "verdict": decided.get(("01_names.csv", var.variable_name), ("", ""))[0],
             "rename_to": "",
-            "note": "",
+            "note": decided.get(("01_names.csv", var.variable_name), ("", ""))[1],
         })
     names = pd.DataFrame(rows).sort_values(
         ["ambiguous_name", "schedule", "variable_name"], ascending=[False, True, True]
@@ -191,8 +209,8 @@ def build(panel_root: Path, out: Path) -> None:
             "config": filename,
             "risk": _derived_risk(var.variable_name),
             "zero_fill_evidence": zero_fill.get(var.variable_name, ""),
-            "verdict": "",       # ok | fix | drop | question
-            "note": "",
+            "verdict": decided.get(("02_derived.csv", var.variable_name), ("", ""))[0],
+            "note": decided.get(("02_derived.csv", var.variable_name), ("", ""))[1],
         })
     pd.DataFrame(rows).sort_values(["risk", "variable_name"]).to_csv(
         out / "02_derived.csv", index=False

@@ -63,6 +63,50 @@ and nonfarm nonresidential is the largest CRE category. Adding them is the prere
 and the reconstruction should be shipped only once it reproduces the reported total in the
 overlap periods.
 
+## How good is the reconstruction, and should you use it
+
+Accepted with the caveat below. The numbers, measured rather than asserted:
+
+**How often it runs.** `pdl_tot_non` is the reported `RCFD1403` on **88.5%** of rows. The
+22-term reconstruction fills the other 11.5% (162,125 rows), and 99% of those sit in
+2010–2019 — the window where `RCFD1403` was discontinued. It is used where it is needed and
+almost nowhere else.
+
+**How close it gets.** Scored against `RCFD1403` on the 465,519 rows where both exist:
+
+| era | within 1% | median abs error |
+| --- | --- | --- |
+| 1985–1999 | 3% | 70–82% |
+| 2000–2009 | 7–18% | 29–81% |
+| 2010–2025 | 23–38% | **6–8%** |
+
+Pooled across all eras the median error is 35%, which is the wrong number to quote: it
+averages the method over forty years in which it never runs. Conditional on the rows where
+it *is* used, the error is the 6–8% figure.
+
+**Where it assumes.** On 64,164 of those rows a component is blank while its line was being
+collected, and `fillna(0)` treats the blank as zero. All of it is `na_ag_1583`, agricultural
+nonaccrual. Splitting the blanks:
+
+| | rows | reading |
+| --- | --- | --- |
+| banks holding **no** agricultural loans | 32,545 (49.8%) | blank means zero |
+| banks that **do** hold ag loans | 32,841 (50.2%) | the zero is an assumption |
+
+For the second half the ag book is a median $618k, 0.98% of loans, and among ag-holding
+banks that *did* report the line, 83.4% reported exactly zero. Imputing at the reporting
+banks' own nonaccrual rate bounds the understatement at **0.41%** of `pdl_tot_non` on
+affected rows. The bias is one-directional — the formula is a pure sum of non-negative
+quantities, so a missing term can only push the total down.
+
+**What this means for `npl_tot` and `pastdue_tot`.** Both inherit it. For 88.5% of rows they
+rest on a reported total; on the rest, expect ~6–8% dispersion and a ≤0.41% downward bias.
+That is fine for cross-sectional and time-series work and not fine for reconciling a single
+bank-quarter to its filing. Read `pdl_tot_non_1403` directly if you need only reported values.
+
+Separately, `pastdue_tot` starts at **2001Q1** rather than 1985 — `pd30_tot` (`RCFD1406`) is
+simply not collected earlier. `npl_tot`, which does not use it, runs the full period.
+
 ## What the data shows
 
 Aggregate nonperforming loans (`npl_tot` = `pd90_tot` + `pdl_tot_non`) against loans:
