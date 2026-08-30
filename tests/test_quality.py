@@ -214,3 +214,29 @@ def test_coalesce_is_not_a_zero_fill(write_config):
     cs = ConfigSet.load(write_config(text))
     df = _frame(["2000-03-31"] * 4, [1.0, 2.0, None, 4.0], [1.0] * 4, [1.0] * 4)
     assert find_within_era_zerofill(df, cs).empty
+
+
+def test_dead_branch_zerofill_is_not_counted(write_config):
+    """A fillna(0) inside a branch the row never takes did not affect the output.
+
+    pdl_tot_non is `reported.fillna(<22-term sum>)`: on the 88.5% of rows carrying the
+    reported code, the sum is never evaluated. Counting its blanks there overstated the
+    exposure threefold.
+    """
+    from bankpanel.config import ConfigSet
+    from bankpanel.validate.quality import find_within_era_zerofill
+
+    text = ERA_SUM.replace(
+        "total,RC,stock,Stitched total,old_code.fillna(0) + new_code.fillna(0) + partner.fillna(0)",
+        "total,RC,stock,Reported else rebuilt,old_code.fillna(new_code.fillna(0) + partner.fillna(0))",
+    )
+    cs = ConfigSet.load(write_config(text))
+    df = _frame(
+        ["2000-03-31"] * 4,
+        [9.0, 9.0, 9.0, None],       # reported on 3 of 4 rows
+        [1.0, 1.0, None, 1.0],       # live, blank on row 2 -- but row 2 has old_code
+        [1.0] * 4,
+    )
+    df["total"] = [9.0, 9.0, 9.0, 2.0]
+    # The only blank sits on a row that took the reported branch, so nothing is assumed.
+    assert find_within_era_zerofill(df, cs).empty

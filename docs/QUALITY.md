@@ -130,6 +130,18 @@ Why a cell is blank is the whole question:
 - **inside its era** — the bank either had nothing to report or did not report, and the
   data cannot distinguish them. The zero is an assumption.
 
+A blank is counted only where the zero it produces actually reaches the output. Formulas
+branch: `pdl_tot_non` is `reported.fillna(<22-term sum>)`, so the sum -- and every
+`fillna(0)` inside it -- is evaluated only on the 11.5% of rows where the reported code is
+missing. Counting components on every row overstated the exposure threefold (211,689 vs
+64,164). Rather than parse branch structure, each suspect cell is perturbed and the formula
+re-evaluated: if the output does not move, the zero never mattered there. Exact for any
+formula shape, including ones not yet written.
+
+Only a name written literally as `X.fillna(0)` counts. The *head* of a coalesce -- the `a`
+in `a.fillna(b)` -- is blank on purpose whenever the fallback fires, so treating it as an
+assumed zero flagged every era stitch in the repo.
+
 Liveness is measured per quarter from the cross-section — what share of the banks
 reporting *any* component report this one — rather than from the config's declared era.
 What the panel shows beats what the era bounds claim, and it needs no maintenance.
@@ -139,9 +151,15 @@ leave inapplicable lines empty rather than typing 0. Failing a build on this wou
 every build. The point is that the assumption is counted and visible.
 
 Worked example — `pdl_tot_non`, the 22-term nonaccrual reconstruction, is the only column
-where this is material: 40.3% of the rows where the reconstruction actually runs zero-fill
-a live `na_ag_1583` (agricultural nonaccrual). Testing whether blank means "nothing to
-report":
+where this is material -- 64,164 rows, 4.5% of those built, 40% of the rows where
+the reconstruction actually runs, all driven by a live `na_ag_1583` (agricultural
+nonaccrual). Testing whether blank means "nothing to report":
+
+Direction is knowable here because every flagged formula is a **pure sum** of non-negative
+balance-sheet quantities, with no subtraction. Replacing a missing term with 0 can only
+push the total down. That is why the question reduces to *how much* was left out rather
+than which way the error runs -- a formula that subtracted a zero-filled term would have
+no such guarantee.
 
 | | rows | reading |
 |---|---|---|

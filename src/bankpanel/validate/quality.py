@@ -243,6 +243,14 @@ def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPO
     config's declared era: what the panel shows banks actually reporting beats what the
     era bounds claim, and it needs no maintenance as items come and go.
 
+    A blank component is only counted when the zero it produces actually reaches the
+    output. Formulas branch: ``pdl_tot_non`` is ``reported.fillna(<22-term sum>)``, so the
+    sum -- and every ``fillna(0)`` in it -- is evaluated only where the reported code is
+    missing, which is 11.5% of rows. Counting components on all of them overstated the
+    exposure by 3x. Rather than parse the branch structure, each suspect cell is perturbed
+    and the formula re-evaluated: if the output does not move, the zero never mattered on
+    that row. That is exact for any formula shape, including ones not yet written.
+
     Reported, never gated. Blank overwhelmingly does mean zero on a Call Report -- banks
     leave inapplicable lines empty rather than typing 0 -- so failing a build on this would
     fail every build. The point is that the assumption is counted and visible.
@@ -261,24 +269,57 @@ def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPO
         inputs = [c for c in sorted(graph.deps.get(name, ())) if c in df.columns]
         if len(inputs) < 2:
             continue
+        # Only a name written as `X.fillna(0)` has its blank replaced by a zero. The head
+        # of a coalesce -- the `a` in `a.fillna(b)` -- is blank on purpose there: that is
+        # the fallback firing, not an assumption, and counting it flagged every era stitch.
+        zero_filled = set(re.findall(r"(\w+)\s*\.fillna\(\s*0\s*\)", var.formula))
+        candidates = [c for c in inputs if c in zero_filled]
+        if not candidates:
+            continue
 
         present = df[inputs].notna()
         any_input = present.any(axis=1)
         denominator = any_input.groupby(period).sum().replace(0, np.nan)
         built = df[name].notna().to_numpy()
 
+        namespace = {c: df[c] for c in inputs}
+        actual = df[name]
+
         affected = np.zeros(len(df), dtype=bool)
         cells = 0
-        worst_name, worst_share = "", 0.0
-        for column in inputs:
+        worst_name, worst_count = "", 0
+        for column in candidates:
             coverage = present[column].groupby(period).sum() / denominator
             live = period.map(coverage >= LIVE_THRESHOLD).to_numpy(dtype=bool)
             zeroed = live & ~present[column].to_numpy() & built
+            if not zeroed.any():
+                continue
+            # Does this blank actually reach the output? Perturb it and re-evaluate: an
+            # unchanged result means the term sat in a branch this row never took.
+            probe = namespace.copy()
+            probe[column] = df[column].mask(zeroed, 1.0)
+            try:
+                moved = pd.Series(
+                    evaluate(var.formula, probe, where=str(var.origin)), index=df.index
+                ).ne(actual).to_numpy()
+            except FormulaError:
+                moved = np.ones(len(df), dtype=bool)  # cannot prove it is inert
+            zeroed &= moved
+            if not zeroed.any():
+                continue
             affected |= zeroed
             cells += int(zeroed.sum())
-            share = zeroed.sum() / max(int(live.sum()), 1)
-            if share > worst_share:
-                worst_name, worst_share = column, float(share)
+            if int(zeroed.sum()) > worst_count:
+                worst_name, worst_count = column, int(zeroed.sum())
+        if worst_count:
+            live_rows = int(
+                period.map(
+                    present[worst_name].groupby(period).sum() / denominator >= LIVE_THRESHOLD
+                ).to_numpy(dtype=bool).sum()
+            )
+            worst_share = worst_count / max(live_rows, 1)
+        else:
+            worst_share = 0.0
 
         if affected.any():
             rows.append({
