@@ -42,6 +42,61 @@ CONFIDENTIAL = [
 ]
 
 
+def _zero_fill_evidence(panel_root: Path, cs) -> dict:
+    """Per derived column: how many rows rest on an assumed zero.
+
+    Attached to the review rather than left in a terminal report, because "is this
+    construction sound" cannot be answered without it -- a sum whose components are
+    sometimes blank inside their collection era is a different object from one whose
+    blanks are all era stitches.
+    """
+    import pyarrow.dataset as ds
+
+    from bankpanel.validate.quality import find_fabricated_values, find_within_era_zerofill
+
+    dataset = ds.dataset(panel_root / "panel", partitioning="hive")
+    wanted = {"REPORTING_PERIOD"}
+    for var in cs.derived:
+        wanted.add(var.variable_name)
+        wanted |= set(cs.graph.deps.get(var.variable_name, ()))
+    df = dataset.to_table(columns=sorted(wanted & set(dataset.schema.names))).to_pandas()
+
+    out: dict[str, str] = {}
+    for _, row in find_within_era_zerofill(df, cs).iterrows():
+        out[row["column"]] = (
+            f"{row.n_rows:,} rows ({row.share_of_built:.1%} of built) rest on an assumed "
+            f"zero; worst component {row.worst_input}"
+        )
+    for _, row in find_fabricated_values(df, cs).iterrows():
+        prefix = out.get(row["column"], "")
+        out[row["column"]] = (
+            f"FABRICATED: {row.n_fabricated:,} rows have a value with no input at all. "
+            + prefix
+        ).strip()
+
+    # An assumption inherited from upstream is still an assumption. npl_tot is clean in
+    # itself and sits on pdl_tot_non, whose 22-term fallback rests on 64,164 assumed
+    # zeros -- reviewing npl_tot without that is reviewing the wrong half of it.
+    direct = dict(out)
+    for var in cs.derived:
+        if var.variable_name in direct:
+            continue
+        seen, stack, found = set(), list(cs.graph.deps.get(var.variable_name, ())), []
+        while stack:
+            dep = stack.pop()
+            if dep in seen:
+                continue
+            seen.add(dep)
+            if dep in direct:
+                found.append(dep)
+            stack.extend(cs.graph.deps.get(dep, ()))
+        if found:
+            out[var.variable_name] = "inherited via " + ", ".join(
+                f"{d} ({direct[d].split(';')[0]})" for d in sorted(found)
+            )
+    return out
+
+
 def _stats(panel_root: Path, columns: list[str]) -> pd.DataFrame:
     """Measured coverage and level for each column, so review needs no querying."""
     import pyarrow.dataset as ds
@@ -85,6 +140,7 @@ def build(panel_root: Path, out: Path) -> None:
     ]
     stats = _stats(panel_root, [v.variable_name for _, v in (*new_base, *new_derived)])
     stats_by_col = stats.set_index("column")
+    zero_fill = _zero_fill_evidence(panel_root, cs)
 
     def stat(name, field, default=""):
         return stats_by_col.at[name, field] if name in stats_by_col.index else default
@@ -134,6 +190,7 @@ def build(panel_root: Path, out: Path) -> None:
             "median_value": stat(var.variable_name, "median_value", None),
             "config": filename,
             "risk": _derived_risk(var.variable_name),
+            "zero_fill_evidence": zero_fill.get(var.variable_name, ""),
             "verdict": "",       # ok | fix | drop | question
             "note": "",
         })
@@ -234,6 +291,11 @@ Base columns are a code and a name. Derived columns are a *claim*. Sorted by `ri
 - **3-simple** — additive within one era; low stakes.
 
 `formula` and `inputs` are both shown so a claim can be checked without opening a config.
+
+`zero_fill_evidence` is filled in wherever the construction rests on an assumed zero — a
+component blank *inside* its collection era, where `fillna(0)` cannot tell "had nothing to
+report" from "did not report". Blank in that column means every zero-filled component was
+outside its era, which is the era stitch working rather than an assumption.
 
 `verdict`: `ok` | `fix` | `drop` | `question`
 
