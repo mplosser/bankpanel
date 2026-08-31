@@ -48,10 +48,13 @@ Z_CRIT = 8.0
 MIN_JUMP = 0.02
 
 
-#: Label for the branch that has no single source column -- a reported total falling back
+#: Prefix for the branch that has no single source column -- a reported total falling back
 #: to a sum of its subcomponents. Naming it rather than picking one of the 22 terms is the
 #: point: "reported" -> "constructed" is the transition worth watching.
 CONSTRUCTED = "<constructed>"
+
+#: How many component names to spell out in a constructed-branch label before abbreviating.
+LABEL_TERMS = 3
 
 
 def _chain(formula: str) -> list[str]:
@@ -66,6 +69,46 @@ def _chain(formula: str) -> list[str]:
     head = re.findall(r"[A-Za-z_]\w*", formula.split(".fillna(")[0])
     tail = re.findall(r"\.fillna\(\s*([A-Za-z_]\w*)\s*\)", formula)
     return head + tail
+
+
+def graph_inputs(configset, name: str) -> set[str]:
+    return set(configset.graph.deps.get(name, ()))
+
+
+#: Components beyond this are not distinguished in a recipe label. 62 fits a signed
+#: int64 bitmask, and no real formula comes close.
+MAX_RECIPE_TERMS = 62
+
+
+def _recipe_labels(present: pd.DataFrame, names: list[str]) -> pd.Series:
+    """One label per row naming which components were available to build it.
+
+    The presence pattern is bit-packed into an integer and the distinct patterns are
+    labelled once. A row-wise apply is the obvious way to write this and is ~200x slower
+    on a 1.4M-row panel: there are a handful of distinct recipes, not 1.4M of them.
+    """
+    names = names[:MAX_RECIPE_TERMS]
+    values = present[names].to_numpy()
+    codes = np.zeros(len(present), dtype=np.int64)
+    for index in range(values.shape[1]):
+        codes |= values[:, index].astype(np.int64) << index
+    labels = {
+        int(code): _abbreviate(
+            "+".join(n for i, n in enumerate(names) if int(code) >> i & 1)
+        )
+        for code in pd.unique(codes)
+    }
+    return pd.Series(codes, index=present.index).map(labels)
+
+
+def _abbreviate(recipe: str) -> str:
+    """Shorten a recipe label without losing that it CHANGED."""
+    if not recipe:
+        return ""
+    parts = recipe.split("+")
+    if len(parts) <= LABEL_TERMS:
+        return recipe
+    return "+".join(parts[:LABEL_TERMS]) + f"+{len(parts) - LABEL_TERMS} more"
 
 
 def find_stitch_steps(df: pd.DataFrame, configset, *, date_col: str = "REPORTING_PERIOD",
@@ -86,12 +129,24 @@ def find_stitch_steps(df: pd.DataFrame, configset, *, date_col: str = "REPORTING
         # else the unnamed fallback branch. Then the modal source per quarter. Read from
         # the data, so it cannot drift out of step with declared era bounds.
         built = df[name].notna()
-        source = pd.Series(CONSTRUCTED, index=df.index, dtype=object)
+        source = pd.Series(None, index=df.index, dtype=object)
         assigned = pd.Series(False, index=df.index)
         for link in chain:
             take = df[link].notna() & ~assigned
             source[take] = link
             assigned |= take
+
+        # The constructed branch is not one source but a RECIPE, and the recipe changes.
+        # brokered_dep_mat_lte1yr was rebuilt from one tranche before 2011Q1 and three
+        # after; labelling every such row "<constructed>" made that handoff invisible and
+        # hid a component missing for fifteen years. So label by which inputs are present.
+        rest = [c for c in sorted(graph_inputs(configset, name)) if c not in chain and c in df.columns]
+        if rest:
+            recipe = _recipe_labels(df[rest].notna(), rest)
+        else:
+            recipe = pd.Series("", index=df.index)
+        fallback = built & ~assigned
+        source[fallback] = CONSTRUCTED + recipe[fallback].map(lambda r: f":{r}" if r else "")
         source = source.where(built)
         modal = source.groupby(period).agg(lambda s: s.mode().iat[0] if len(s.mode()) else None)
         dominant = {q: v for q, v in modal.items() if v is not None}

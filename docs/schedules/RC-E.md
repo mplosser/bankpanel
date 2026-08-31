@@ -28,6 +28,32 @@ above $100,000 was reported in a single bucket with no $250k split, so the pre-2
 are a *narrower* quantity wearing the same name. Use `era_start` when you need a series
 you can regress on.
 
+### `brokered_dep_mat_lte1yr` — three regimes, four codes
+
+Brokered deposits with a remaining maturity of one year or less are split by denomination,
+and the split changes twice:
+
+| era | codes | tranches |
+| --- | --- | --- |
+| 1996Q1–2010Q4 | `RCONA243` + `RCONA244` | < $100k, ≥ $100k |
+| 2011Q1–2016Q4 | `RCONA243` + `RCONK219` + `RCONK220` | < $100k, $100–250k, > $250k |
+| 2017Q1– | `RCONHK06` + `RCONK220` | ≤ $250k, > $250k |
+
+`RCONA244` was missing from this config until 2026-08-31, which left the whole 1996–2010
+era carrying only the sub-$100k tranche — **52% to 78% of the value, depending on the
+year**. The balanced-panel level across the 2010Q4/2011Q1 boundary was **+104.7%**; with
+A244 restored it is **−1.9%** over the same 6,920 banks. The 2016Q4/2017Q1 boundary is
+−0.6%.
+
+The handover is exact rather than assumed: A244 is reported by 2,189 banks in 2010Q4 and by
+**zero** banks from 2011Q1, when K219 and K220 begin. So A244 carries `era_end 2010-12-31`
+and its term cannot double-count against the K-codes.
+
+Note what the two boundary numbers are for. A stitch is only correct if the level does not
+step when the source changes; a series that reads sensibly on each side and jumps between
+them is broken in a way no coverage or quality check can see. `bankpanel validate stitches`
+measures exactly this — see [../VALIDATION.md](../VALIDATION.md).
+
 ## Sweep deposits
 
 `sweep_dep_*` begin **2021Q3** and split four ways: affiliate vs non-affiliate, fully

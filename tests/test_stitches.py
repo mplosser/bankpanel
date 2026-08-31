@@ -102,4 +102,4 @@ def test_constructed_branch_is_labelled(write_config):
     df["total"] = df.old_code.fillna(df.new_code * 2)
     found = find_stitch_steps(df, cs)
     assert not found.empty
-    assert found.iloc[0].to_source == CONSTRUCTED
+    assert found.iloc[0].to_source.startswith(CONSTRUCTED)

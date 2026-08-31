@@ -166,6 +166,24 @@ absolute error; this says the aggregate also sits about **16% high** over the ba
 switched back at 2017Q1. Dispersion and level bias are different defects and the first
 does not imply the second. See [schedules/RC-N.md](schedules/RC-N.md).
 
+### A composite fallback is a recipe, not a source
+
+The first version of this check labelled every row built from an expression `<constructed>`
+— one bucket for "not a single named column". That made a whole class of handoff invisible,
+and one of them was hiding a real defect.
+
+`brokered_dep_mat_lte1yr` is rebuilt from its denomination tranches, and the recipe changes:
+one tranche before 2011Q1, three after. Both sides were `<constructed>`, so no handoff was
+detected — while the series in fact doubled at that quarter, because `RCONA244` (brokered
+deposits ≥ $100k, 1996–2010) was missing from the config entirely. The check now labels the
+branch by which components are present, so `<constructed:A243>` →
+`<constructed:A243+K219+K220>` registers, and the missing tranche is visible as a +104.7%
+step. With A244 restored the same boundary is −1.9%.
+
+The general lesson is worth stating: **a check that collapses distinct states into one
+label cannot see transitions between them**, and the collapsed bucket is exactly where the
+messy constructions live.
+
 `--strict` exits non-zero on a `critical` handoff.
 
 ## What parity does and does not prove
