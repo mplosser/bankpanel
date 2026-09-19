@@ -49,6 +49,13 @@ ZERO_FILL_SCOPES = frozenset({"always", "in_era"})
 #: How loudly a failed data-quality check speaks.
 SEVERITIES = frozenset({"error", "warning", "info"})
 
+#: Columns the builder always supplies and a formula may READ but never bind. ``form_type``
+#: is the one that matters: some RC-N lines are reported separately on the FFIEC 031 and
+#: folded into a broader line on the 041/051, so a total that counts each category once has
+#: to know which form the row came from. Never part of a formula's dependency set -- they
+#: are not variables, they are context -- and injected into every evaluation namespace.
+BUILTIN_COLUMNS = frozenset({"form_type"})
+
 #: Names the builder owns. A config may not bind any of these.
 RESERVED_NAMES = frozenset({
     "RSSD_ID", "REPORTING_PERIOD", "year", "quarter", "form_type", "form_type_source",

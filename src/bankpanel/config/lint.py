@@ -15,7 +15,7 @@ from datetime import date
 
 from ..expr import FormulaError, dependencies
 from .graph import DependencyGraph
-from .model import RESERVED_NAMES, Config, Origin
+from .model import BUILTIN_COLUMNS, RESERVED_NAMES, Config, Origin
 
 
 @dataclass(frozen=True)
@@ -163,7 +163,7 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
             except FormulaError as exc:
                 issues.append(LintIssue("error", str(exc).splitlines()[0]))
                 continue
-            unknown = sorted(deps - known)
+            unknown = sorted(deps - known - BUILTIN_COLUMNS)
             if unknown:
                 issues.append(LintIssue(
                     "error",

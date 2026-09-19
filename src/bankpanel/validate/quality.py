@@ -23,6 +23,7 @@ import numpy as np
 import pandas as pd
 
 from ..config import Check
+from ..config.model import BUILTIN_COLUMNS
 from ..expr import FormulaError, dependencies, evaluate
 
 
@@ -244,7 +245,7 @@ def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPO
     era bounds claim, and it needs no maintenance as items come and go.
 
     A blank component is only counted when the zero it produces actually reaches the
-    output. Formulas branch: ``pdl_tot_non`` is ``reported.fillna(<22-term sum>)``, so the
+    output. Formulas branch: ``na_tot`` is ``reported.fillna(<22-term sum>)``, so the
     sum -- and every ``fillna(0)`` in it -- is evaluated only where the reported code is
     missing, which is 11.5% of rows. Counting components on all of them overstated the
     exposure by 3x. Rather than parse the branch structure, each suspect cell is perturbed
@@ -272,7 +273,11 @@ def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPO
         # Only a name written as `X.fillna(0)` has its blank replaced by a zero. The head
         # of a coalesce -- the `a` in `a.fillna(b)` -- is blank on purpose there: that is
         # the fallback firing, not an assumption, and counting it flagged every era stitch.
-        zero_filled = set(re.findall(r"(\w+)\s*\.fillna\(\s*0\s*\)", var.formula))
+        # `X.where(cond).fillna(0)` zero-fills X just as `X.fillna(0)` does -- the where()
+        # only narrows which rows X contributes to -- so the name is still a candidate.
+        zero_filled = set(re.findall(
+            r"(\w+)(?:\.where\([^()]*\))?\s*\.fillna\(\s*0\s*\)", var.formula
+        ))
         candidates = [c for c in inputs if c in zero_filled]
         if not candidates:
             continue
@@ -283,6 +288,9 @@ def find_within_era_zerofill(df: pd.DataFrame, configset, *, id_col: str = "REPO
         built = df[name].notna().to_numpy()
 
         namespace = {c: df[c] for c in inputs}
+        # Builtins are not dependencies but a formula may read them; without them the
+        # re-evaluation raises and every blank is counted as "cannot prove it is inert".
+        namespace.update({b: df[b] for b in BUILTIN_COLUMNS if b in df.columns})
         actual = df[name]
 
         affected = np.zeros(len(df), dtype=bool)

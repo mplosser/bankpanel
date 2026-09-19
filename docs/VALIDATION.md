@@ -122,7 +122,7 @@ The three validators above watch **reporting**. This one watches the **handoff**
 
 An era stitch swaps which MDRM code supplies a column at some quarter: `rwa` moves from
 Basel I to Basel III at 2015Q1, `ln_oth` from `RCFD1563` to `RCONJ464` at 2010Q1, and
-`pdl_tot_non` falls from a reported total to a 22-term sum of subcomponents when
+`na_tot` falls from a reported total to a 22-term sum of subcomponents when
 `RCFD1403` is discontinued. On both sides of that quarter every source reports perfectly.
 Coverage sees nothing, breaks sees nothing, quality sees nothing. What can go wrong is the
 *level* — the two codes may not measure quite the same thing, and the series steps.
@@ -148,7 +148,7 @@ every one of them is in the legacy configs:
 
 | column | quarter | jump | z | banks | source change |
 | --- | --- | --- | --- | --- | --- |
-| `pdl_tot_non` | 2017Q1 | **−13.8%** | 11.7 | 5,906 | `<constructed>` → `RCFD1403` — **fixed**, now −4.4% |
+| `na_tot` | 2017Q1 | **−13.8%** | 11.7 | 5,906 | `<constructed>` → `RCFD1403` — **fixed**, now −4.4% |
 | `obm_gt1yr` | 1997Q2 | +15.8% | 9.6 | 9,828 | `_pre97` → `_9701` |
 | `ln_othcons` | 2001Q1 | +7.9% | 5.3 | 8,721 | `_2` → `_01` |
 | `accrued_int` | 2001Q1 | +37.5% | 5.3 | 8,721 | `_pre01` → `_01` |
@@ -160,7 +160,7 @@ reports 688/688 on exactly these columns, because both sides of every handoff ar
 reproduced faithfully — the legacy pipeline has the same steps. Reproducing a
 discontinuity bit-for-bit is not the same as not having one.
 
-The `pdl_tot_non` finding has since been root-caused and fixed. The reconstruction counted
+The `na_tot` finding has since been root-caused and fixed. The reconstruction counted
 an RC-N memorandum item (`RCONF663`, modified 1–4 family loans) that is already inside the
 1–4 family lines, and it read C&I, leases and depository institutions only from the 031
 breakdowns, missing the 041 totals reported by ~98% of banks. The two errors offset at
@@ -217,7 +217,7 @@ were fixed. Parity did not move by a single cell, because none of those columns 
 comparison.
 
 The corollary is the uncomfortable one. The three legacy columns with known fabricated
-zeros — `pdl_tot_non`, `ffrepo_ass`, `ffrepo_liab` — are *inside* the parity set, which is
+zeros — `na_tot`, `ffrepo_ass`, `ffrepo_liab` — are *inside* the parity set, which is
 precisely why they have not been fixed: correcting them would change values the legacy
 pipeline depends on. Parity protects them from being changed, including from being
 corrected.

@@ -35,8 +35,32 @@ LEGACY_PANELS = {
 }
 
 
+def _renamed() -> dict[str, str]:
+    """Our name -> legacy name, from reference_data/legacy_names.csv.
+
+    A column renamed for the public API is still the same series, and parity must keep
+    comparing it. Without this map a rename silently drops the column out of the shared
+    set and parity reports fewer columns, all green -- a regression guard that forgets
+    what it was guarding.
+    """
+    path = Path(__file__).resolve().parents[1] / "reference_data" / "legacy_names.csv"
+    if not path.exists():
+        return {}
+    table = pd.read_csv(path, keep_default_na=False)
+    return dict(zip(table["name"], table["legacy_name"], strict=True))
+
+
+RENAMED = _renamed()
+
+
 def legacy_name(name: str) -> str:
-    """Reproduce the legacy quarterize rename: ytd_X -> qX, ytdX -> qX."""
+    """Our column name as the legacy panels spelled it.
+
+    Two transforms: the legacy quarterize rename (ytd_X -> qX, ytdX -> qX) and the
+    explicit public-API renames recorded in reference_data/legacy_names.csv.
+    """
+    if name in RENAMED:
+        return RENAMED[name]
     if name.startswith("ytd_"):
         return "q" + name[4:]
     if name.startswith("ytd"):

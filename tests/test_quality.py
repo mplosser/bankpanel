@@ -219,7 +219,7 @@ def test_coalesce_is_not_a_zero_fill(write_config):
 def test_dead_branch_zerofill_is_not_counted(write_config):
     """A fillna(0) inside a branch the row never takes did not affect the output.
 
-    pdl_tot_non is `reported.fillna(<22-term sum>)`: on the 88.5% of rows carrying the
+    na_tot is `reported.fillna(<22-term sum>)`: on the 88.5% of rows carrying the
     reported code, the sum is never evaluated. Counting its blanks there overstated the
     exposure threefold.
     """

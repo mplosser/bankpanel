@@ -217,3 +217,21 @@ liabilities_total,always,Verified absent means zero
 """
     issues = ConfigSet.load(write_config(text)).lint()
     assert any("dropped before zero-fill runs" in str(i) for i in issues)
+
+
+# --- builtins: readable, never bindable, never a dependency ----------------------------------
+
+
+def test_form_type_is_readable_but_not_a_dependency(write_config):
+    text = MINIMAL + "big_bank_assets,RC,stock,Assets on the 031 form,assets_total.where(form_type == 31)\n"
+    cs = ConfigSet.load(write_config(text))
+    cs.lint()
+    assert cs.graph.deps["big_bank_assets"] == {"assets_total"}
+    assert "form_type" not in cs.output_columns()
+
+
+def test_form_type_cannot_be_bound(write_config):
+    # Rename the base variable AND its reference, so the only fault is the reserved name.
+    text = MINIMAL.replace("liabilities_total", "form_type")
+    with pytest.raises(ConfigError, match="reserved"):
+        ConfigSet.load(write_config(text)).lint()

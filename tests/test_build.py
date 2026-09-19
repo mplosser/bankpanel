@@ -18,7 +18,7 @@ def panel(synth_panel):
         columns=[
             "assets_total", "loans_3mo", "avg_assets", "late_item", "semiannual_item",
             "int_inc_total", "event_flag", "deposit_accounts", "assets_less_loans",
-            "late_or_assets",
+            "late_or_assets", "assets_031_only",
         ],
         root=synth_panel,
         verify=False,
@@ -248,3 +248,17 @@ def test_non_boolean_text_still_becomes_nan():
     from bankpanel.build.quarter import to_numeric
 
     assert to_numeric(pd.Series(["CONF", "CONF"])).isna().all()
+
+
+# --- form type is readable inside a formula ------------------------------------------------
+
+
+def test_formula_can_read_form_type(panel):
+    """A category reported separately on one form and inside a broader line on another
+    can only be counted once if the formula knows which form the row came from."""
+    is_031 = panel["form_type"] == 31
+    assert is_031.any() and (~is_031).any(), "fixture must carry both forms"
+    on = panel.loc[is_031, "assets_031_only"]
+    off = panel.loc[~is_031, "assets_031_only"]
+    assert on.notna().all() and (on == panel.loc[is_031, "assets_total"]).all()
+    assert off.isna().all()

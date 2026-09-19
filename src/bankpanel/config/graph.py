@@ -18,7 +18,7 @@ import graphlib
 from dataclasses import dataclass
 
 from ..expr import FormulaError, dependencies
-from .model import ConfigError, DerivedVar
+from .model import BUILTIN_COLUMNS, ConfigError, DerivedVar
 
 
 @dataclass
@@ -72,7 +72,10 @@ def build_graph(base_names: set[str], derived: list[DerivedVar]) -> DependencyGr
     Raises :class:`ConfigError` on an unknown identifier or a dependency cycle.
     """
     derived_names = {d.variable_name for d in derived}
-    known = base_names | derived_names
+    # A builtin may be referenced but is not a dependency: it is supplied by the builder,
+    # not produced by a config, so it must not appear in deps (which drive evaluation
+    # order, the intermediate lint, and every validator's notion of "inputs").
+    known = base_names | derived_names | BUILTIN_COLUMNS
 
     deps: dict[str, set[str]] = {}
     referenced: set[str] = set()
@@ -80,7 +83,7 @@ def build_graph(base_names: set[str], derived: list[DerivedVar]) -> DependencyGr
     for var in derived:
         where = str(var.origin)
         try:
-            raw_deps = dependencies(var.formula, where=where)
+            raw_deps = dependencies(var.formula, where=where) - BUILTIN_COLUMNS
         except FormulaError as exc:
             raise ConfigError(str(exc)) from None
 

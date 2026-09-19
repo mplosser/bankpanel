@@ -38,6 +38,12 @@ dictionary ships with the panel, so an undescribed column is an undocumented one
 Era stitching lives here: `a.fillna(b).fillna(c)` coalesces the successive MDRM codes
 that carried one concept across a definition change.
 
+**`form_type` is readable in any formula.** It is supplied by the builder, not a config —
+so it can be read but never bound, and it is not a dependency. It exists because some RC-N
+lines are reported separately on the FFIEC 031 and folded into a broader line on the
+041/051: agricultural nonaccrual (`RCFD1583`) sits inside all other loans on the 041, so a
+total that counts each category once must write `na_agprod.where(form_type == 31)`.
+
 **Guard every `fillna(0)` chain.** Tolerating one missing component inside an era is
 right; doing it across an era boundary, where every component is absent, fabricates a
 confident zero — and *raises* coverage while doing it, so no reporting-side validator can

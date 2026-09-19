@@ -75,7 +75,7 @@ def _zero_fill_evidence(panel_root: Path, cs) -> dict:
         ).strip()
 
     # An assumption inherited from upstream is still an assumption. npl_tot is clean in
-    # itself and sits on pdl_tot_non, whose 22-term fallback rests on 64,164 assumed
+    # itself and sits on na_tot, whose 22-term fallback rests on 64,164 assumed
     # zeros -- reviewing npl_tot without that is reviewing the wrong half of it.
     direct = dict(out)
     for var in cs.derived:

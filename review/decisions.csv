@@ -6,8 +6,8 @@ file,kind,item,verdict,note,decided_on
 02_derived.csv,,tier1_rbc_ratio,ok,Computed because the reported ratio is confidential from 2015Q1. Validated at median computed/reported 1.0000.,2026-08-30
 02_derived.csv,,total_rbc_ratio,ok,Computed replacement for a confidential item; validated as above.,2026-08-30
 02_derived.csv,,cet1_ratio,ok,Computed replacement. Coverage 0.129: starts 2014Q1 and CBLR removes RWA reporting for a third of banks from 2020Q1. Documented in docs/schedules/RC-R-I.md.,2026-08-30
-02_derived.csv,,npl_tot,ok,"Accepted with caveat. 88.5% reported RCFD1403; the 11.5% reconstruction runs almost entirely 2010-2019 where its median error is 6-8%, with a bounded 0.41% downward bias from assumed zeros. Documented in docs/schedules/RC-N.md.",2026-08-30
-02_derived.csv,,pastdue_tot,ok,Same caveat as npl_tot. Also note coverage starts 2001Q1 because pd30_tot (RCFD1406) is not collected earlier.,2026-08-30
+02_derived.csv,,npl_tot,ok,"Accepted. na_tot is reported RCFD1403 on 88.5% of rows; the 2011-2016 reconstruction now counts each RC-N category once (agricultural only on the 031, where it is a separate line) and reproduces the reported total for 100.00% of bank-quarters from 2017 on. Assumed zeros: 2 rows. Documented in docs/schedules/RC-N.md.",2026-09-19
+02_derived.csv,,pastdue_tot,ok,"Accepted. na_tot is reported RCFD1403 on 88.5% of rows; the 2011-2016 reconstruction now counts each RC-N category once (agricultural only on the 031, where it is a separate line) and reproduces the reported total for 100.00% of bank-quarters from 2017 on. Assumed zeros: 2 rows. Documented in docs/schedules/RC-N.md. Coverage starts 2001Q1 because pd30_tot (RCFD1406) is not collected earlier.",2026-09-19
 02_derived.csv,,ac_afs_tot_toplevel,ok,"Partial aggregate accepted: sums only the components carried, not a reported total.",2026-08-30
 02_derived.csv,,amt_ln_smallbiz_tot,ok,Partial aggregate accepted.,2026-08-30
 02_derived.csv,,amt_ln_smallbiz_ci,ok,Partial aggregate accepted.,2026-08-30

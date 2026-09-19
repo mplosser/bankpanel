@@ -188,9 +188,10 @@ Two cases, and only one is a problem:
   is an assumption.
 
 `bankpanel validate quality` reports the second case per column, with liveness measured
-per quarter from the cross-section. Currently six columns are affected and one is material:
-`pdl_tot_non` (64,164 rows, 4.5%), which propagates to `npl_tot` and `pastdue_tot`. See
-[schedules/RC-N.md](schedules/RC-N.md), where the resulting bias is bounded at 0.41%.
+per quarter from the cross-section. Six columns are affected and none materially: the
+largest is `oth_assets` at 6,637 rows (0.5%). `na_tot` once showed 64,164, all agricultural
+nonaccrual on the 041 form — which is reported inside all other loans there, not blank.
+Counted on the right line it falls to 2 rows. See [schedules/RC-N.md](schedules/RC-N.md).
 
 Because these formulas are pure sums of non-negative quantities with no subtraction, the
 bias is one-directional: affected totals are too low, never too high.

@@ -1,0 +1,17 @@
+legacy_name,name,renamed_on,why
+pdl_tot_non,na_tot,2026-09-19,nonaccrual family conforms to the RC-N {bucket}_{category} scheme used by pd30_/pd90_
+pdl_tot_non_1403,na_tot_1403,2026-09-19,reported-total era piece of na_tot
+pdl_ci_non,na_ci,2026-09-19,C&I nonaccrual total
+pdl_cc_non,na_cc,2026-09-19,credit-card nonaccrual (pre-2001 stitch also repaired)
+pdl_firstlien_non,na_famres_first,2026-09-19,closed-end 1-4 family first liens
+na_re_c230,na_famres_junior,2026-09-19,closed-end 1-4 family junior liens
+pdl_closedlien_non,na_famres_closed,2026-09-19,1-4 family all other (closed-end total; = first + junior from 2002)
+na_re_5400,na_heloc,2026-09-19,revolving open-end 1-4 family
+na_re_3495,na_farmland,2026-09-19,loans secured by farmland
+na_re_3501,na_multifam,2026-09-19,multifamily residential
+na_ag_1583,na_agprod,2026-09-19,agricultural production and other loans to farmers
+na_fgov_5391,na_forgovt,2026-09-19,foreign governments and official institutions
+na_oth_5461,na_othln,2026-09-19,all other loans
+na_ind_k215,na_auto,2026-09-19,automobile loans
+na_ind_k218,na_indiv,2026-09-19,other loans to individuals
+na_re_b574,na_re_foreign,2026-09-19,real estate loans in foreign offices

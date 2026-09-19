@@ -32,11 +32,29 @@ Families:
 family, so naming on bucket and category alone collapses them onto one another — 112 of
 184 names collided before the family was added.
 
-A handful of names carry a trailing MDRM item code (`pd30_forgovt_itemized_k095` vs
-`..._k283`). Those are genuinely distinct items that coexist in the same period under
-near-identical MDRM descriptions — checked, and their eras are identical, so they are not
-an era chain. The suffix is ugly and unambiguous, which is the right trade; the full item
-name is in the `notes` column.
+The nonaccrual column of the main body follows the same scheme, and its 17 published
+categories are the terms of the `na_tot` reconstruction below:
+
+| `na_` category | codes | | `na_` category | codes |
+| --- | --- | --- | --- | --- |
+| `constr` | F176+F177 / 3492 / 5426 | | `agprod` | 1583 (031 only — see below) |
+| `nfnres` | F182+F183 / 3504 / 5441 | | `ci` | 1608 / 1253+1256 |
+| `farmland` | 3495 | | `cc` | B577 / 5385 / 1220 |
+| `heloc` | 5400 | | `auto` | K215 |
+| `famres_first` | C229 | | `indiv` | K218 |
+| `famres_junior` | C230 | | `forgovt` | 5391 |
+| `famres_closed` | 5403 (not a term: = first + junior) | | `othln` | 5461 |
+| `multifam` | 3501 | | `lease` | 1228 / F168+F171 |
+| `depinst` | B836 / 5379+5382 | | `re_foreign` | B574 |
+
+Where a category has both a total code and a breakdown, only the total is published; the
+breakdown pieces are `[INTERMEDIATE]`. `na_tot` is the reported `RCFD1403`, else the sum;
+`na_tot_1403` is the reported series alone.
+
+These columns were renamed on 2026-09-19 from the legacy `pdl_*_non` / `na_re_3495`-style
+names (`reference_data/legacy_names.csv` has the map). `tools/parity_check.py` reads that
+map, so the renamed columns are still compared against the legacy panels under their old
+names rather than silently dropping out of the shared set.
 
 ## Known gap: the reported totals disappear for 2011–2016
 
@@ -51,8 +69,8 @@ are **NaN for 2011Q1–2016Q4**. That is honest rather than convenient: the valu
 known from the reported totals in that window.
 
 A reconstruction is possible in principle — the balance-sheet config already does it for
-nonaccrual, where `pdl_tot_non` fills the gap by summing 22 by-category RC-N items — and
-that is why `npl_tot` and `pastdue_tot` reference `pdl_tot_non` rather than a local total.
+nonaccrual, where `na_tot` fills the gap by summing 22 by-category RC-N items — and
+that is why `npl_tot` and `pastdue_tot` reference `na_tot` rather than a local total.
 
 **It is not done here for past-due, because it does not yet validate.** Summing the
 by-category `pd30_*` / `pd90_*` items and comparing to the reported total in the periods
@@ -65,7 +83,7 @@ overlap periods.
 
 ## How good is the reconstruction, and should you use it
 
-**How often it runs.** `pdl_tot_non` is the reported `RCFD1403` on 88.5% of rows. Where
+**How often it runs.** `na_tot` is the reported `RCFD1403` on 88.5% of rows. Where
 `RCFD1403` is missing — 160,902 bank-quarters, almost all 2011Q1–2016Q4 — it is rebuilt from
 the RC-N nonaccrual column by category.
 
@@ -76,7 +94,7 @@ the RC-N nonaccrual column by category.
 | construction, land development, other land | `na_constr` | `F176 + F177` from 2007; `3492` before; `5426` for 041 filers 1991–2000 |
 | nonfarm nonresidential | `na_nfnres` | `F182 + F183` from 2007; `3504` before; `5441` for 041 filers 1991–2000 |
 | depository institutions | `na_depinst` | `RCONB836`, else `5379 + 5382` |
-| C&I | `pdl_ci_non` | `RCFD1608`, else `1253 + 1256` |
+| C&I | `na_ci` | `RCFD1608`, else `1253 + 1256` |
 | leases | `na_lease` | `RCON1228`, else `F168 + F171` |
 | farmland, 1–4 family revolving, closed-end first and junior liens, multifamily, agricultural, credit cards, auto, other consumer, foreign governments, all other loans, real estate in foreign offices | as reported | single codes: `3495`, `5400`, `C229`, `C230`, `3501`, `1583`, `B577`, `K215`, `K218`, `5391`, `5461`, `B574` |
 
@@ -103,41 +121,54 @@ to offset, so the handoff looked smooth (−0.3%). By 2016 the double count had 
 level fell **16.3%** when `RCFD1403` returned in 2017Q1. Found by `bankpanel validate
 stitches`; see [../VALIDATION.md](../VALIDATION.md).
 
+**Agricultural loans are counted once, and which line depends on the form.** On the FFIEC
+031, agricultural nonaccrual (`1583`) is its own line. On the 041 and 051 it is reported
+*inside* all other loans (`5461`) — the MDRM note on `1583` reads "beginning 3/31/01,
+reported in Schedule RC-N Past Due for the FFIEC 041 report; not applicable to banks filing
+the FFIEC 031", and the data agrees: where both are reported, all other loans ≥ agricultural
+for 100% of 041/051 filers and only 66% of 031 filers. So the term is
+`na_agprod.where(form_type == 31)`. Counting it for everyone had overstated 11,732
+bank-quarters in 2011–2016 by exactly their agricultural line — $4.6bn, 0.16% of the
+reconstructed total, 3.3% for the banks affected. `form_type` is readable in formulas for
+exactly this reason; see [../CONFIG_FORMAT.md](../CONFIG_FORMAT.md).
+
 **How close it gets now.** Scored against `RCFD1403` where both exist:
 
 | window | bank-quarters | matches exactly (±$1k) | sum ratio |
 | --- | --- | --- | --- |
-| 2017Q1 on | 176,784 | **89.9%** (was 39–44%) | **1.006** (was 1.053) |
-| 2007–2010 | 120,191 | 52.8% | 0.987 |
-| 2001–2006 | 198,169 | 47.3% | 0.924 |
+| 2017Q1 on | 176,784 | **100.00%** on every form (was 39–44%) | **1.0000** (was 1.053) |
+| 2007–2010 | 120,191 | 55.0% | 0.985 |
+| 2001–2006 | 198,169 | 50.0% | 0.918 |
 
-The handoffs are now −5.5% at 2011Q1 and −4.4% at 2017Q1 across the same banks. Nonaccruals
-were falling steadily through 2011–2017, and the stitch validator scores the 2011Q1 step at
-robust z = 0.6 — within the series' own quarterly movement — and does not flag 2017Q1.
+From 2017 the construction reproduces the reported total exactly, so where the
+reconstruction actually runs (2011–2016, the same form) it can be trusted to the same
+degree. The handoffs are −5.6% at 2011Q1 and −3.9% at 2017Q1 over the same banks;
+nonaccruals were falling steadily through that period and the stitch validator scores the
+2011Q1 step at robust z = 0.7, inside the series' own quarterly movement.
 
-The fit is weaker before 2011, where the reconstruction almost never runs. The 2001–2006
-shortfall (ratio 0.924) most likely reflects a consumer category that was split differently
-before the 2011 auto / other-consumer codes; it is recorded, not yet traced.
+The pre-2011 shortfall is one code: `RCFDB580`, other loans to individuals, which the 2011
+`K215`/`K218` split replaced. Every remaining mismatch there equals `B580` exactly. It touches
+3 reconstructed rows and is not carried; the pre-2011 category totals are affected, `na_tot`
+is not.
 
-**Where it assumes.** On 64,164 rows a component is blank while its line was being collected,
-and `fillna(0)` treats the blank as zero. All of it is `na_ag_1583`, agricultural nonaccrual.
-Splitting the blanks:
+**Blank inside the window means zero — and after the fix there is almost nothing left to
+assume.** A category that is blank while its line is being collected enters the sum as zero.
+`bankpanel validate quality` counts those assumptions per column; `na_tot` had 64,164 of them,
+all agricultural — and every one was a 041 bank whose agricultural nonaccrual was inside all
+other loans, not blank. Counted correctly, `na_tot` rests on an assumed zero for **2**
+bank-quarters. Where no category is reported at all the total is blank, not a fabricated
+zero (1,223 rows before).
 
-| | rows | reading |
-| --- | --- | --- |
-| banks holding **no** agricultural loans | 32,545 (49.8%) | blank means zero |
-| banks that **do** hold ag loans | 32,841 (50.2%) | the zero is an assumption |
-
-For the second half the ag book is a median $618k, 0.98% of loans, and among ag-holding banks
-that *did* report the line, 83.4% reported exactly zero. Imputing at the reporting banks' own
-nonaccrual rate bounds the understatement at about 0.4% of `pdl_tot_non` on affected rows.
-
-**Blank, not zero.** Where no category is reported at all, `pdl_tot_non` is now blank. It was
-previously a fabricated zero on 1,223 bank-quarters.
+**The credit-card stitch was blank before 2001.** `na_cc` is `B577` from 2001; the fallback
+*summed* the two pre-2001 codes (`RCFD5385` on the 031, `RCON1220` elsewhere), and since no
+bank reports both, the sum was blank for the entire pre-2001 era — 717,918 bank-quarters.
+Coalesced, coverage is 0.72 in 1985 and 1.00 from 1995. The balanced-panel step at 2001Q1 is
+−10.0%: the pre-2001 items are "credit cards **and related plans**", and `B577` is credit
+cards alone, so the series narrows slightly at the definition change. Recorded, not repaired.
 
 **What this means for `npl_tot` and `pastdue_tot`.** Both inherit it. For 88.5% of rows they
 rest on a reported total; on the reconstructed rows, expect near-exact agreement for most
-banks and a small downward bias from assumed zeros. Read `pdl_tot_non_1403` directly if you
+banks and a small downward bias from assumed zeros. Read `na_tot_1403` directly if you
 need reported values only.
 
 `pastdue_tot` starts at **2001Q1** rather than 1985 — `pd30_tot` (`RCFD1406`) is not collected
@@ -149,7 +180,7 @@ formula (`data_preparation/config/assets.csv`), which still carries both errors.
 
 ## What the data shows
 
-Aggregate nonperforming loans (`npl_tot` = `pd90_tot` + `pdl_tot_non`) against loans:
+Aggregate nonperforming loans (`npl_tot` = `pd90_tot` + `na_tot`) against loans:
 
 | | 2007Q2 | 2008Q1 | 2008Q4 | 2009Q3 | 2010Q2 |
 | --- | --- | --- | --- | --- | --- |

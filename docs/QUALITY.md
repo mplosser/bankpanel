@@ -132,7 +132,7 @@ Why a cell is blank is the whole question:
   data cannot distinguish them. The zero is an assumption.
 
 A blank is counted only where the zero it produces actually reaches the output. Formulas
-branch: `pdl_tot_non` is `reported.fillna(<22-term sum>)`, so the sum -- and every
+branch: `na_tot` is `reported.fillna(<22-term sum>)`, so the sum -- and every
 `fillna(0)` inside it -- is evaluated only on the 11.5% of rows where the reported code is
 missing. Counting components on every row overstated the exposure threefold (211,689 vs
 64,164). Rather than parse branch structure, each suspect cell is perturbed and the formula
@@ -151,26 +151,21 @@ Reported, never gated. On a Call Report a blank overwhelmingly *does* mean zero:
 leave inapplicable lines empty rather than typing 0. Failing a build on this would fail
 every build. The point is that the assumption is counted and visible.
 
-Worked example — `pdl_tot_non`, the 22-term nonaccrual reconstruction, is the only column
-where this is material -- 64,164 rows, 4.5% of those built, 40% of the rows where
-the reconstruction actually runs, all driven by a live `na_ag_1583` (agricultural
-nonaccrual). Testing whether blank means "nothing to report":
+Worked example — `na_tot`, the by-category nonaccrual reconstruction, first showed 64,164
+rows resting on an assumed zero, all in `na_agprod` (agricultural nonaccrual). Testing whether
+blank meant "nothing to report" split them 50/50 between banks with no agricultural loans and
+banks with a small book, and bounded the understatement at 0.4%.
 
-Direction is knowable here because every flagged formula is a **pure sum** of non-negative
-balance-sheet quantities, with no subtraction. Replacing a missing term with 0 can only
-push the total down. That is why the question reduces to *how much* was left out rather
-than which way the error runs -- a formula that subtracted a zero-filled term would have
-no such guarantee.
+The bound was right and the diagnosis was not. Those banks file the FFIEC 041, on which
+agricultural nonaccrual is reported *inside* all other loans rather than on its own line —
+the value was not blank, it was already in the total under another name. Once the term reads
+`na_agprod.where(form_type == 31)`, the assumed-zero count for `na_tot` falls from 64,164 to
+**2**, and the category sum matches the reported total for 100.00% of bank-quarters from
+2017 on.
 
-| | rows | reading |
-|---|---|---|
-| blanks at banks holding **no** agricultural loans | 32,545 (49.8%) | blank means zero |
-| blanks at banks that **do** hold ag loans | 32,841 (50.2%) | zero is an assumption |
-
-For the second half the ag book is a median of $618k, 0.98% of loans, and among banks
-holding ag loans that *did* report the line, 83.4% reported exactly zero. Imputing at the
-reporting banks' own nonaccrual rate bounds the understatement at **0.41%** of
-`pdl_tot_non` on affected rows.
+So the check found a real defect, but not the one it named: a blank that looks like an
+assumption can be a category counted on the wrong line. The bound told us the cost was
+small; the form told us it was zero.
 
 That is the shape of the answer this check is for: not "is the zero right" — unknowable —
 but "how wrong can it be", answered from the panel itself.

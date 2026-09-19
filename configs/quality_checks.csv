@@ -35,7 +35,7 @@ name,expression,severity,description
 loan_reserve_le_loans,ll_res <= ll_tot,error,Loan loss reserves cannot exceed the loans they are held against
 reserve_nonneg,ll_res >= 0,error,The allowance for loan and lease losses is a contra-asset and cannot be negative
 loans_le_assets,ll_tot <= assets,error,Loans are a component of assets and cannot exceed the total
-nonaccrual_le_loans,pdl_tot_non <= ll_tot,error,Nonaccrual loans are a subset of loans
+nonaccrual_le_loans,na_tot <= ll_tot,error,Nonaccrual loans are a subset of loans
 assets_nonneg,assets >= 0,error,Total assets cannot be negative
 tier1_ratio_nonneg,tier1_rbc_ratio >= 0,error,A capital ratio cannot be negative
 tier1_ratio_plausible,tier1_rbc_ratio <= 10,info,A tier 1 ratio above 1000pct is legitimate but rare -- a small bank holding almost only zero-risk-weight assets. NOT an error: the regulator's own reported ratio exceeds 1 for every one of these banks. See docs/QUALITY.md

@@ -179,6 +179,7 @@ RCON7777,deposit_accounts,RC-E,count,all,,,,Carries a 1000x unit error for one b
 variable_name,schedule,flow_type,description,formula,unit,sign
 assets_less_loans,CROSS,stock,Assets net of short-maturity loans,assets_total - loans_3mo,thousands_usd,
 late_or_assets,RC,stock,Late item where present else assets,late_item.fillna(assets_total),thousands_usd,
+assets_031_only,RC,stock,Assets where the bank files the 031 form,assets_total.where(form_type == 31),thousands_usd,
 
 [ZERO_FILL]
 column,scope,reason
