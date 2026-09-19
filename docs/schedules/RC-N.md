@@ -174,9 +174,30 @@ need reported values only.
 `pastdue_tot` starts at **2001Q1** rather than 1985 — `pd30_tot` (`RCFD1406`) is not collected
 earlier. `npl_tot`, which does not use it, runs the full period.
 
-**Relevance to BEC.** BEC uses this series as `na_loans`, which splits the loan-loss reserve
-between loan families and enters the loan-book denominators. BEC reads its own copy of the
-formula (`data_preparation/config/assets.csv`), which still carries both errors.
+**Effect on BEC, measured.** BEC uses this series as `na_loans`, which splits the loan-loss
+reserve between loan families, enters the loan-book totals, and feeds a footing gate. Two full
+pipeline runs on identical code — one on the production panels, one on these panels emitted
+through `tools/export_legacy_panels.py` — differ only through the three fixed columns:
+
+| | |
+| --- | --- |
+| bank-quarters whose `na_loans` changed | 101,664, all 2011–2016 (plus a handful of pre-2011 rows from the credit-card stitch) |
+| `na_loans`, aggregate on those rows | **−15.0%**; median bank **+4.0%** |
+| EC (industry spread, 5y horizon), mean over affected bank-quarters | **+6.0 bps of assets**, median +2.4 |
+| EC, aggregate | **−$476bn** summed over affected bank-quarters, of which 89% is four banks with assets above $1tn |
+| aggregate EC / assets, 2011–2016 | **−8 to −19 bps** each year; zero outside the window |
+| bank-quarters restored to the panel | **+1,382** (2011–2016): previously dropped by `flag_matlow` because missing C&I nonaccrual made the loan book foot 2.5%+ short |
+
+The two halves pull opposite ways. The 041 filers — nearly every bank — gain the C&I
+nonaccrual total that was missing, so `na_loans` rises (+2.3% for banks under $10bn) and
+their EC rises a few basis points. The largest mortgage banks lose the double-counted
+modified 1–4 family memo item (`RCONF663`), so their `na_loans` falls (−19.7% for banks over
+$10bn) and, because nonaccrual loans enter the "other" loan-book total that the reserve
+deduction scales, their loan fair value and EC fall. Both are corrections of the same
+construction error, in opposite directions for different banks.
+
+BEC's own config still carries the old formula; the shim is how the corrected panel reaches
+it.
 
 ## What the data shows
 
