@@ -171,21 +171,26 @@ These originate in `data_call_report`, not in `bankpanel`, and are passed throug
   identity fields — name, city, FDIC certificate number — are intact. Do not use the
   header dataset's `state` column until this is fixed upstream.
 
-## 9. Two definition changes at 2001Q1 that no stitch can hide
+## 9. Three definition changes at 2001Q1, published as separate series
 
-The 2001Q1 form revision changed what two lines measure, and the panel carries the change
-rather than papering over it:
+The 2001Q1 form revision changed what three lines measure. The panel does not stitch across
+a definition change: each half is a separate column, and the old one carries an era suffix.
 
-- **`accrued_int`** is "income earned, not collected on loans" (`RCFD2164`) through 2000Q4
-  and accrued interest receivable on **all** assets (`RCFDB556`) from 2001Q1. The level
-  rises 38.7% at the boundary over the same banks, and more for banks holding more
-  securities. There is no all-asset code before 2001, so the pre-2001 series is narrower.
-- **`ln_cc` and `ln_othcons`**: "other revolving credit plans" moved from credit cards into
-  other consumer loans at 2001Q1 (−13.2% / +10.2% over the same banks; the two-line sum
-  moves +0.5%). Use `ln_cc + ln_othcons` for a consumer series that is continuous across
-  2001.
+| through 2000Q4 | from 2001Q1 | why they differ |
+| --- | --- | --- |
+| `accrued_int_loans_pre01` (`RCFD2164`) | `accrued_int` (`RCFDB556`) | income earned not collected **on loans** → accrued interest on **all** assets. +38.7% at the boundary over the same banks, more for banks holding more securities. No all-asset code exists before 2001. |
+| `ln_cc_incl_revolving_pre01` (`RCFD2008`) | `ln_cc` (`RCFDB538`) + `ln_revolving_oth` (`RCFDB539`) | credit cards **and related plans** → credit cards alone; the plans became their own line. |
+| `na_cc_incl_revolving_pre01` (`5385`/`1220`) | `na_cc` (`RCFDB577`) | the same carve-out on the nonaccrual side; the revolving-plan nonaccruals have no code of their own after 2001. |
 
-Found by `bankpanel validate stitches`; see [VALIDATION.md](VALIDATION.md).
+Where the split turned one line into two, the sum is the old definition and is published as
+a consistent series: **`ln_cc_incl_revolving`** = `2008` → `B538 + B539` (−3.4% at the
+boundary, inside the ±5–9% seasonal swing on either side). **`ln_consumer_oth`** (other
+consumer loans excluding cards and revolving plans; `2011` → `K137 + K207`) is consistent
+throughout, +3.3% at 2001Q1 and −0.3% at 2011Q1. The legacy `ln_othcons`, which added the
+revolving plans from 2001 only, is retired (`reference_data/legacy_retired.csv`).
+
+A consumer who needs one accrued-interest number across 2001 must coalesce the two columns
+knowingly; the panel will not do it silently.
 
 ## 10. Some totals rest on an assumed zero
 

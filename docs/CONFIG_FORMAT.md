@@ -36,7 +36,18 @@ graph-resolved dependencies, behind an AST allowlist. `description` is required:
 dictionary ships with the panel, so an undescribed column is an undocumented one.
 
 Era stitching lives here: `a.fillna(b).fillna(c)` coalesces the successive MDRM codes
-that carried one concept across a definition change.
+that carried one concept across a *code* change.
+
+**A series whose definition changes does not keep one name across the change.** A stitch
+is for the same measurement under a new code — verified, where both codes overlap, by the
+two agreeing. When the form redefines a line (accrued interest on loans becoming accrued
+interest on all assets at 2001Q1; credit cards *and related plans* becoming credit cards
+alone), the two halves are published under two names, and the old one carries an era
+suffix (`accrued_int_loans_pre01`). If the redefinition split one line into two, their sum
+is the old definition and may be published as a consistent series under its own name
+(`ln_cc_incl_revolving`). `bankpanel validate stitches` finds the level steps that mark a
+definition change hidden inside a stitch; the [VALIDATION.md](VALIDATION.md) table records
+which steps were which.
 
 **`form_type` is readable in any formula.** It is supplied by the builder, not a config —
 so it can be read but never bound, and it is not a dependency. It exists because some RC-N

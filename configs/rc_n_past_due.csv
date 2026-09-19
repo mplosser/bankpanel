@@ -295,9 +295,8 @@ pd30_depinst_b834,Total code RCONB834; published as pd30_depinst (else the 031 b
 pd90_depinst_b835,Total code RCONB835; published as pd90_depinst (else the 031 breakdown).
 pd30_lease_1226,Total code RCON1226; published as pd30_lease (else the 031 breakdown).
 pd90_lease_1227,Total code RCON1227; published as pd90_lease (else the 031 breakdown).
-na_cc_b577,Credit-card nonaccrual code RCFDB577 (2001-); published as na_cc.
-na_cc_5385,"Credit-card nonaccrual, RCFD5385 (031 filers, 1991-2000); published only inside na_cc."
-na_cc_1220,"Credit-card nonaccrual, RCON1220 (other forms, 1984-2000); published only inside na_cc."
+na_cc_5385,"Credit-card nonaccrual, RCFD5385 (031 filers, 1991-2000); published only inside na_cc_incl_revolving_pre01."
+na_cc_1220,"Credit-card nonaccrual, RCON1220 (other forms, 1984-2000); published only inside na_cc_incl_revolving_pre01."
 na_ci_1608,C&I nonaccrual total code RCFD1608; published as na_ci.
 na_ci_1253,C&I nonaccrual to US addressees (031 split); published only inside na_ci.
 na_ci_1256,C&I nonaccrual to non-US addressees (031 split); published only inside na_ci.
