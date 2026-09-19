@@ -133,8 +133,12 @@ def _decisions(out: Path) -> dict:
     if not path.exists():
         return {}
     prior = pd.read_csv(path, keep_default_na=False)
+    if "kind" not in prior.columns:
+        prior["kind"] = ""
+    # Keyed on kind as well as item: in 03_domain_calls one item could carry two separate
+    # judgements (its flow type AND its sign), and a verdict on one must not answer both.
     return {
-        (row.file, row.item): (row.verdict, row.note)
+        (row.file, row.kind, row.item): (row.verdict, row.note)
         for row in prior.itertuples()
     }
 
@@ -181,9 +185,9 @@ def build(panel_root: Path, out: Path) -> None:
             "era_end": var.era_end or "",
             "flow_type": var.flow_type,
             "config": filename,
-            "verdict": decided.get(("01_names.csv", var.variable_name), ("", ""))[0],
+            "verdict": decided.get(("01_names.csv", "", var.variable_name), ("", ""))[0],
             "rename_to": "",
-            "note": decided.get(("01_names.csv", var.variable_name), ("", ""))[1],
+            "note": decided.get(("01_names.csv", "", var.variable_name), ("", ""))[1],
         })
     names = pd.DataFrame(rows).sort_values(
         ["ambiguous_name", "schedule", "variable_name"], ascending=[False, True, True]
@@ -209,8 +213,8 @@ def build(panel_root: Path, out: Path) -> None:
             "config": filename,
             "risk": _derived_risk(var.variable_name),
             "zero_fill_evidence": zero_fill.get(var.variable_name, ""),
-            "verdict": decided.get(("02_derived.csv", var.variable_name), ("", ""))[0],
-            "note": decided.get(("02_derived.csv", var.variable_name), ("", ""))[1],
+            "verdict": decided.get(("02_derived.csv", "", var.variable_name), ("", ""))[0],
+            "note": decided.get(("02_derived.csv", "", var.variable_name), ("", ""))[1],
         })
     pd.DataFrame(rows).sort_values(["risk", "variable_name"]).to_csv(
         out / "02_derived.csv", index=False
@@ -254,7 +258,11 @@ def build(panel_root: Path, out: Path) -> None:
             "detail": f"{schedule}: {label}",
             "verdict": "", "note": "",
         })
-    pd.DataFrame(rows).to_csv(out / "03_domain_calls.csv", index=False)
+    calls = pd.DataFrame(rows)
+    for i, row in calls.iterrows():
+        verdict, note = decided.get(("03_domain_calls.csv", row.kind, row["item"]), ("", ""))
+        calls.at[i, "verdict"], calls.at[i, "note"] = verdict, note
+    calls.to_csv(out / "03_domain_calls.csv", index=False)
 
     _write_readme(out, len(new_base), len(new_derived))
     print(f"01_names.csv        {len(new_base):>4} columns "
