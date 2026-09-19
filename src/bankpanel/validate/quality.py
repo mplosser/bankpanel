@@ -138,6 +138,7 @@ def find_fabricated_values(df: pd.DataFrame, configset) -> pd.DataFrame:
     zero_filled = {rule.column for rule in configset.zero_fill}
     graph = configset.graph
     rows = []
+    unverifiable: list[str] = []
     for var in configset.derived:
         if var.variable_name in zero_filled:
             continue
@@ -145,6 +146,12 @@ def find_fabricated_values(df: pd.DataFrame, configset) -> pd.DataFrame:
         inputs = sorted(graph.deps.get(name, ()))
         present = [c for c in inputs if c in df.columns]
         if name not in df.columns or not present:
+            continue
+        # A withheld ([INTERMEDIATE]) input is not in the panel, so its contribution cannot
+        # be seen here. Testing against the inputs that ARE visible would flag every value
+        # the withheld one supplied -- the pre-2011 half of a stitch, say -- as fabricated.
+        if len(present) < len(inputs):
+            unverifiable.append(name)
             continue
         any_input = df[present].notna().any(axis=1)
         fabricated = int((df[name].notna() & ~any_input).sum())
@@ -158,13 +165,18 @@ def find_fabricated_values(df: pd.DataFrame, configset) -> pd.DataFrame:
                 "formula": var.formula[:90],
                 "config": var.origin.path.name,
             })
-    return pd.DataFrame(rows).sort_values("n_fabricated", ascending=False) if rows else pd.DataFrame(
+    out = pd.DataFrame(rows).sort_values("n_fabricated", ascending=False) if rows else pd.DataFrame(
         columns=["column", "n_fabricated", "share_of_panel", "all_zero", "formula", "config"]
     )
+    out.attrs["unverifiable"] = unverifiable
+    return out
 
 
 def format_fabricated(found: pd.DataFrame) -> str:
     lines = ["", "-" * 78, "FABRICATED VALUES -- derived columns with a value but no inputs", "-" * 78]
+    skipped = found.attrs.get("unverifiable", [])
+    if skipped:
+        lines.append(f"({len(skipped)} column(s) not checked: an input is [INTERMEDIATE], not in the panel)")
     if found.empty:
         lines.append("none: every derived value rests on at least one reported input")
         return "\n".join(lines)

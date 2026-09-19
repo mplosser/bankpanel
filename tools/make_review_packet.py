@@ -282,7 +282,7 @@ def _derived_risk(name: str) -> str:
     """Order the review queue by consequence, not alphabetically."""
     high = {
         "tier1_capital", "tier2_capital", "rwa", "tier1_rbc_ratio", "total_rbc_ratio",
-        "cet1_ratio", "brokered_dep_mat_lte1yr", "npl_tot", "pastdue_tot",
+        "cet1_ratio", "brokered_dep_mat_lte1yr", "npl_tot", "pastdue_tot", "pd30_tot", "pd90_tot",
     }
     partial = {"ac_afs_tot_toplevel", "amt_ln_smallbiz_tot", "amt_ln_smallfarm_tot",
                "amt_ln_smallbiz_ci", "amt_ln_smallbiz_nfnres"}

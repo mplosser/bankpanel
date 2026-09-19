@@ -56,32 +56,53 @@ names (`reference_data/legacy_names.csv` has the map). `tools/parity_check.py` r
 map, so the renamed columns are still compared against the legacy panels under their old
 names rather than silently dropping out of the shared set.
 
-## Known gap: the reported totals disappear for 2011–2016
+## The reported totals disappear for 2011–2016, and are rebuilt
 
-Measured coverage of `pd30_tot` / `pd90_tot` (`RCFD1406` / `RCFD1407`):
+`RCFD1403` (nonaccrual), `RCFD1406` (past due 30–89) and `RCFD1407` (past due 90+) are the
+schedule's total lines. All three stop at 2010Q4 and resume at 2017Q1; for 2011–2016 the
+totals are not collected and only the by-category lines exist. `na_tot`, `pd30_tot` and
+`pd90_tot` are the reported total where it exists and the sum of the categories where it
+does not, built the same way for all three: **each category once, as its total or as its
+breakdown, never both.**
 
-| 2010Q4 | 2011Q1 | 2016Q4 | 2017Q1 |
+| category | published as | total code, else breakdown |
+| --- | --- | --- |
+| construction, land development, other land | `{pd30,pd90,na}_constr` | F172+F173 / F174+F175 / F176+F177 from 2007; 2759 / 2769 / 3492 before (031: 5426 for na) |
+| nonfarm nonresidential | `_nfnres` | F178+F179 / F180+F181 / F182+F183 from 2007; 3502 / 3503 / 3504 before |
+| C&I | `_ci` | RCON1606 / 1607 / RCFD1608, else the 031 split US + non-US addressees |
+| depository institutions | `_depinst` | RCONB834 / B835 / B836, else the 031 split US + foreign banks |
+| leases | `_lease` | RCON1226 / 1227 / 1228, else the 031 split individuals + all other |
+| consumer other than credit cards | `_consumer_noncc` | auto + other from 2011 (K213/K216, K214/K217, K215/K218); the single line B578 / B579 / B580 for 2001–2010 |
+| agricultural | `_agprod` | 1594 / 1597 / 1583 — **031 filers only**; on the 041/051 it is inside all other loans |
+| farmland, revolving 1–4 family, closed-end first and junior liens, multifamily, credit cards, foreign governments, all other loans, real estate in foreign offices | as reported | single codes |
+
+Every "else" was tested where both sides are reported: the pre-2007 construction and
+nonfarm-nonresidential totals equal the sum of their 2007 splits for **100%** of banks in
+2007–2010, and the 041 totals never co-report with the 031 breakdowns. Loans to
+nondepository financial institutions (2024Q4 on) are *not* a term: added, the sum overshot the
+reported total by exactly that line on every affected bank, so they sit inside all other loans.
+
+**How close it gets.** Category sum against the reported total, where both exist:
+
+| | 2017Q1 on (176,784) | 2007–2010 (120,192) | 2001–2006 (198,170) |
 | --- | --- | --- | --- |
-| 1.00 | **0.00** | **0.00** | 1.00 |
+| `na_tot` vs 1403 | **100.00%**, ratio 1.0000 | **100.00%** | 91.8% |
+| `pd30_tot` vs 1406 | **100.00%**, ratio 1.0000 | 98.9% (041: 100%) | 85.7% |
+| `pd90_tot` vs 1407 | **100.00%**, ratio 1.0000 | 99.2% (041: 100%) | 92.6% |
 
-The same six-year hole as `RCFD1403`, total nonaccrual. So `npl_tot` and `pastdue_tot`
-are **NaN for 2011Q1–2016Q4**. That is honest rather than convenient: the value is not
-known from the reported totals in that window.
+All three match exactly on every form from 2017, which is the test that matters: the
+reconstruction runs on 2011–2016 filings of the same shape. Before 2011 the 041 filers match
+from 2007; what remains short there is the **031 filers before 2011**, whose own lease
+breakdown before the 2007 split (`1257/1271`, `1258/1272`) is not carried. Since the
+reported total is used wherever it exists, that affects only the 031 category totals before
+2007, not `pd30_tot` / `pd90_tot`.
 
-A reconstruction is possible in principle — the balance-sheet config already does it for
-nonaccrual, where `na_tot` fills the gap by summing 22 by-category RC-N items — and
-that is why `npl_tot` and `pastdue_tot` reference `na_tot` rather than a local total.
+Handoffs, over the same banks: −5.7% / −6.4% for `pd30_tot` at 2011Q1 / 2017Q1, −2.1% /
+−7.1% for `pd90_tot`, −4.3% / −5.2% for `npl_tot`; the stitch validator scores every one
+within the series' own quarterly movement (robust z ≤ 1.1). `npl_tot` and `pastdue_tot`
+now cover 2011–2016 completely; before this they were blank there.
 
-**It is not done here for past-due, because it does not yet validate.** Summing the
-by-category `pd30_*` / `pd90_*` items and comparing to the reported total in the periods
-where both exist reproduces it for only ~23% of bank-quarters, with a median error of
-about 21%. The cause is identified: this repo does not yet carry the *main-body*
-nonfarm-nonresidential past-due items — only their `lossshare` and `modified` variants —
-and nonfarm nonresidential is the largest CRE category. Adding them is the prerequisite,
-and the reconstruction should be shipped only once it reproduces the reported total in the
-overlap periods.
-
-## How good is the reconstruction, and should you use it
+## The nonaccrual reconstruction in detail: what was wrong and how it was found
 
 **How often it runs.** `na_tot` is the reported `RCFD1403` on 88.5% of rows. Where
 `RCFD1403` is missing — 160,902 bank-quarters, almost all 2011Q1–2016Q4 — it is rebuilt from
