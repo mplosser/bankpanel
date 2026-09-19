@@ -171,6 +171,24 @@ fell from −16.3% to −4.4%. See [schedules/RC-N.md](schedules/RC-N.md).
 It is also the clearest case for this check: the error was invisible at the handoff *into*
 the reconstruction and only showed at the handoff back out.
 
+### The other five, examined
+
+Each was given one targeted test, over the same banks on both sides of its handoff.
+
+| column | handoff | finding | verdict |
+| --- | --- | --- | --- |
+| `accrued_int` | 2001Q1, +38.7% | `RCFD2164` is "income earned, not collected **on loans**"; `RCFDB556` from 2001 is accrued interest on **all** assets. Banks in the top half by securities share jump +50%, the bottom half +20%. No overlap quarter exists. | **Definition broadened.** No all-asset code exists before 2001; the pre-2001 series is loans-only and is documented as such. |
+| `ln_othcons` and `ln_cc` | 2001Q1, +10.2% / −13.2% | "Other revolving credit plans" (`RCFDB539`, $24.7bn) moved from credit cards into other consumer loans. The two-line sum moves **+0.5%**. | **Reclassification.** `ln_cc + ln_othcons` is continuous; the split is not, and cannot be made so before 2001. |
+| `ac_htm_gnma` | 2009Q2, +69.6% | A $3.2bn → $5.5bn series; three banks are 85% of the increase; the adjacent quarters are +16.5% and +4.5%. `RCFD1698` and `RCFDG300` are the same item. | **Real and concentrated.** A small base makes three banks' GNMA purchases in 2009 look like a break. |
+| `equitysec` | 2020Q2, +56.4% | The sum of both codes jumps by the same amount, so the stitch is not the cause. One bank is 57% of it (1.18 → 4.98 → 0.58 $bn across three quarters) and a second most of the rest (0.01 → 3.01 → 0.03); both revert. | **Two banks' one-quarter spikes**, coincident with the quarter JA22 became the majority code. A cleaning question, not a construction one. |
+| `obm_gt1yr` | 1997Q2, +25.0% | Total other borrowed money moved +12.9% the same quarter, and the >1yr share kept rising the quarter after (0.33 → 0.36 → 0.39). | **Partly trend**; the residual is unresolved. Not a BEC input. |
+
+The lesson from the set: the validator finds *level steps*, and a level step has four
+possible causes — a construction error, a definition change, a reclassification between
+sibling lines, and a genuine concentrated move. Only the first is fixable by editing a
+formula. The others need to be *named* so nobody downstream treats the step as data. The
+first version of this table called all six "breaks"; one was.
+
 ### A composite fallback is a recipe, not a source
 
 The first version of this check labelled every row built from an expression `<constructed>`

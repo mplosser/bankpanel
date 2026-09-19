@@ -171,7 +171,23 @@ These originate in `data_call_report`, not in `bankpanel`, and are passed throug
   identity fields — name, city, FDIC certificate number — are intact. Do not use the
   header dataset's `state` column until this is fixed upstream.
 
-## 9. Some totals rest on an assumed zero
+## 9. Two definition changes at 2001Q1 that no stitch can hide
+
+The 2001Q1 form revision changed what two lines measure, and the panel carries the change
+rather than papering over it:
+
+- **`accrued_int`** is "income earned, not collected on loans" (`RCFD2164`) through 2000Q4
+  and accrued interest receivable on **all** assets (`RCFDB556`) from 2001Q1. The level
+  rises 38.7% at the boundary over the same banks, and more for banks holding more
+  securities. There is no all-asset code before 2001, so the pre-2001 series is narrower.
+- **`ln_cc` and `ln_othcons`**: "other revolving credit plans" moved from credit cards into
+  other consumer loans at 2001Q1 (−13.2% / +10.2% over the same banks; the two-line sum
+  moves +0.5%). Use `ln_cc + ln_othcons` for a consumer series that is continuous across
+  2001.
+
+Found by `bankpanel validate stitches`; see [VALIDATION.md](VALIDATION.md).
+
+## 10. Some totals rest on an assumed zero
 
 A derived total that sums components has to decide what a blank component means. On a Call
 Report a blank overwhelmingly means "nothing to report" — banks leave inapplicable lines
