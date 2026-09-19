@@ -19,9 +19,22 @@ name. Remaining collisions take an MDRM item-code suffix.
 
 ## Flow types matter here
 
-Charge-offs and recoveries are **year-to-date** and are quarterized. They are gross
-additive quantities — neither can be negative over a quarter — so they carry
-`sign=nonneg` and the quarterize audit will report any that are.
+Charge-offs and recoveries are **year-to-date** and are quarterized.
+
+**Charge-offs are one-signed** (`sign=nonneg`): a charge-off cannot be negative over a
+quarter, and the quarterize audit reports any that are.
+
+**Recoveries are not** (`sign=any`). A recovery can be reversed, so a negative quarterly
+recovery can be real. Banks almost never *report* a negative year-to-date recovery —
+0.001% of 1.4 million filings — but a reversal within the year shows up as a fall in the
+year-to-date figure and so as a negative quarter. Treating those as errors would repair
+real data away.
+
+Recoveries can also exceed charge-offs, which is a separate point: in 14% of bank-years a
+bank recovers more than it charges off (26% for C&I), mostly on losses written off in
+earlier years. It is strongly countercyclical — 4–5% of bank-years in 2009–10, 35–37% in
+2021–22. So net charge-offs are negative in those years, and `net_chargeoffs_tot` carries
+no sign constraint.
 
 The Part II reconciliation items are *not* charge-off flows and are typed accordingly:
 `alll_end` and `acl_oth_fin_assets` are balances (`stock`), while `alll_adjustments` and
@@ -79,11 +92,10 @@ recession year, so a naive before/after comparison would mostly measure the cycl
 
 ### Provisions are two-signed
 
-Unlike charge-offs and recoveries, a provision can genuinely be negative — a reserve
-release. Banks report a negative year-to-date provision 3.1% of the time before CECL and
-7.1% under it, against essentially never (0.000–0.001%) for charge-offs and recoveries. So
-the provisions carry `sign=any` and the quarterize audit never treats a negative as an
-error.
+A provision can genuinely be negative — a reserve release. Banks report a negative
+year-to-date provision 3.1% of the time before CECL and 7.1% under it, against essentially
+never (0.000–0.001%) for charge-offs and recoveries. So the provisions carry `sign=any` and
+the quarterize audit never treats a negative as an error.
 
 ## What it shows
 

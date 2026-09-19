@@ -1,9 +1,13 @@
 """Gross-additive flows that came out negative.
 
-Interest income, interest expense, non-interest expense, fiduciary income, charge-offs
-and recoveries are all gross and additive: over a quarter they cannot be negative. When
-one is, the year-to-date series was reset mid-year and the difference picked up the reset
-instead of a flow.
+Interest income, interest expense, non-interest expense, fiduciary income and charge-offs
+are all gross and additive: over a quarter they cannot be negative. When one is, the
+year-to-date series was reset mid-year and the difference picked up the reset instead of a
+flow.
+
+Recoveries are deliberately NOT on that list. A recovery can be reversed, so a negative
+quarterly recovery can be real, and repairing it would destroy genuine data. Only pass a
+column declared ``sign=nonneg`` in the configs.
 
 The gate is simply ``value < 0``. It is deliberately NOT conditioned on a structural-event
 flag: the value is impossible whatever caused it, and most causes are not flagged.

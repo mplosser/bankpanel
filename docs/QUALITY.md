@@ -80,9 +80,10 @@ conclude the assertion was wrong.
 ## Overlap with the other validators is informative
 
 `recovery_ci_le_total` fails on 0.583% of rows, and 58% of those are cases where
-`rec_tot` is **negative** — the year-to-date reset artifact the quarterize audit already
-reports. The same defect surfacing through an ordering violation is not duplication; it
-shows how far the artifact propagates.
+`rec_tot` is **negative**. That can be a year-to-date reset artifact or a genuine reversal
+of an earlier recovery. Recoveries are two-signed, so the quarterize audit no longer reports
+them, and this ordering check is the one place a negative total recovery still surfaces.
+It is a `warning` for that reason: a failure here is worth a look, not a repair.
 
 ## Current checks
 

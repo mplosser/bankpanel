@@ -5,9 +5,7 @@ Opt-in, in memory, and last.
 ```python
 from bankpanel.clean import CleaningPlan, apply_plan, summarize_audit
 
-plan = (CleaningPlan()
-        .add("interpolate_negative", column="co_tot")
-        .add("interpolate_negative", column="rec_tot"))
+plan = CleaningPlan().add("interpolate_negative", column="co_tot")
 
 cleaned, audit = apply_plan(df, plan)
 summarize_audit(audit)
@@ -35,7 +33,7 @@ neither should have the other's choice baked into the data they downloaded.
 
 Steps are not asked to report their own changes — the runner diffs the frame around each
 step, so the audit cannot drift out of step with what actually happened. On the current
-panel, repairing negative charge-offs and recoveries touches **18,565 cells**, and every
+panel, repairing negative charge-offs touches **6,353 cells**, and every
 one is in the frame.
 
 This is what turns "we cleaned the data" into a claim somebody else can check, quantify,
@@ -100,6 +98,12 @@ tiny tail is overridden.
 
 Do not pass a **net** quantity to `interpolate_negative` or to a repair with
 `negative_impossible=True`. Trading revenue, gains and losses on sales, and tax benefits
-are all legitimately negative, and repairing them destroys real variation. The panel
+are all legitimately negative, and repairing them destroys real variation.
+
+Nor recoveries. They are gross, but a recovery can be *reversed*, so a negative quarterly
+recovery can be real. An earlier version of the example above repaired `rec_tot` alongside
+`co_tot`, which would have overwritten genuine reversals; the recovery columns are now
+`sign=any` and the example repairs charge-offs only. Provisions are two-signed for the
+same reason — a reserve release is a negative provision. The panel
 declares which columns are gross-additive via `sign=nonneg`; `bankpanel validate
 quarterize` reports exactly those.
