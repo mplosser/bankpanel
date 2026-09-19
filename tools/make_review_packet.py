@@ -169,8 +169,14 @@ def build(panel_root: Path, out: Path) -> None:
 
     # --- 1. names ---------------------------------------------------------------------
     code_suffixes = {v.mdrm_code[4:].lower() for _, v in new_base}
+    # Names are reviewed because they are the published API. A withheld [INTERMEDIATE]
+    # column never reaches the panel, so its name -- often a deliberate code suffix on an
+    # era piece -- is not up for review and must not be flagged as ambiguous.
+    withheld = cs.intermediate_columns()
     rows = []
     for filename, var in new_base:
+        if var.variable_name in withheld:
+            continue
         tail = var.variable_name.rsplit("_", 1)[-1]
         rows.append({
             "schedule": var.schedule,
@@ -264,8 +270,8 @@ def build(panel_root: Path, out: Path) -> None:
         calls.at[i, "verdict"], calls.at[i, "note"] = verdict, note
     calls.to_csv(out / "03_domain_calls.csv", index=False)
 
-    _write_readme(out, len(new_base), len(new_derived))
-    print(f"01_names.csv        {len(new_base):>4} columns "
+    _write_readme(out, len(names), len(new_derived))
+    print(f"01_names.csv        {len(names):>4} columns "
           f"({int((names.ambiguous_name == 'YES').sum())} flagged ambiguous)")
     print(f"02_derived.csv      {len(new_derived):>4} series")
     print(f"03_domain_calls.csv {len(rows):>4} calls")

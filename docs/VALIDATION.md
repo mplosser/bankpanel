@@ -148,7 +148,7 @@ every one of them is in the legacy configs:
 
 | column | quarter | jump | z | banks | source change |
 | --- | --- | --- | --- | --- | --- |
-| `pdl_tot_non` | 2017Q1 | **−13.8%** | 11.7 | 5,906 | `<constructed>` → `RCFD1403` |
+| `pdl_tot_non` | 2017Q1 | **−13.8%** | 11.7 | 5,906 | `<constructed>` → `RCFD1403` — **fixed**, now −4.4% |
 | `obm_gt1yr` | 1997Q2 | +15.8% | 9.6 | 9,828 | `_pre97` → `_9701` |
 | `ln_othcons` | 2001Q1 | +7.9% | 5.3 | 8,721 | `_2` → `_01` |
 | `accrued_int` | 2001Q1 | +37.5% | 5.3 | 8,721 | `_pre01` → `_01` |
@@ -160,11 +160,16 @@ reports 688/688 on exactly these columns, because both sides of every handoff ar
 reproduced faithfully — the legacy pipeline has the same steps. Reproducing a
 discontinuity bit-for-bit is not the same as not having one.
 
-The `pdl_tot_non` finding also sharpens a caveat that was already written down. The
-reconstruction's *dispersion* against the reported total was measured at 6–8% median
-absolute error; this says the aggregate also sits about **16% high** over the banks that
-switched back at 2017Q1. Dispersion and level bias are different defects and the first
-does not imply the second. See [schedules/RC-N.md](schedules/RC-N.md).
+The `pdl_tot_non` finding has since been root-caused and fixed. The reconstruction counted
+an RC-N memorandum item (`RCONF663`, modified 1–4 family loans) that is already inside the
+1–4 family lines, and it read C&I, leases and depository institutions only from the 031
+breakdowns, missing the 041 totals reported by ~98% of banks. The two errors offset at
+2011Q1 and compounded by 2017Q1. With each category counted once, agreement with the
+reported total after 2017 rose from 39–44% of bank-quarters to 89.9%, and the 2017Q1 step
+fell from −16.3% to −4.4%. See [schedules/RC-N.md](schedules/RC-N.md).
+
+It is also the clearest case for this check: the error was invisible at the handoff *into*
+the reconstruction and only showed at the handoff back out.
 
 ### A composite fallback is a recipe, not a source
 
