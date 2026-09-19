@@ -1078,3 +1078,9 @@ alll_adjustments,base,True,RI-B,ytd,thousands_usd,any,RIADC233,all,2002-03-31,,A
 writedowns_transfer_to_hfs,base,True,RI-B,ytd,thousands_usd,nonneg,RIAD5523,all,2001-06-30,,WRITE DOWNS ARISING FROM TRANSFER TO HFS,,,ri_b_chargeoffs.csv,647278.0,0.4574,2001Q2,2025Q3,0.9946,45502266.0
 acl_oth_fin_assets,base,True,RI-B,stock,thousands_usd,any,RCFDJJ03,all,2020-03-31,,Allowance for credit losses on other financial assets measured at amortized cost,,,ri_b_chargeoffs.csv,53690.0,0.0379,2019Q1,2025Q3,0.9837,23503303.0
 net_chargeoffs_tot,derived,True,RI-B,ytd,thousands_usd,any,,,,,Net charge-offs: gross charge-offs less recoveries,co_tot - rec_tot,co_tot rec_tot,ri_b_chargeoffs.csv,1414984.0,1.0,1985Q1,2025Q3,0.155,1874548313.0
+provision_ll,base,True,RI,ytd,thousands_usd,any,RIAD4230,all,,,PROVISION FOR LOAN AND LEASE LOSSES,,,ri_provisions.csv,1414991.0,1.0,1985Q1,2025Q3,0.2582,2050999000.0
+provision_credit_tot,base,True,RI,ytd,thousands_usd,any,RIADJJ33,all,2019-03-31,,PROVISIONS FOR CREDIT LOSSES ON FINANCIAL ASSETS,,,ri_provisions.csv,131294.0,0.0928,2019Q1,2025Q3,0.3298,462622857.0
+provision_htm,base,True,RI-B,ytd,thousands_usd,any,RIADJH90,all,2019-03-31,,Provisions for credit losses; Held-to-maturity debt securities,,,ri_provisions.csv,53689.0,0.0379,2019Q1,2025Q3,0.9574,348507.0
+provision_afs,base,True,RI-B,ytd,thousands_usd,any,RIADJH96,all,2019-03-31,,Provisions for credit losses; Available-for-sale debt securities,,,ri_provisions.csv,53689.0,0.0379,2019Q1,2025Q3,0.9843,390269.0
+provision_oth_fin,base,True,RI-B,ytd,thousands_usd,any,RIADJJ02,all,2019-03-31,,Provisions for credit losses on other financial assets measured at amortized cost,,,ri_provisions.csv,53685.0,0.0379,2019Q1,2025Q3,0.9896,2907936.0
+provision_obs,base,True,RI-B,ytd,thousands_usd,any,RIADMG93,all,2021-03-31,,Provisions for credit losses on off-balance-sheet exposures,,,ri_provisions.csv,52607.0,0.0372,2021Q1,2025Q3,0.6703,-892621.0

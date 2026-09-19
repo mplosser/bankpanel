@@ -30,7 +30,7 @@ NEW_CONFIGS = {
     "rc_c_loans.csv", "rc_e_deposits.csv", "rc_b_securities.csv", "rc_d_trading.csv",
     "rc_n_past_due.csv", "rc_k_quarterly_avg.csv", "rc_r_capital.csv",
     "rc_o_assessments.csv", "ri_a_equity.csv", "ri_b_chargeoffs.csv",
-    "quality_checks.csv",
+    "ri_provisions.csv", "quality_checks.csv",
 }
 
 #: Items excluded as collected-but-unpublished. Every populated cell is the string "CONF".
