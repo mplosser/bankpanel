@@ -139,7 +139,52 @@ def cmd_validate(args: argparse.Namespace) -> int:
     from .config import ConfigSet
     from .reference.expectations import read_expectations
 
-    root, df, cols = _load_for_validation(args.panel_root)
+    import pyarrow.dataset as ds
+
+    from .io.reader import _resolve_root
+
+    # The whole panel is ~11 GiB as a frame, which a 32 GB machine cannot always spare. No
+    # validator needs it at once: coverage and breaks look at one column at a time, and the
+    # cross-column ones only at the columns a formula references.
+    root = _resolve_root(args.panel_root)
+    reserved = {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
+    in_panel = [c for c in ds.dataset(root / "panel", partitioning="hive").schema.names
+                if c not in reserved]
+    cols = [c for c in in_panel if not c.startswith("q_")]
+    chunk = 350
+
+    def column_chunks():
+        for i in range(0, len(cols), chunk):
+            _, frame, part = _load_for_validation(args.panel_root, columns=cols[i:i + chunk])
+            yield frame, part
+
+    class _Subset:
+        """The config set, exposing only one batch of derived variables."""
+
+        def __init__(self, cs, derived):
+            self._cs, self.derived = cs, derived
+
+        def __getattr__(self, key):
+            return getattr(self._cs, key)
+
+    def formula_batches(cs, size=40):
+        """(frame, config subset) per batch of derived variables: each variable, its direct
+        inputs and the base items behind them -- everything its formula can touch."""
+        present = set(in_panel)
+        published = [v for v in cs.derived if v.variable_name in present]
+        for i in range(0, len(published), size):
+            batch = published[i:i + size]
+            need: set[str] = set()
+            for var in batch:
+                name = var.variable_name
+                need |= {name} | set(cs.graph.deps.get(name, ())) | cs.graph.transitive_inputs(name)
+            _, frame, _ = _load_for_validation(args.panel_root, columns=sorted(need & present))
+            yield frame, _Subset(cs, batch)
+
+    def concat(frames):
+        frames = [f for f in frames if f is not None and not f.empty]
+        return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
     exit_code = 0
     saved: dict[str, pd.DataFrame] = {}
 
@@ -153,9 +198,12 @@ def cmd_validate(args: argparse.Namespace) -> int:
         else:
             print(f"[warn] no expectations at {exp_path}; run 'bankpanel expectations build'.")
             print("[warn] without it, FFIEC 051 semiannual items will dominate the output.")
-        new, approved = coverage_scan(
-            df, cols, panel="panel", expectations=expectations, ledger_path=args.ledger
-        )
+        scans = [
+            coverage_scan(frame, part, panel="panel", expectations=expectations,
+                          ledger_path=args.ledger)
+            for frame, part in column_chunks()
+        ]
+        new, approved = concat(n for n, _ in scans), concat(a for _, a in scans)
         print(format_report(new, approved))
         saved["coverage_findings"] = new
         saved["coverage_approved"] = approved
@@ -176,8 +224,11 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.check in ("breaks", "all"):
         from .validate.breaks import check_latest_quarter, format_report, gate
 
-        findings = check_latest_quarter(df, cols)
-        latest = str(pd.DatetimeIndex(df.REPORTING_PERIOD).max().date())
+        parts, latest = [], ""
+        for frame, part in column_chunks():
+            parts.append(check_latest_quarter(frame, part))
+            latest = str(pd.DatetimeIndex(frame.REPORTING_PERIOD).max().date())
+        findings = concat(parts)
         print()
         print(format_report(findings, latest))
         saved["series_breaks"] = findings
@@ -186,8 +237,18 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.check in ("quality", "all"):
         from .validate.quality import format_report, gate, run_checks
 
+        from .expr import FormulaError, dependencies
+
         cs = ConfigSet.load(args.config_dir)
+        check_cols: set[str] = set()
+        for check in cs.checks:
+            try:
+                check_cols |= dependencies(check.expression, where=str(check.origin))
+            except FormulaError:
+                pass
+        _, df, _ = _load_for_validation(args.panel_root, columns=sorted(check_cols & set(in_panel)))
         results = run_checks(df, cs.checks)
+        del df
         print()
         print(format_report(results))
         saved["quality_checks"] = results
@@ -199,9 +260,16 @@ def cmd_validate(args: argparse.Namespace) -> int:
             format_within_era_zerofill,
         )
 
-        fabricated = find_fabricated_values(df, cs)
+        fab_parts, zero_parts, unverifiable = [], [], []
+        for frame, subset in formula_batches(cs):
+            found = find_fabricated_values(frame, subset)
+            unverifiable += found.attrs.get("unverifiable", [])
+            fab_parts.append(found)
+            zero_parts.append(find_within_era_zerofill(frame, subset))
+        fabricated = concat(fab_parts)
+        fabricated.attrs["unverifiable"] = unverifiable
         print(format_fabricated(fabricated))
-        print(format_within_era_zerofill(find_within_era_zerofill(df, cs)))
+        print(format_within_era_zerofill(concat(zero_parts)))
         saved["fabricated_values"] = fabricated
         # Reported, not gated: the remaining cases are legacy columns kept bit-identical
         # for parity with the source pipeline, so failing the build on them would make the
@@ -213,7 +281,10 @@ def cmd_validate(args: argparse.Namespace) -> int:
         from .validate.stitches import format_report as format_stitches
         from .validate.stitches import gate as gate_stitches
 
-        steps = find_stitch_steps(df, ConfigSet.load("configs"))
+        steps = concat(
+            find_stitch_steps(frame, subset)
+            for frame, subset in formula_batches(ConfigSet.load(args.config_dir))
+        )
         print(format_stitches(steps))
         saved["stitches"] = steps
         exit_code |= gate_stitches(steps) if args.strict else 0
