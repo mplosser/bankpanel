@@ -204,7 +204,16 @@ RCFDK207,ln_consumer_oth_ex_auto,RC-C,stock,all,2011-03-31,,,OTHER CONSUMER LOAN
 RCFD2011,ln_consumer_oth_pre11,RC,stock,all,,2010-12-31,,"OTHER LOANS TO INDIVIDUALS through 2010Q4 = K137 + K207 from 2011 (same line, split); piece of ln_consumer_oth"
 RCFD1590,ln_agr,RC-C,stock,all,,,,
 RCFD1766,ln_ci_tot,RC,stock,all,,,,
-RCFD1410,ln_re,RC-C,stock,all,,,,
+RCFD1410,ln_re_1410,RC-C,stock,all,,,,"LOANS SECURED BY REAL ESTATE, reported total (RC-C item 1, consolidated). Reported by every bank through 2010; dropped from the 041 in 2011 and by the large 031 filers from 2013Q2, when column A began to carry the components instead"
+RCFDF158,ln_condev_1_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, 1-4 family residential construction: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFDF159,ln_condev_2_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, other construction, land development and other land: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFD1420,ln_farm_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, secured by farmland: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFD1797,ln_famres_heloc_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, revolving open-end 1-4 family (HELOC): CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFD5367,ln_famres_first_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, closed-end 1-4 family first liens: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFD5368,ln_famres_jr_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, closed-end 1-4 family junior liens: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFD1460,ln_multi_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, multifamily (5 or more) residential: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFDF160,ln_other_re_1_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, owner-occupied nonfarm nonresidential: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
+RCFDF161,ln_other_re_2_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, other nonfarm nonresidential: CONSOLIDATED (031 column A, from 2013Q2); falls back to the domestic RCON item for a 031 filer that files no column A detail"
 RCONF158,ln_condev_1,RC-C,stock,all,,,,
 RCONF159,ln_condev_2,RC-C,stock,all,,,,
 RCON1415,ln_condev_pre07,RC,stock,all,,,,
@@ -424,6 +433,8 @@ ln_famres_01,CROSS,stock,,ln_famres_heloc + ln_famres_other,,
 ln_famres,CROSS,stock,"Loans: Family RE [RCFD1430, 1797 + 1798, 1797 + 5367 + 5368] ln_rre",ln_famres_pre01.fillna(ln_famres_01),,
 ln_other_re_08,CROSS,stock,,ln_other_re_1+ln_other_re_2,,
 ln_other_re,CROSS,stock,"Loans: Nonfarm Nonresidential RE [1480, F160+F161] ln_nfnr",ln_other_re_pre08.fillna(ln_other_re_08),,
+ln_re_dom,RC-C,stock,"Loans secured by real estate in DOMESTIC offices: construction + farmland + 1-4 family + multifamily + nonfarm nonresidential (RCON components, era-aware). One definition throughout. Equals the reported total RCFD1410 for 100.00% of 041 bank-quarters where both exist; for 031 filers with foreign offices it is lower by their foreign-office real estate loans (3-6% in aggregate).",ln_condev + ln_farm + ln_famres + ln_multi + ln_other_re,thousands_usd,
+ln_re,RC-C,stock,"Loans secured by real estate, CONSOLIDATED: the reported total RCFD1410 where filed; else the sum of the consolidated components (031 column A, from 2013Q2; equals RCFD1410 for every bank that filed both); else ln_re_dom, which is the consolidated figure for a bank with no foreign offices (every 041/051 filer).",ln_re_1410.fillna(ln_condev_1_consol + ln_condev_2_consol + ln_farm_consol + ln_famres_heloc_consol + ln_famres_first_consol + ln_famres_jr_consol + ln_multi_consol + ln_other_re_1_consol + ln_other_re_2_consol).fillna(ln_re_dom),thousands_usd,
 ln_dep_pre01,CROSS,stock,,ln_dep_1 + ln_dep_2,,
 ln_dep,CROSS,stock,"Loans: Depository Institutions [1288, 1489+1755]",ln_dep_01.fillna(ln_dep_pre01),,
 na_ci,CROSS,stock,"Nonaccrual: C&I loans. RCFD1608, else the 031 split US (1253) + non-US (1256) addressees; every row lacking 1608 carries both split codes. Replaces a fallback that added RCON1224 -- commercial AND ALL OTHER loans, broader than C&I -- and left 68,983 split-reported bank-quarters blank.",na_ci_1608.fillna(na_ci_1253 + na_ci_1256),,
@@ -443,3 +454,16 @@ ln_othernfnr,CROSS,stock,Alias for ln_other_re_2 (RCONF161),ln_other_re_2,,
 column,scope,reason
 ln_dep,always,Loans to depository institutions became conditional 2017Q1; 99.7pct of blanks were $0 (verified triage 2026-07-27)
 reven_inv,always,"RCFD3656 (revaluation/equity investments) introduced ~2005Q1, absent before; only ~3pct nonzero even after. Pre-2005 NaN nuked book_nonfin -> book_liquid -> dropped the whole pre-2005 window from dd3's NIE regression (pv_nie=0 for 1997-2004)."
+
+[INTERMEDIATE]
+column,reason
+ln_re_1410,Reported real-estate total; published inside ln_re.
+ln_condev_1_consol,Consolidated real-estate component; published inside ln_re.
+ln_condev_2_consol,Consolidated real-estate component; published inside ln_re.
+ln_farm_consol,Consolidated real-estate component; published inside ln_re.
+ln_famres_heloc_consol,Consolidated real-estate component; published inside ln_re.
+ln_famres_first_consol,Consolidated real-estate component; published inside ln_re.
+ln_famres_jr_consol,Consolidated real-estate component; published inside ln_re.
+ln_multi_consol,Consolidated real-estate component; published inside ln_re.
+ln_other_re_1_consol,Consolidated real-estate component; published inside ln_re.
+ln_other_re_2_consol,Consolidated real-estate component; published inside ln_re.
