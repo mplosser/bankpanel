@@ -99,7 +99,8 @@ class ConfigSet:
         the coalesce is a harmless no-op there. See docs/CAVEATS.md.)
         """
         codes = [v.mdrm_code for v in self.base]
-        siblings = ["RCON" + c[4:] for c in codes if c.startswith("RCFD")]
+        pairs = {"RCFD": "RCON", "RCFA": "RCOA"}
+        siblings = [pairs[c[:4]] + c[4:] for c in codes if c[:4] in pairs]
         return list(dict.fromkeys(codes + siblings))
 
     def output_columns(self) -> list[str]:

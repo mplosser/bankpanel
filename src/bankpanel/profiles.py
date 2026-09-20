@@ -43,7 +43,9 @@ class ReportProfile:
     #: Row-level coalesce pairs, ``(primary, fallback)``. The same numeric suffix under
     #: two prefixes is the same line item at two consolidation levels; take the primary
     #: where present and fill from the fallback where it is not.
-    coalesce_rules: tuple[tuple[str, str], ...] = (("RCFD", "RCON"),)
+    #: RCFA/RCOA is the same pairing on Schedule RC-R from 2015Q1 (Basel III): the 031 files
+    #: the regulatory-capital items under RCFA (consolidated), the 041/051 under RCOA.
+    coalesce_rules: tuple[tuple[str, str], ...] = (("RCFD", "RCON"), ("RCFA", "RCOA"))
 
     #: When year-to-date accumulation resets. Drives the quarterization grouping, and is
     #: the reason the panel is partitioned by year.

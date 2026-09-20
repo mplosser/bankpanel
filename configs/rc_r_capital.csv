@@ -38,16 +38,18 @@ RCFDB701,rwa_bucket_20pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RIS
 RCFDB702,rwa_bucket_50pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 50%
 RCFDB703,rwa_bucket_100pct_baselI,RC-R-I,stock,031+041,2001-03-31,2014-12-31,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 100%
 RCFDL138,assets_for_leverage_baselI,RC-R-I,stock,031+041,2012-03-31,2014-12-31,,TOTAL ASSETS FOR LEVERAGE CAPITAL PURPOSES
-RCOA8274,tier1_capital_baselIII,RC-R-I,stock,041+051,2015-03-31,,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
-RCOA5311,tier2_capital_baselIII,RC-R-I,stock,041+051,2015-03-31,,,TIER 2 (SUPPLEMENTARY) CAPITAL
-RCOAA223,rwa_baselIII,RC-R-I,stock,041+051,2015-03-31,,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
-RCOAP742,cet1_common_stock_surplus,RC-R-I,stock,041+051,2015-03-31,,,COMMON EQUITY TIER 1 CAPITAL: COMMON STOCK PLUS RELATED SURPLUS; NET OF TREASURY STOCK AND UNEARNED EMPLOYEE STOCK OWN
-RCOAP839,cet1_minority_interest,RC-R-I,stock,041+051,2015-03-31,,,COMMON EQUITY TIER 1 MINORITY INTEREST INCLUDABLE IN COMMON EQUITY TIER 1 CAPITAL
-RCOAP858,cet1_adjustments_deductions,RC-R-I,stock,041+051,2015-03-31,,,TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL
-RCOAP862,tier1_minority_interest_not_cet1,RC-R-I,stock,041+051,2015-03-31,,,TIER 1 MINORITY INTEREST NOT INCLUDED IN COMMON EQUITY TIER 1 CAPITAL
+RCFA8274,tier1_capital_baselIII,RC-R-I,stock,all,2015-03-31,,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
+RCFA5311,tier2_capital_baselIII,RC-R-I,stock,all,2015-03-31,,,TIER 2 (SUPPLEMENTARY) CAPITAL
+RCFAA223,rwa_baselIII,RC-R-I,stock,all,2015-03-31,,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
+RCFAP742,cet1_common_stock_surplus,RC-R-I,stock,all,2015-03-31,,,COMMON EQUITY TIER 1 CAPITAL: COMMON STOCK PLUS RELATED SURPLUS; NET OF TREASURY STOCK AND UNEARNED EMPLOYEE STOCK OWN
+RCFAP839,cet1_minority_interest,RC-R-I,stock,all,2015-03-31,,,COMMON EQUITY TIER 1 MINORITY INTEREST INCLUDABLE IN COMMON EQUITY TIER 1 CAPITAL
+RCFAP858,cet1_adjustments_deductions_p858,RC-R-I,stock,all,2015-03-31,,,TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL
+RCFWP858,cet1_adjustments_deductions_aa,RC-R-I,stock,031,2020-03-31,,,"TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL -- advanced approaches institutions' column (RCFW) on the 031, from 2020Q1"
+RCFAP862,tier1_minority_interest_not_cet1,RC-R-I,stock,all,2015-03-31,,,TIER 1 MINORITY INTEREST NOT INCLUDED IN COMMON EQUITY TIER 1 CAPITAL
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+cet1_adjustments_deductions,RC-R-I,stock,"Total adjustments and deductions for common equity tier 1 capital: RCFAP858 (031) / RCOAP858 (041, 051); from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP858) instead. The two are never filed together and cover every 031 filer.",cet1_adjustments_deductions_p858.fillna(cet1_adjustments_deductions_aa),thousands_usd,
 tier1_capital,RC-R-I,stock,Tier 1 capital on a consistent basis; Basel III (RCOA8274) from 2015Q1 falling back to Basel I (RCFD8274) before,tier1_capital_baselIII.fillna(tier1_capital_baselI),thousands_usd,
 tier2_capital,RC-R-I,stock,Tier 2 capital on a consistent basis across the Basel I / Basel III change,tier2_capital_baselIII.fillna(tier2_capital_baselI),thousands_usd,
 rwa,RC-R-I,stock,Risk-weighted assets on a consistent basis across the Basel I / Basel III change,rwa_baselIII.fillna(rwa_baselI),thousands_usd,
@@ -58,6 +60,8 @@ cet1_ratio,RC-R-I,rate,Common equity tier 1 ratio; COMPUTED as cet1 over risk-we
 
 [INTERMEDIATE]
 column,reason
+cet1_adjustments_deductions_p858,Era/column piece of cet1_adjustments_deductions.
+cet1_adjustments_deductions_aa,Advanced-approaches column piece of cet1_adjustments_deductions.
 tier1_capital_baselI,"Era piece of tier1_capital: the pre-2015 Basel I measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
 tier1_capital_baselIII,"Era piece of tier1_capital: the Basel III from 2015Q1 measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
 tier2_capital_baselI,"Era piece of tier2_capital: the pre-2015 Basel I measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."

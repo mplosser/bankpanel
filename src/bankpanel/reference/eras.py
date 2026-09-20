@@ -44,8 +44,9 @@ def _codes_behind(cs: ConfigSet, column: str) -> set[str]:
     for name in names:
         code = by_name[name].mdrm_code
         codes.add(code)
-        if code.startswith("RCFD"):
-            codes.add("RCON" + code[4:])
+        for primary, fallback in (("RCFD", "RCON"), ("RCFA", "RCOA")):
+            if code.startswith(primary):
+                codes.add(fallback + code[4:])
     return codes
 
 
