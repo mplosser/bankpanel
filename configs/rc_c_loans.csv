@@ -80,3 +80,4 @@ ln_oth,RC-C,stock,"Other loans: loans for purchasing or carrying securities plus
 column,reason
 ln_oth_consol,"Era piece of ln_oth: the pre-2010 consolidated reported total. Published only as ln_oth so there is one Other loans column rather than two overlapping definitions."
 ln_oth_dom,"Era piece of ln_oth: the domestic-office total that replaces RCFD1563 from 2010Q1. Published only as ln_oth."
+ln_consumer_oth_pre11,"Pre-2011 other-consumer line RCFD2011; published only inside ln_consumer_oth. From 2011 the line is ln_auto + ln_consumer_oth_ex_auto, both published."

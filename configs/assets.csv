@@ -199,9 +199,9 @@ RCFD2122,ll_tot,RC-C,stock,all,,,,
 RCFDB538,ln_cc,RC-C,stock,all,,,,CREDIT CARDS (from 2001Q1). Before 2001 credit cards were reported together with related plans as RCFD2008.
 RCFD2008,ln_cc_incl_revolving_pre01,RC,stock,all,,,,CREDIT CARDS AND RELATED PLANS (through 2000Q4) = ln_cc + ln_revolving_oth after the 2001 split. Not stitched to ln_cc.
 RCFDB539,ln_revolving_oth,RC-C,stock,all,,,,OTHER REVOLVING CREDIT PLANS (from 2001Q1); carved out of credit cards and related plans
-RCFDK137,ln_othcons_2a,RC-C,stock,all,,,,
-RCFDK207,ln_othcons_2b,RC-C,stock,all,,,,
-RCFD2011,ln_othcons_2_src,RC,stock,all,,,,
+RCFDK137,ln_auto,RC-C,stock,all,2011-03-31,,,"AUTOMOBILE LOANS TO INDIVIDUALS (RC-C 6.c). Collected from 2011Q1 only; blank before, not reconstructed."
+RCFDK207,ln_consumer_oth_ex_auto,RC-C,stock,all,2011-03-31,,,OTHER CONSUMER LOANS TO INDIVIDUALS excluding automobile (RC-C 6.d). Collected from 2011Q1 only.
+RCFD2011,ln_consumer_oth_pre11,RC,stock,all,,2010-12-31,,"OTHER LOANS TO INDIVIDUALS through 2010Q4 = K137 + K207 from 2011 (same line, split); piece of ln_consumer_oth"
 RCFD1590,ln_agr,RC-C,stock,all,,,,
 RCFD1766,ln_ci_tot,RC,stock,all,,,,
 RCFD1410,ln_re,RC-C,stock,all,,,,
@@ -416,7 +416,7 @@ fv_ln_cons_pre18,CROSS,stock,FV Loans to consumers [F586+F587+F588],fv_ln_cons_1
 fv_ln_cons,CROSS,stock,FV Loans to consumers [HT89] ln_fv_cons,fv_ln_cons_18.fillna(fv_ln_cons_pre18),,
 life_ins_ass_11,CROSS,stock,Life insurance value [K201+K202+K270],life_ins_ass_gen+life_ins_ass_sep+life_ins_ass_hyb,,
 life_ins_ass,CROSS,stock,Life insurance value [C009] life_ins_ass,life_ins_ass_11.fillna(life_ins_ass_pre11),,
-ln_consumer_oth,CROSS,stock,"Other consumer loans: all loans to individuals except credit cards and other revolving plans. RCFD2011 through 2010Q4, then automobile (K137) + other (K207). Same definition throughout: the 2011 change split one line into two, and the sum steps -0.3% over the same banks.",ln_othcons_2_src.fillna(ln_othcons_2a+ln_othcons_2b),,
+ln_consumer_oth,CROSS,stock,"Consumer loans other than credit cards and revolving plans: automobile plus other installment, single-payment and student loans to individuals. RCFD2011 through 2010Q4, then automobile (K137) + other consumer (K207) -- the 2011 form split that one line into two, so the sum is the same definition throughout. Consistent: +3.3% over the same banks at 2001Q1, -0.3% at 2011Q1. ln_auto and ln_consumer_oth_ex_auto carry the two halves for 2011 on.",ln_consumer_oth_pre11.fillna(ln_auto + ln_consumer_oth_ex_auto),,
 ln_condev_07,CROSS,stock,Loans: Construction and development [F158+F159],ln_condev_1+ln_condev_2,,
 ln_condev,CROSS,stock,Loans: Construction and development [1415] ln_con_ld_oll,ln_condev_pre07.fillna(ln_condev_07),,
 ln_famres_other,CROSS,stock,Loans: Family RE,ln_famres_other_alt.fillna(ln_famres_first + ln_famres_jr),,

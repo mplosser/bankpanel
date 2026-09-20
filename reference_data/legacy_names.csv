@@ -15,3 +15,6 @@ na_oth_5461,na_othln,2026-09-19,all other loans
 na_ind_k215,na_auto,2026-09-19,automobile loans
 na_ind_k218,na_indiv,2026-09-19,other loans to individuals
 na_re_b574,na_re_foreign,2026-09-19,real estate loans in foreign offices
+ln_othcons_2a,ln_auto,2026-09-20,automobile loans to individuals (K137); published for 2011Q1 on only
+ln_othcons_2b,ln_consumer_oth_ex_auto,2026-09-20,other consumer loans excluding automobile (K207); 2011Q1 on
+ln_othcons_2_src,ln_consumer_oth_pre11,2026-09-20,other loans to individuals through 2010Q4 (RCFD2011); withheld piece of ln_consumer_oth
