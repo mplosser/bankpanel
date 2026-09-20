@@ -17,6 +17,9 @@ What it reproduces, and what it does not:
   written back as the legacy ``"true"``/``"false"`` text. (Three legacy rows read ``"FALSE"``
   in capitals -- a filer's typing, which bankpanel normalises to 0 and this writes back as
   ``"false"``. BEC does not read the column.)
+* **Passthrough** (``PASSTHROUGH``): a few bankpanel columns BEC reads under their own
+  names -- the successors of legacy names bankpanel retired or split -- are appended after
+  the legacy set. Their absence from a build is an error, not an omission.
 * **Values** are whatever the bankpanel build produced. Under ``--gap-policy keep`` that is
   bit-identical to legacy on every column except the ones deliberately fixed, which is the
   point: the difference in BEC's output is then exactly the effect of those fixes.
@@ -42,6 +45,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 KEYS = ["RSSD_ID", "REPORTING_PERIOD"]
 LEGACY_FILES = ["assets", "liabilities", "income_statement"]
 BOOLEAN_TEXT = {"custody_bank"}  # legacy stores these as "true"/"false" strings
+
+# bankpanel columns BEC reads under their OWN names, appended after the legacy set. These
+# are the successors of legacy names bankpanel retired or split (reference_data/
+# legacy_retired.csv); BEC's cutover checklist records which stage consumes each.
+PASSTHROUGH = {
+    "assets": [
+        "accrued_int_loans_pre01",  # imp2 coalesces: accrued_int.fillna(accrued_int_loans_pre01)
+        "ln_cc_incl_revolving",     # p1/dd1/a1 cc_share (consistent 1984-present)
+        "ln_consumer_oth",          # p1/a1 cons_share (consistent 1984-present)
+        "ln_revolving_oth",         # B539, 2001-; kept next to the two above for audit
+    ],
+}
 
 
 def legacy_map() -> dict[str, str]:
@@ -72,9 +87,14 @@ def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
         wanted = [f.name for f in template if f.name not in KEYS]
         have = [c for c in wanted if c in ours_by_legacy]
         missing = [c for c in wanted if c not in ours_by_legacy]
+        extra = PASSTHROUGH.get(name, [])
+        absent = [c for c in extra if c not in dataset.schema.names]
+        if absent:
+            raise SystemExit(f"{name}: passthrough column(s) not in this build: {absent}")
 
-        table = dataset.to_table(columns=KEYS + [ours_by_legacy[c] for c in have])
+        table = dataset.to_table(columns=KEYS + [ours_by_legacy[c] for c in have] + extra)
         df = table.to_pandas().rename(columns={ours_by_legacy[c]: c for c in have})
+        have = have + extra
         df = df.sort_values(KEYS).reset_index(drop=True)
 
         # Match the legacy file's own representation, not ours.
@@ -93,6 +113,8 @@ def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
         print(f"{name:<17} {len(df):>10,} rows x {len(have) + 2:>4} cols -> {out / (name + '.parquet')}")
         if missing:
             print(f"{'':<17} omitted {len(missing)} legacy column(s) bankpanel withholds: {missing}")
+        if extra:
+            print(f"{'':<17} appended {len(extra)} bankpanel column(s) under their own names: {extra}")
 
 
 if __name__ == "__main__":
