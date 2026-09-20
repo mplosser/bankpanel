@@ -25,13 +25,13 @@ mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,not
 RIAD3210,equity_end,RI-A,stock,all,,,,TOTAL EQUITY CAPITAL
 RIAD3217,equity_prev_yearend,RI-A,stock,all,,,,EQUITY CAPITAL; MOST RECENTLY REPORTED FOR THE END OF PREVIOUS CALENDAR YEAR (I.E.; AFTER ADJUSTMENTS FROM AMENDED REP
 RIADB508,equity_prev_yearend_restated,RI-A,stock,all,2001-03-31,,,BALANCE END OF PREVIOUS CALENDAR YEAR AS RESTATED
-RIADB509,capital_stock_net,RI-A,ytd,all,2001-03-31,,,SALE; CONVERSION; ACQUISITION; OR RETIREMENT OF CAPITAL STOCK; NET (EXCLUDING TREASURY STOCK TRANSACTIONS)
-RIADB510,treasury_stock_net,RI-A,ytd,all,2001-03-31,,,TREASURY STOCK TRANSACTIONS; NET
-RIADB511,oth_comprehensive_income,RI-A,ytd,all,2001-03-31,,,OTHER COMPREHENSIVE INCOME
-RIAD4415,oth_stockholder_transactions,RI-A,ytd,all,,,,OTHER TRANSACTIONS WITH STOCKHOLDERS (INCLUDING PARENT HOLDING COMPANY)
-RIAD4460,div_common,RI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON COMMON STOCK
-RIAD4470,div_preferred,RI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON PREFERRED STOCK
+RIADB509,ytd_capital_stock_net,RI-A,ytd,all,2001-03-31,,,SALE; CONVERSION; ACQUISITION; OR RETIREMENT OF CAPITAL STOCK; NET (EXCLUDING TREASURY STOCK TRANSACTIONS)
+RIADB510,ytd_treasury_stock_net,RI-A,ytd,all,2001-03-31,,,TREASURY STOCK TRANSACTIONS; NET
+RIADB511,ytd_oth_comprehensive_income,RI-A,ytd,all,2001-03-31,,,OTHER COMPREHENSIVE INCOME
+RIAD4415,ytd_oth_stockholder_transactions,RI-A,ytd,all,,,,OTHER TRANSACTIONS WITH STOCKHOLDERS (INCLUDING PARENT HOLDING COMPANY)
+RIAD4460,ytd_div_common,RI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON COMMON STOCK
+RIAD4470,ytd_div_preferred,RI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON PREFERRED STOCK
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
-div_tot,RI-A,ytd,Cash dividends declared on common and preferred stock,div_common + div_preferred,thousands_usd,
+ytd_div_tot,RI-A,ytd,Cash dividends declared on common and preferred stock,ytd_div_common + ytd_div_preferred,thousands_usd,

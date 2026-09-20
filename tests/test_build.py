@@ -17,7 +17,7 @@ def panel(synth_panel):
     return read_panel(
         columns=[
             "assets_total", "loans_3mo", "avg_assets", "late_item", "semiannual_item",
-            "int_inc_total", "event_flag", "deposit_accounts", "assets_less_loans",
+            "ytd_int_inc_total", "q_int_inc_total", "ytd_event_flag", "deposit_accounts", "assets_less_loans",
             "late_or_assets", "assets_031_only",
         ],
         root=synth_panel,
@@ -87,15 +87,15 @@ def test_stitch_falls_back_to_the_older_series(panel):
 def test_in_era_zero_fill_never_fabricates_a_pre_era_zero(panel):
     """The whole point of scope=in_era: before collection began, NaN means unknown."""
     early = panel[panel.REPORTING_PERIOD < CHANGE]
-    assert early.event_flag.isna().all()
+    assert early.ytd_event_flag.isna().all()
 
 
 def test_in_era_zero_fill_applies_once_collection_starts(panel):
-    # Restricted to a bank with no reporting gaps: event_flag is a YTD column, so the
+    # Restricted to a bank with no reporting gaps: ytd_event_flag is a YTD column, so the
     # gap policy legitimately NaNs it for the bank that skips a quarter and the one that
     # enters mid-year. Those NaNs come from quarterization, not from the zero-fill.
     clean = panel[(panel.REPORTING_PERIOD >= CHANGE) & (panel.RSSD_ID == 1)]
-    assert clean.event_flag.notna().all()
+    assert clean.ytd_event_flag.notna().all()
 
 
 # --- form type ---------------------------------------------------------------------
@@ -134,9 +134,12 @@ def test_short_form_semiannual_pattern_is_preserved_not_filled(panel):
 
 
 def test_ytd_columns_are_quarterized(panel):
-    """Source accumulates 100/quarter, so every quarterized flow is ~100."""
+    """Source accumulates 100/quarter: the flow companion is ~100 and the as-filed
+    year-to-date column is kept, so its Q4 value is ~400."""
     clean = panel[(panel.RSSD_ID == 1)]
-    assert clean.int_inc_total.dropna().between(100, 102).all()
+    assert clean.q_int_inc_total.dropna().between(100, 102).all()
+    q4 = clean[pd.DatetimeIndex(clean.REPORTING_PERIOD).quarter == 4]
+    assert q4.ytd_int_inc_total.dropna().between(400, 408).all()
 
 
 def test_stock_columns_are_not_quarterized(panel):

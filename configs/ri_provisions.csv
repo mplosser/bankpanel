@@ -6,16 +6,16 @@
 #
 #   allowance(end) = allowance(start) + provision - charge-offs + recoveries (+/- adjustments)
 #
-# provision_ll (RIAD4230) is the time-consistent series. It is the provision for LOANS AND
+# ytd_provision_ll (RIAD4230) is the time-consistent series. It is the provision for LOANS AND
 # LEASES on every form from 1985 to the present, and CECL did not retire it: RIAD4230 is
 # reported by 100% of banks in every quarter through 2025, adopters included. It matches
 # ll_res in scope -- both cover loans and leases only -- so no era stitch is needed.
 #
 # CECL (ASU 2016-13) added a BROADER total alongside it rather than replacing it:
 #
-#   provision_credit_tot (JJ33) = provision_ll (4230) + provision_htm (JH90)
-#                               + provision_afs (JH96) + provision_oth_fin (JJ02)
-#                               + provision_obs (MG93)
+#   ytd_provision_credit_tot (JJ33) = ytd_provision_ll (4230) + ytd_provision_htm (JH90)
+#                               + ytd_provision_afs (JH96) + ytd_provision_oth_fin (JJ02)
+#                               + ytd_provision_obs (MG93)
 #
 # which holds for 99.9% of banks in 2024Q4. JJ33 is reported by every bank from 2019Q1;
 # for banks that have not adopted CECL it simply equals 4230. The components follow
@@ -25,7 +25,7 @@
 # off-balance-sheet provisions -- and splicing them would put a level step at each bank's
 # adoption quarter.
 #
-# One definitional change inside provision_ll: before 2001Q1 RIAD4230 also INCLUDED the
+# One definitional change inside ytd_provision_ll: before 2001Q1 RIAD4230 also INCLUDED the
 # provisions for off-balance-sheet credit exposures and for allocated transfer risk. From
 # 2001Q1 both moved to other noninterest expense (RIAD4092). Documented in RI-B.md.
 #
@@ -41,16 +41,16 @@ profile,ffiec_call
 
 [BASE_VARIABLES]
 mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
-RIAD4230,provision_ll,RI,ytd,all,,,any,PROVISION FOR LOAN AND LEASE LOSSES (before 2001Q1 also includes off-balance-sheet and allocated transfer risk provisions)
-RIADJJ33,provision_credit_tot,RI,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON FINANCIAL ASSETS (CECL total; equals RIAD4230 for non-adopters)
-RIADJH90,provision_htm,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON HELD-TO-MATURITY DEBT SECURITIES
-RIADJH96,provision_afs,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON AVAILABLE-FOR-SALE DEBT SECURITIES
-RIADJJ02,provision_oth_fin,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON OTHER FINANCIAL ASSETS MEASURED AT AMORTIZED COST
-RIADMG93,provision_obs,RI-B,ytd,all,2021-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON OFF-BALANCE-SHEET CREDIT EXPOSURES
+RIAD4230,ytd_provision_ll,RI,ytd,all,,,any,PROVISION FOR LOAN AND LEASE LOSSES (before 2001Q1 also includes off-balance-sheet and allocated transfer risk provisions)
+RIADJJ33,ytd_provision_credit_tot,RI,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON FINANCIAL ASSETS (CECL total; equals RIAD4230 for non-adopters)
+RIADJH90,ytd_provision_htm,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON HELD-TO-MATURITY DEBT SECURITIES
+RIADJH96,ytd_provision_afs,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON AVAILABLE-FOR-SALE DEBT SECURITIES
+RIADJJ02,ytd_provision_oth_fin,RI-B,ytd,all,2019-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON OTHER FINANCIAL ASSETS MEASURED AT AMORTIZED COST
+RIADMG93,ytd_provision_obs,RI-B,ytd,all,2021-03-31,,any,PROVISIONS FOR CREDIT LOSSES ON OFF-BALANCE-SHEET CREDIT EXPOSURES
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
 
 [CHECKS]
 name,expression,severity,description
-provision_cecl_identity,(provision_credit_tot - (provision_ll + provision_htm + provision_afs + provision_oth_fin + provision_obs)).abs() <= 5,warning,The CECL provision total is the sum of its five components (holds for 99.9% of banks in 2024Q4); tolerance covers rounding across five year-to-date items
+provision_cecl_identity,(ytd_provision_credit_tot - (ytd_provision_ll + ytd_provision_htm + ytd_provision_afs + ytd_provision_oth_fin + ytd_provision_obs)).abs() <= 5,warning,The CECL provision total is the sum of its five components (holds for 99.9% of banks in 2024Q4); tolerance covers rounding across five year-to-date items

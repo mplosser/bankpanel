@@ -91,6 +91,12 @@ This is not hypothetical — on the current panel it flags `uc_other_2_src` (`RC
 collapsing 100% → 0% in **2025Q3**, a genuine code retirement that the config's stitch
 handles but which nothing else would have surfaced.
 
+**Which representation each validator sees.** Coverage, breaks, expectations and
+stitches ask whether an item was *reported*, so they run on the as-filed `ytd_` columns
+and never on the `q_` companions (whose presence is the `ytd_` presence minus the gap
+rule, by construction). The quarterize audit runs on the `q_` companions, where a
+negative flow is the thing being looked for.
+
 ## 3. `quarterize` — impossible negative flows
 
 A gross additive flow — interest income, interest expense, non-interest *expense*,

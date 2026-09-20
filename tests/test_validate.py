@@ -16,7 +16,7 @@ from bankpanel.validate.breaks import check_latest_quarter
 from bankpanel.validate.coverage import find_discontinuities
 from bankpanel.validate.quarterize_audit import attribute, audit
 
-COLUMNS = ["assets_total", "loans_3mo", "semiannual_item", "late_item", "int_inc_total"]
+COLUMNS = ["assets_total", "loans_3mo", "semiannual_item", "late_item", "ytd_int_inc_total", "q_int_inc_total"]
 
 
 @pytest.fixture(scope="module")
@@ -169,8 +169,8 @@ def test_coverage_collapse_in_the_newest_quarter_is_critical(panel):
 
 def test_audit_counts_impossible_negatives(panel):
     broken = panel.copy()
-    broken.loc[broken.index[:5], "int_inc_total"] = -100.0
-    summary, flagged = audit(broken, ["int_inc_total"])
+    broken.loc[broken.index[:5], "q_int_inc_total"] = -100.0
+    summary, flagged = audit(broken, ["q_int_inc_total"])
     assert int(summary.iloc[0].n_negative) == 5
     assert len(flagged) == 5
 
@@ -178,16 +178,16 @@ def test_audit_counts_impossible_negatives(panel):
 def test_audit_ignores_columns_not_declared_nonneg(panel):
     broken = panel.copy()
     broken.loc[broken.index[:5], "assets_total"] = -100.0
-    summary, flagged = audit(broken, ["int_inc_total"])
+    summary, flagged = audit(broken, ["q_int_inc_total"])
     assert flagged.empty
 
 
 def test_attribution_reports_unexplained_share(panel):
     broken = panel.copy()
     broken["flag_combo"] = 0.0
-    broken.loc[broken.index[:4], "int_inc_total"] = -100.0
+    broken.loc[broken.index[:4], "q_int_inc_total"] = -100.0
     broken.loc[broken.index[:1], "flag_combo"] = 1.0
-    _, flagged = audit(broken, ["int_inc_total"], flag_columns=["flag_combo"])
+    _, flagged = audit(broken, ["q_int_inc_total"], flag_columns=["flag_combo"])
     causes = attribute(flagged, ["flag_combo"])
     assert float(causes[causes.cause == "flag_combo"].iloc[0].share) == pytest.approx(0.25)
     assert float(causes[causes.cause == "unexplained"].iloc[0].share) == pytest.approx(0.75)

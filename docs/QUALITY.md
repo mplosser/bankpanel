@@ -17,7 +17,7 @@ config's `[CHECKS]` section:
 name,expression,severity,description
 loan_reserve_le_loans,ll_res <= ll_tot,error,Reserves cannot exceed the loans they cover
 tier1_ratio_nonneg,tier1_rbc_ratio >= 0,error,A capital ratio cannot be negative
-chargeoff_ci_le_total,co_ci <= co_tot,warning,Category charge-offs cannot exceed the total
+chargeoff_ci_le_total,ytd_co_ci <= ytd_co_tot,warning,Category charge-offs cannot exceed the total
 ```
 
 Writing them as ordinary boolean expressions — rather than inventing a rule grammar —
@@ -80,7 +80,7 @@ conclude the assertion was wrong.
 ## Overlap with the other validators is informative
 
 `recovery_ci_le_total` fails on 0.583% of rows, and 58% of those are cases where
-`rec_tot` is **negative**. That can be a year-to-date reset artifact or a genuine reversal
+`q_rec_tot` is **negative**. That can be a year-to-date reset artifact or a genuine reversal
 of an earlier recovery. Recoveries are two-signed, so the quarterize audit no longer reports
 them, and this ordering check is the one place a negative total recovery still surfaces.
 It is a `warning` for that reason: a failure here is worth a look, not a repair.

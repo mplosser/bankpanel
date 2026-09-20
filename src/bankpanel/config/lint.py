@@ -179,6 +179,24 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
 
     # --- flow-type sanity -----------------------------------------------------------
     for cfg in configs:
+        for var in (*cfg.base, *cfg.derived):
+            if var.variable_name.startswith("q_"):
+                issues.append(
+                    LintIssue(
+                        "error",
+                        f"{var.origin}: {var.variable_name!r} -- the q_ prefix is reserved "
+                        f"for the quarterly-flow companions of ytd_ items.",
+                    )
+                )
+            if var.flow_type == "ytd" and not var.variable_name.startswith("ytd_"):
+                issues.append(
+                    LintIssue(
+                        "error",
+                        f"{var.origin}: {var.variable_name!r} is flow_type=ytd but is not "
+                        f"named ytd_<stem>. A year-to-date item is published as itself "
+                        f"(ytd_<stem>, as filed) and as its quarterly flow (q_<stem>).",
+                    )
+                )
         for var in cfg.base:
             if var.flow_type == "ytd" and not var.schedule.startswith("RI"):
                 issues.append(

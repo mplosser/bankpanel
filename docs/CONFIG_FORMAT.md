@@ -20,8 +20,15 @@ One MDRM code → one output column.
 `form_scope, era_start, era_end, sign, notes` optional.
 
 `flow_type` (`stock|ytd|flag|count|rate|text`) is the quarterize discriminator — only
-`ytd` is differenced. It replaces the legacy `ytd*` name-prefix convention, which forced
-a rename map and collided whenever `ytd_foo` and `ytdfoo` both existed.
+`ytd` is differenced. A `ytd` item is **published twice**: `ytd_<stem>` exactly as filed
+(the year-to-date, never altered) and `q_<stem>`, the within-year difference (Q1 = the
+year-to-date; NaN wherever the prior quarter is missing or blank, so an annual filer's Q4
+total stays in `ytd_<stem>` and its `q_<stem>` is NaN all year). The config
+`variable_name` is the as-filed column, so lint requires it to start with `ytd_`; the
+companion name is derived, and the `q_` prefix is reserved for it (lint refuses a config
+name that starts with `q_`). The legacy pipeline overwrote the year-to-date in place under
+a `q` name (`ytdint_inc` → `qint_inc`); the legacy spellings are kept in
+`reference_data/legacy_names.csv` for parity and the export shim.
 
 `sign=nonneg` marks a gross-additive flow that cannot be negative over a quarter. It
 drives the quarterize audit, so it must not be set on net items — trading revenue, gains

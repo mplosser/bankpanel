@@ -86,6 +86,23 @@ def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) 
                 "source_config": cfg.path.name,
             })
 
+    by_name = {r["variable_name"]: r for r in rows}
+    for ytd_name, flow_name in cs.flow_columns().items():
+        src = by_name[ytd_name]
+        rows.append({
+            **src,
+            "variable_name": flow_name,
+            "variable_type": "flow",
+            "published": True,
+            "flow_type": "quarterly",
+            "mdrm_code": "",
+            "description": f"Quarterly flow of {ytd_name}: {src['description']}",
+            "formula": (f"{ytd_name}(t) - {ytd_name}(t-1) within the bank-year; Q1 = {ytd_name}; "
+                        f"NaN where the prior quarter is missing or blank (an annual filer's "
+                        f"Q4 total stays in {ytd_name}, its flows are NaN)"),
+            "inputs": ytd_name,
+        })
+
     return pd.DataFrame(rows, columns=DICTIONARY_COLUMNS)
 
 

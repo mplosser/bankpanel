@@ -5,7 +5,7 @@ Opt-in, in memory, and last.
 ```python
 from bankpanel.clean import CleaningPlan, apply_plan, summarize_audit
 
-plan = CleaningPlan().add("interpolate_negative", column="co_tot")
+plan = CleaningPlan().add("interpolate_negative", column="q_co_tot")
 
 cleaned, audit = apply_plan(df, plan)
 summarize_audit(audit)
@@ -28,8 +28,8 @@ neither should have the other's choice baked into the data they downloaded.
 
 | RSSD_ID | REPORTING_PERIOD | column | rule | old | new |
 | --- | --- | --- | --- | --- | --- |
-| 46 | 1986-09-30 | co_tot | interpolate_negative | −1.0 | 7.0 |
-| 354 | 2016-12-31 | co_tot | interpolate_negative | −1.0 | 5.5 |
+| 46 | 1986-09-30 | q_co_tot | interpolate_negative | −1.0 | 7.0 |
+| 354 | 2016-12-31 | q_co_tot | interpolate_negative | −1.0 | 5.5 |
 
 Steps are not asked to report their own changes — the runner diffs the frame around each
 step, so the audit cannot drift out of step with what actually happened. On the current
@@ -101,8 +101,8 @@ Do not pass a **net** quantity to `interpolate_negative` or to a repair with
 are all legitimately negative, and repairing them destroys real variation.
 
 Nor recoveries. They are gross, but a recovery can be *reversed*, so a negative quarterly
-recovery can be real. An earlier version of the example above repaired `rec_tot` alongside
-`co_tot`, which would have overwritten genuine reversals; the recovery columns are now
+recovery can be real. An earlier version of the example above repaired `q_rec_tot` alongside
+`q_co_tot`, which would have overwritten genuine reversals; the recovery columns are now
 `sign=any` and the example repairs charge-offs only. Provisions are two-signed for the
 same reason — a reserve release is a negative provision. The panel
 declares which columns are gross-additive via `sign=nonneg`; `bankpanel validate

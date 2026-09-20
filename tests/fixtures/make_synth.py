@@ -171,8 +171,8 @@ RCFDA570,loans_3mo,RC-C,stock,all,,,,Alphanumeric pair needing the row-level coa
 RCFA1234,avg_assets,RC-K,stock,all,,,,Reachable only through the RCFA to RCOA alias
 RCON9999,late_item,RC,stock,all,2011-03-31,,,Absent before the provider change
 RCON8888,semiannual_item,RC,stock,041+051,2011-03-31,,,Short-form filers report only in Q2 and Q4
-RIAD4107,int_inc_total,RI,ytd,all,,,nonneg,Year-to-date interest income
-RIAD9001,event_flag,RI-A,ytd,all,,,,Collected only from 2011; zero-filled in era
+RIAD4107,ytd_int_inc_total,RI,ytd,all,,,nonneg,Year-to-date interest income
+RIAD9001,ytd_event_flag,RI-A,ytd,all,,,,Collected only from 2011; zero-filled in era
 RCON7777,deposit_accounts,RC-E,count,all,,,,Carries a 1000x unit error for one bank
 
 [DERIVED_VARIABLES]
@@ -183,7 +183,7 @@ assets_031_only,RC,stock,Assets where the bank files the 031 form,assets_total.w
 
 [ZERO_FILL]
 column,scope,reason
-event_flag,in_era,Structural-event item; NaN means no event once collection began but means not collected before
+ytd_event_flag,in_era,Structural-event item; NaN means no event once collection began but means not collected before
 """
 
 

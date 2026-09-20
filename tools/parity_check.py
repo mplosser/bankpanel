@@ -56,15 +56,14 @@ RENAMED = _renamed()
 def legacy_name(name: str) -> str:
     """Our column name as the legacy panels spelled it.
 
-    Two transforms: the legacy quarterize rename (ytd_X -> qX, ytdX -> qX) and the
-    explicit public-API renames recorded in reference_data/legacy_names.csv.
+    The explicit renames recorded in reference_data/legacy_names.csv, which include the
+    legacy quarterize spellings (our q_int_inc was the legacy qint_inc). Our ytd_ columns
+    have no legacy counterpart: the legacy quarterize overwrote the year-to-date in place.
     """
     if name in RENAMED:
         return RENAMED[name]
     if name.startswith("ytd_"):
-        return "q" + name[4:]
-    if name.startswith("ytd"):
-        return "q" + name[3:]
+        return ""  # as-filed year-to-date: the legacy panels carried only the flow
     return name
 
 

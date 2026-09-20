@@ -10,8 +10,9 @@ What it reproduces, and what it does not:
 * **Column sets** come from the legacy files themselves (``--legacy-dir``), so each output
   carries the columns BEC expects and nothing else. A legacy column bankpanel withholds
   (its ``[INTERMEDIATE]`` detail pieces) is omitted with a note; none is read by BEC.
-* **Names** are mapped back through ``reference_data/legacy_names.csv`` and the legacy
-  quarterize rename (``ytd_X`` -> ``qX``).
+* **Names** are mapped back through ``reference_data/legacy_names.csv``, including the
+  legacy quarterize spellings (``q_int_inc`` -> ``qint_inc``). The as-filed ``ytd_``
+  columns are not exported: the legacy files carried only the flows.
 * **Dtypes and order** match the legacy files: ``RSSD_ID`` float64, ``REPORTING_PERIOD``
   microsecond timestamps, rows sorted by (RSSD_ID, REPORTING_PERIOD). ``custody_bank`` is
   written back as the legacy ``"true"``/``"false"`` text. (Three legacy rows read ``"FALSE"``
@@ -67,13 +68,9 @@ def legacy_map() -> dict[str, str]:
 
 
 def to_legacy(name: str, renamed: dict[str, str]) -> str:
-    if name in renamed:
-        return renamed[name]
-    if name.startswith("ytd_"):
-        return "q" + name[4:]
-    if name.startswith("ytd"):
-        return "q" + name[3:]
-    return name
+    """Legacy spelling, from reference_data/legacy_names.csv (which carries the legacy
+    quarterize spellings, q_int_inc -> qint_inc). ytd_ columns have no legacy twin."""
+    return renamed.get(name, name)
 
 
 def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:

@@ -18,3 +18,70 @@ na_re_b574,na_re_foreign,2026-09-19,real estate loans in foreign offices
 ln_othcons_2a,ln_auto,2026-09-20,automobile loans to individuals (K137); published for 2011Q1 on only
 ln_othcons_2b,ln_consumer_oth_ex_auto,2026-09-20,other consumer loans excluding automobile (K207); 2011Q1 on
 ln_othcons_2_src,ln_consumer_oth_pre11,2026-09-20,other loans to individuals through 2010Q4 (RCFD2011); withheld piece of ln_consumer_oth
+qint_exp_trans_accts_dom,q_int_exp_trans_accts_dom,2026-09-21,quarterly flow of ytd_int_exp_trans_accts_dom; legacy quarterize renamed ytdint_exp_trans_accts_dom -> qint_exp_trans_accts_dom in place
+qint_exp_savings_dep_dom_01,q_int_exp_savings_dep_dom_01,2026-09-21,quarterly flow of ytd_int_exp_savings_dep_dom_01; legacy quarterize renamed ytdint_exp_savings_dep_dom_01 -> qint_exp_savings_dep_dom_01 in place
+qint_exp_time_lt250k_dom,q_int_exp_time_lt250k_dom,2026-09-21,quarterly flow of ytd_int_exp_time_lt250k_dom; legacy quarterize renamed ytdint_exp_time_lt250k_dom -> qint_exp_time_lt250k_dom in place
+qint_exp_time_gt250k_dom,q_int_exp_time_gt250k_dom,2026-09-21,quarterly flow of ytd_int_exp_time_gt250k_dom; legacy quarterize renamed ytdint_exp_time_gt250k_dom -> qint_exp_time_gt250k_dom in place
+qint_exp_for,q_int_exp_for,2026-09-21,quarterly flow of ytd_int_exp_for; legacy quarterize renamed ytdint_exp_for -> qint_exp_for in place
+qint_exp_time_lt100k_dom,q_int_exp_time_lt100k_dom,2026-09-21,quarterly flow of ytd_int_exp_time_lt100k_dom; legacy quarterize renamed ytdint_exp_time_lt100k_dom -> qint_exp_time_lt100k_dom in place
+qint_exp_trad_othbor,q_int_exp_trad_othbor,2026-09-21,quarterly flow of ytd_int_exp_trad_othbor; legacy quarterize renamed ytdint_exp_trad_othbor -> qint_exp_trad_othbor in place
+qint_exp_subdebt,q_int_exp_subdebt,2026-09-21,quarterly flow of ytd_int_exp_subdebt; legacy quarterize renamed ytdint_exp_subdebt -> qint_exp_subdebt in place
+qint_exp_oth_dep,q_int_exp_oth_dep,2026-09-21,quarterly flow of ytd_int_exp_oth_dep; legacy quarterize renamed ytdint_exp_oth_dep -> qint_exp_oth_dep in place
+qint_exp_oth_time_dep,q_int_exp_oth_time_dep,2026-09-21,quarterly flow of ytd_int_exp_oth_time_dep; legacy quarterize renamed ytdint_exp_oth_time_dep -> qint_exp_oth_time_dep in place
+qfiduc_inc,q_fiduc_inc,2026-09-21,quarterly flow of ytd_fiduc_inc; legacy quarterize renamed ytdfiduc_inc -> qfiduc_inc in place
+qnonint_inc_srv_chrg_dep,q_nonint_inc_srv_chrg_dep,2026-09-21,quarterly flow of ytd_nonint_inc_srv_chrg_dep; legacy quarterize renamed ytdnonint_inc_srv_chrg_dep -> qnonint_inc_srv_chrg_dep in place
+qtradrev_inc,q_tradrev_inc,2026-09-21,quarterly flow of ytd_tradrev_inc; legacy quarterize renamed ytdtradrev_inc -> qtradrev_inc in place
+qnonint_inc_sb,q_nonint_inc_sb,2026-09-21,quarterly flow of ytd_nonint_inc_sb; legacy quarterize renamed ytdnonint_inc_sb -> qnonint_inc_sb in place
+qnonint_inc_fees_adv,q_nonint_inc_fees_adv,2026-09-21,quarterly flow of ytd_nonint_inc_fees_adv; legacy quarterize renamed ytdnonint_inc_fees_adv -> qnonint_inc_fees_adv in place
+qnonint_inc_fees_annu,q_nonint_inc_fees_annu,2026-09-21,quarterly flow of ytd_nonint_inc_fees_annu; legacy quarterize renamed ytdnonint_inc_fees_annu -> qnonint_inc_fees_annu in place
+qnonint_inc_ins_underw,q_nonint_inc_ins_underw,2026-09-21,quarterly flow of ytd_nonint_inc_ins_underw; legacy quarterize renamed ytdnonint_inc_ins_underw -> qnonint_inc_ins_underw in place
+qnonint_inc_oth_ins_act,q_nonint_inc_oth_ins_act,2026-09-21,quarterly flow of ytd_nonint_inc_oth_ins_act; legacy quarterize renamed ytdnonint_inc_oth_ins_act -> qnonint_inc_oth_ins_act in place
+qsectn_inc,q_sectn_inc,2026-09-21,quarterly flow of ytd_sectn_inc; legacy quarterize renamed ytdsectn_inc -> qsectn_inc in place
+qnonint_inc_oth,q_nonint_inc_oth,2026-09-21,quarterly flow of ytd_nonint_inc_oth; legacy quarterize renamed ytdnonint_inc_oth -> qnonint_inc_oth in place
+qnonint_inc,q_nonint_inc,2026-09-21,quarterly flow of ytd_nonint_inc; legacy quarterize renamed ytdnonint_inc -> qnonint_inc in place
+qnonint_inc_oth_fee,q_nonint_inc_oth_fee,2026-09-21,quarterly flow of ytd_nonint_inc_oth_fee; legacy quarterize renamed ytdnonint_inc_oth_fee -> qnonint_inc_oth_fee in place
+qnonint_inc_all_oth,q_nonint_inc_all_oth,2026-09-21,quarterly flow of ytd_nonint_inc_all_oth; legacy quarterize renamed ytdnonint_inc_all_oth -> qnonint_inc_all_oth in place
+qnonint_inc_ins_fee,q_nonint_inc_ins_fee,2026-09-21,quarterly flow of ytd_nonint_inc_ins_fee; legacy quarterize renamed ytdnonint_inc_ins_fee -> qnonint_inc_ins_fee in place
+qnonint_inc_ib_adv_fee,q_nonint_inc_ib_adv_fee,2026-09-21,quarterly flow of ytd_nonint_inc_ib_adv_fee; legacy quarterize renamed ytdnonint_inc_ib_adv_fee -> qnonint_inc_ib_adv_fee in place
+qnonint_inc_oth_pre2001,q_nonint_inc_oth_pre2001,2026-09-21,quarterly flow of ytd_nonint_inc_oth_pre2001; legacy quarterize renamed ytdnonint_inc_oth_pre2001 -> qnonint_inc_oth_pre2001 in place
+qnonint_inc_net_gain_ll,q_nonint_inc_net_gain_ll,2026-09-21,quarterly flow of ytd_nonint_inc_net_gain_ll; legacy quarterize renamed ytdnonint_inc_net_gain_ll -> qnonint_inc_net_gain_ll in place
+qnonint_inc_oreo,q_nonint_inc_oreo,2026-09-21,quarterly flow of ytd_nonint_inc_oreo; legacy quarterize renamed ytdnonint_inc_oreo -> qnonint_inc_oreo in place
+qnonint_inc_net_gain_oth_ass,q_nonint_inc_net_gain_oth_ass,2026-09-21,quarterly flow of ytd_nonint_inc_net_gain_oth_ass; legacy quarterize renamed ytdnonint_inc_net_gain_oth_ass -> qnonint_inc_net_gain_oth_ass in place
+qnonint_exp_comp,q_nonint_exp_comp,2026-09-21,quarterly flow of ytd_nonint_exp_comp; legacy quarterize renamed ytdnonint_exp_comp -> qnonint_exp_comp in place
+qnonint_exp_fass,q_nonint_exp_fass,2026-09-21,quarterly flow of ytd_nonint_exp_fass; legacy quarterize renamed ytdnonint_exp_fass -> qnonint_exp_fass in place
+qnonint_exp_oth,q_nonint_exp_oth,2026-09-21,quarterly flow of ytd_nonint_exp_oth; legacy quarterize renamed ytdnonint_exp_oth -> qnonint_exp_oth in place
+qnonint_exp,q_nonint_exp,2026-09-21,quarterly flow of ytd_nonint_exp; legacy quarterize renamed ytdnonint_exp -> qnonint_exp in place
+qtaxes_inc,q_taxes_inc,2026-09-21,quarterly flow of ytd_taxes_inc; legacy quarterize renamed ytdtaxes_inc -> qtaxes_inc in place
+qint_inc,q_int_inc,2026-09-21,quarterly flow of ytd_int_inc; legacy quarterize renamed ytdint_inc -> qint_inc in place
+qint_exp,q_int_exp,2026-09-21,quarterly flow of ytd_int_exp; legacy quarterize renamed ytdint_exp -> qint_exp in place
+qint_exp_savings_dep_dom_1_pre01,q_int_exp_savings_dep_dom_1_pre01,2026-09-21,quarterly flow of ytd_int_exp_savings_dep_dom_1_pre01; legacy quarterize renamed ytdint_exp_savings_dep_dom_1_pre01 -> qint_exp_savings_dep_dom_1_pre01 in place
+qint_exp_savings_dep_dom_2_pre01,q_int_exp_savings_dep_dom_2_pre01,2026-09-21,quarterly flow of ytd_int_exp_savings_dep_dom_2_pre01; legacy quarterize renamed ytdint_exp_savings_dep_dom_2_pre01 -> qint_exp_savings_dep_dom_2_pre01 in place
+qtradrev_inc_1_pre01,q_tradrev_inc_1_pre01,2026-09-21,quarterly flow of ytd_tradrev_inc_1_pre01; legacy quarterize renamed ytdtradrev_inc_1_pre01 -> qtradrev_inc_1_pre01 in place
+qtradrev_inc_2_pre01,q_tradrev_inc_2_pre01,2026-09-21,quarterly flow of ytd_tradrev_inc_2_pre01; legacy quarterize renamed ytdtradrev_inc_2_pre01 -> qtradrev_inc_2_pre01 in place
+qint_exp_time_gt100k_dom_pre97,q_int_exp_time_gt100k_dom_pre97,2026-09-21,quarterly flow of ytd_int_exp_time_gt100k_dom_pre97; legacy quarterize renamed ytdint_exp_time_gt100k_dom_pre97 -> qint_exp_time_gt100k_dom_pre97 in place
+qint_exp_time_gt100k_dom_97,q_int_exp_time_gt100k_dom_97,2026-09-21,quarterly flow of ytd_int_exp_time_gt100k_dom_97; legacy quarterize renamed ytdint_exp_time_gt100k_dom_97 -> qint_exp_time_gt100k_dom_97 in place
+qint_exp_savings_dep_dom,q_int_exp_savings_dep_dom,2026-09-21,quarterly flow of ytd_int_exp_savings_dep_dom; legacy quarterize renamed ytdint_exp_savings_dep_dom -> qint_exp_savings_dep_dom in place
+qtradrev_inc_pre01,q_tradrev_inc_pre01,2026-09-21,quarterly flow of ytd_tradrev_inc_pre01; legacy quarterize renamed ytdtradrev_inc_pre01 -> qtradrev_inc_pre01 in place
+qnonint_inc_oth_pre01,q_nonint_inc_oth_pre01,2026-09-21,quarterly flow of ytd_nonint_inc_oth_pre01; legacy quarterize renamed ytdnonint_inc_oth_pre01 -> qnonint_inc_oth_pre01 in place
+qnonint_inc_sales,q_nonint_inc_sales,2026-09-21,quarterly flow of ytd_nonint_inc_sales; legacy quarterize renamed ytdnonint_inc_sales -> qnonint_inc_sales in place
+qint_exp_time_gt100k_dom,q_int_exp_time_gt100k_dom,2026-09-21,quarterly flow of ytd_int_exp_time_gt100k_dom; legacy quarterize renamed ytdint_exp_time_gt100k_dom -> qint_exp_time_gt100k_dom in place
+qcecl_htm_dsec_cp_bal,q_cecl_htm_dsec_cp_bal,2026-09-21,quarterly flow of ytd_cecl_htm_dsec_cp_bal; the legacy quarterize renamed ytd_cecl_htm_dsec_cp_bal -> qcecl_htm_dsec_cp_bal in place
+qnet_gain_ass_fv,q_net_gain_ass_fv,2026-09-21,quarterly flow of ytd_net_gain_ass_fv; the legacy quarterize renamed ytd_net_gain_ass_fv -> qnet_gain_ass_fv in place
+qint_inc_ln,q_int_inc_ln,2026-09-21,quarterly flow of ytd_int_inc_ln; the legacy quarterize renamed ytd_int_inc_ln -> qint_inc_ln in place
+qint_inc_lndom_re_agg_031032,q_int_inc_lndom_re_agg_031032,2026-09-21,quarterly flow of ytd_int_inc_lndom_re_agg_031032; the legacy quarterize renamed ytd_int_inc_lndom_re_agg_031032 -> qint_inc_lndom_re_agg_031032 in place
+qint_inc_ln_rre,q_int_inc_ln_rre,2026-09-21,quarterly flow of ytd_int_inc_ln_rre; the legacy quarterize renamed ytd_int_inc_ln_rre -> qint_inc_ln_rre in place
+qint_inc_ln_oth_re,q_int_inc_ln_oth_re,2026-09-21,quarterly flow of ytd_int_inc_ln_oth_re; the legacy quarterize renamed ytd_int_inc_ln_oth_re -> qint_inc_ln_oth_re in place
+qint_inc_ln_cc_pre01_031032,q_int_inc_ln_cc_pre01_031032,2026-09-21,quarterly flow of ytd_int_inc_ln_cc_pre01_031032; the legacy quarterize renamed ytd_int_inc_ln_cc_pre01_031032 -> qint_inc_ln_cc_pre01_031032 in place
+qint_inc_ln_cons_pre01,q_int_inc_ln_cons_pre01,2026-09-21,quarterly flow of ytd_int_inc_ln_cons_pre01; the legacy quarterize renamed ytd_int_inc_ln_cons_pre01 -> qint_inc_ln_cons_pre01 in place
+qint_inc_ln_ci,q_int_inc_ln_ci,2026-09-21,quarterly flow of ytd_int_inc_ln_ci; the legacy quarterize renamed ytd_int_inc_ln_ci -> qint_inc_ln_ci in place
+qint_inc_lndom_re_agg_033,q_int_inc_lndom_re_agg_033,2026-09-21,quarterly flow of ytd_int_inc_lndom_re_agg_033; the legacy quarterize renamed ytd_int_inc_lndom_re_agg_033 -> qint_inc_lndom_re_agg_033 in place
+qint_inc_ln_cc,q_int_inc_ln_cc,2026-09-21,quarterly flow of ytd_int_inc_ln_cc; the legacy quarterize renamed ytd_int_inc_ln_cc -> qint_inc_ln_cc in place
+qint_inc_ln_cons,q_int_inc_ln_cons,2026-09-21,quarterly flow of ytd_int_inc_ln_cons; the legacy quarterize renamed ytd_int_inc_ln_cons -> qint_inc_ln_cons in place
+qint_inc_ln_cc_pre01_033034,q_int_inc_ln_cc_pre01_033034,2026-09-21,quarterly flow of ytd_int_inc_ln_cc_pre01_033034; the legacy quarterize renamed ytd_int_inc_ln_cc_pre01_033034 -> qint_inc_ln_cc_pre01_033034 in place
+qstructflag_business_combo,q_structflag_business_combo,2026-09-21,quarterly flow of ytd_structflag_business_combo; the legacy quarterize renamed ytd_structflag_business_combo -> qstructflag_business_combo in place
+qstructflag_restatement,q_structflag_restatement,2026-09-21,quarterly flow of ytd_structflag_restatement; the legacy quarterize renamed ytd_structflag_restatement -> qstructflag_restatement in place
+qstructflag_discontinued_ops,q_structflag_discontinued_ops,2026-09-21,quarterly flow of ytd_structflag_discontinued_ops; the legacy quarterize renamed ytd_structflag_discontinued_ops -> qstructflag_discontinued_ops in place
+qint_inc_ln_cc_pre01,q_int_inc_ln_cc_pre01,2026-09-21,quarterly flow of ytd_int_inc_ln_cc_pre01; the legacy quarterize renamed ytd_int_inc_ln_cc_pre01 -> qint_inc_ln_cc_pre01 in place
+qint_inc_lndom_re_agg,q_int_inc_lndom_re_agg,2026-09-21,quarterly flow of ytd_int_inc_lndom_re_agg; the legacy quarterize renamed ytd_int_inc_lndom_re_agg -> qint_inc_lndom_re_agg in place
+qint_inc_ln_indiv_pre01,q_int_inc_ln_indiv_pre01,2026-09-21,quarterly flow of ytd_int_inc_ln_indiv_pre01; the legacy quarterize renamed ytd_int_inc_ln_indiv_pre01 -> qint_inc_ln_indiv_pre01 in place
+qint_inc_ln_indiv,q_int_inc_ln_indiv,2026-09-21,quarterly flow of ytd_int_inc_ln_indiv; the legacy quarterize renamed ytd_int_inc_ln_indiv -> qint_inc_ln_indiv in place

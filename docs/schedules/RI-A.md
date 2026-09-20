@@ -11,7 +11,7 @@ Here it does not always:
 | flow_type | Items |
 | --- | --- |
 | `stock` | `equity_end`, `equity_prev_yearend`, `equity_prev_yearend_restated` |
-| `ytd` | `div_common`, `div_preferred`, `capital_stock_net`, `treasury_stock_net`, `oth_comprehensive_income`, `oth_stockholder_transactions` |
+| `ytd` | `ytd_div_common`, `ytd_div_preferred`, `ytd_capital_stock_net`, `ytd_treasury_stock_net`, `ytd_oth_comprehensive_income`, `ytd_oth_stockholder_transactions` |
 
 The three `stock` items are **balances that happen to be reported on a year-to-date form**.
 Marking them `ytd` because of the prefix is an easy and invisible error: differencing a
@@ -29,4 +29,4 @@ quarterize audit to explain impossible-negative flows, and they are the reason
 `[ZERO_FILL] scope=in_era` exists: a blank means "no event" once collection began, but
 "not collected" before it did.
 
-`div_tot = div_common + div_preferred` is provided for convenience.
+`ytd_div_tot = ytd_div_common + ytd_div_preferred` is provided for convenience.

@@ -81,7 +81,12 @@ def _load_for_validation(panel_root, columns=None):
     root = _resolve_root(panel_root)
     dataset = ds.dataset(root / "panel", partitioning="hive")
     reserved = {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
-    cols = columns or [c for c in dataset.schema.names if c not in reserved]
+    present = [c for c in dataset.schema.names if c not in reserved]
+    # The q_ companions of year-to-date items are derived by construction (the prefix is
+    # reserved for them; lint refuses it on a config name). Coverage, breaks, expectations
+    # and stitches ask whether an item was REPORTED, so they see the as-filed ytd_ column.
+    # The companions are not loaded here; the quarterize audit loads the ones it needs.
+    cols = columns or [c for c in present if not c.startswith("q_")]
     frame = dataset.to_table(
         columns=["RSSD_ID", "REPORTING_PERIOD", "form_type", *cols]
     ).to_pandas()
@@ -190,15 +195,17 @@ def cmd_validate(args: argparse.Namespace) -> int:
         from .validate.quarterize_audit import attribute, audit, format_report
 
         cs = ConfigSet.load(args.config_dir)
+        flows = cs.flow_columns()  # the sign check runs on the q_ companions, not the as-filed ytd_
         nonneg = [
-            v.variable_name for v in (*cs.base, *cs.derived)
-            if v.sign == "nonneg" and v.flow_type == "ytd"
+            flows[v.variable_name] for v in (*cs.base, *cs.derived)
+            if v.sign == "nonneg" and v.flow_type == "ytd" and v.variable_name in flows
         ]
         flags = [v.variable_name for v in cs.base if "structflag" in v.variable_name]
-        summary, flagged = audit(df, nonneg, flag_columns=flags)
+        _, qdf, _ = _load_for_validation(args.panel_root, columns=nonneg + flags)
+        summary, flagged = audit(qdf, nonneg, flag_columns=flags)
         causes = attribute(flagged, flags)
         print()
-        print(format_report(summary, flagged, causes, len(df)))
+        print(format_report(summary, flagged, causes, len(qdf)))
         saved["quarterize_summary"] = summary
         saved["quarterize_flagged"] = flagged
 

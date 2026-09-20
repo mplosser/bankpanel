@@ -153,9 +153,18 @@ def test_rcon_siblings_added_for_rcfd_codes(write_config):
 
 
 def test_ytd_on_balance_sheet_schedule_warns(write_config):
-    text = MINIMAL.replace("RCFD2170,assets_total,RC,stock", "RCFD2170,assets_total,RC,ytd")
+    text = (MINIMAL.replace("RCFD2170,assets_total,RC,stock", "RCFD2170,ytd_assets_total,RC,ytd")
+            .replace("assets_total - liabilities_total", "ytd_assets_total - liabilities_total"))
     issues = ConfigSet.load(write_config(text)).lint()
     assert any("year-to-date" in i.message.lower() for i in issues)
+
+
+def test_ytd_item_must_carry_the_ytd_prefix(write_config):
+    """A year-to-date item is published twice (ytd_<stem> as filed, q_<stem> flow), so
+    the config name must be the as-filed one."""
+    text = MINIMAL.replace("RCFD2170,assets_total,RC,stock", "RCFD2170,assets_total,RI,ytd")
+    with pytest.raises(ConfigError, match="ytd_<stem>"):
+        ConfigSet.load(write_config(text)).lint()
 
 
 # --- [INTERMEDIATE]: built, used, then withheld ---------------------------------------

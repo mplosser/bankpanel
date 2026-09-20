@@ -127,6 +127,16 @@ class ConfigSet:
     def ytd_columns(self) -> list[str]:
         return [n for n, ft in self.flow_types().items() if ft == "ytd"]
 
+    def flow_columns(self) -> dict[str, str]:
+        """Published year-to-date column -> its quarterly-flow companion.
+
+        A ``flow_type=ytd`` item is published twice: ``ytd_<stem>`` exactly as filed
+        (never altered), and ``q_<stem>`` = the within-year difference, NaN wherever a
+        clean one-quarter difference does not exist. Withheld items get no companion.
+        """
+        withheld = self.intermediate_columns()
+        return {n: "q_" + n.removeprefix("ytd_") for n in self.ytd_columns() if n not in withheld}
+
     def schedules(self) -> dict[str, str]:
         return {v.variable_name: v.schedule for v in (*self.base, *self.derived)}
 

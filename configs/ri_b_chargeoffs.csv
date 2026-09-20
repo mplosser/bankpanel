@@ -18,7 +18,7 @@
 # negative value as an error to repair. Banks almost never REPORT a negative year-to-date
 # recovery (0.001% of filings), but that does not rule out a reversal within the year.
 #
-# net_chargeoffs_tot = co_tot - rec_tot is the series most work actually uses.
+# ytd_net_chargeoffs_tot = ytd_co_tot - ytd_rec_tot is the series most work actually uses.
 
 [META]
 key,value
@@ -28,81 +28,81 @@ profile,ffiec_call
 
 [BASE_VARIABLES]
 mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
-RIAD3584,co_farmland,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS SECURED BY FARMLAND
-RIAD3585,rec_farmland,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS SECURED BY FARMLAND
-RIAD3588,co_multifam,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
-RIAD3589,rec_multifam,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
-RIAD4266,co_lease,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LEASE FINANCING RECEIVABLES
-RIAD4267,rec_lease,RI-B,ytd,all,,,any,RECOVERIES ON LEASE FINANCING RECEIVABLES
-RIAD4481,co_depinst,RI-B,ytd,031+041,,2016-12-31,nonneg,CHARGE-OFFS ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
-RIAD4482,rec_depinst,RI-B,ytd,031+041,,2016-12-31,any,RECOVERIES ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
-RIAD4605,rec_tot,RI-B,ytd,all,,,any,RECOVERIES ON ALLOWANCE FOR LOAN AND LEASE LOSSES
-RIAD4608,rec_ci,RI-B,ytd,all,,,any,RECOVERIES ON COMMERCIAL AND INDUSTRIAL LOANS
-RIAD4627,rec_forgovt,RI-B,ytd,031+041,,,any,RECOVERIES ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
-RIAD4628,rec_othln,RI-B,ytd,all,,,any,RECOVERIES ON ALL OTHER LOANS
-RIAD4635,co_tot,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALLOWANCE FOR LOAN AND LEASE LOSSES
-RIAD4638,co_ci,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON COMMERCIAL AND INDUSTRIAL LOANS
-RIAD4643,co_forgovt,RI-B,ytd,031+041,,,nonneg,CHARGE-OFFS ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
-RIAD4644,co_othln,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALL OTHER LOANS
-RIAD4655,co_agprod,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
-RIAD4665,rec_agprod,RI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
-RIAD5409,co_finance_cre,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEM
-RIAD5410,rec_finance_cre,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS
-RIAD5411,co_heloc,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CRED
-RIAD5412,rec_heloc,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CREDI
-RIADB514,co_cc,RI-B,ytd,all,2001-03-31,,nonneg,CHARGE-OFFS ON LOANS TO CREDIT CARDS
-RIADB515,rec_cc,RI-B,ytd,all,2001-03-31,,any,RECOVERIES ON LOANS TO CREDIT CARDS
-RIADC217,rec_famres_first,RI-B,ytd,all,2002-03-31,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
-RIADC218,rec_famres_junior,RI-B,ytd,all,2002-03-31,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
-RIADC234,co_famres_first,RI-B,ytd,all,2002-03-31,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
-RIADC235,co_famres_junior,RI-B,ytd,all,2002-03-31,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
-RIADC388,cc_fees_reversed,RI-B,ytd,031+041,2003-03-31,,nonneg,UNCOLLECTIBLE CREDIT CARD FEES & FINANCE CHARGES REVERSED AGAINST INCOME (I.E.; NOT INCLUDED IN CHARGE-OFFS AGAINST TH
-RIADC891,co_constr_res14,RI-B,ytd,all,2007-03-31,,nonneg,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS; CHARGE-OFFS
-RIADC892,rec_constr_res14,RI-B,ytd,all,2007-03-31,,any,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS RECOVERIES
-RIADC893,co_constr_oth,RI-B,ytd,all,2007-03-31,,nonneg,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; CHARGE-OFFS
-RIADC894,rec_constr_oth,RI-B,ytd,all,2007-03-31,,any,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; RECOVERIES
-RIADC895,co_nfnres_owner,RI-B,ytd,all,2007-03-31,,nonneg,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
-RIADC896,rec_nfnres_owner,RI-B,ytd,all,2007-03-31,,any,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
-RIADC897,co_nfnres_oth,RI-B,ytd,all,2007-03-31,,nonneg,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
-RIADC898,rec_nfnres_oth,RI-B,ytd,all,2007-03-31,,any,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
-RIADK129,co_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ON AUTOMOBILE LOANS
-RIADK133,rec_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ON AUTOMOBILE LOANS
-RIADK205,co_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN 
-RIADK206,rec_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN C
+RIAD3584,ytd_co_farmland,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS SECURED BY FARMLAND
+RIAD3585,ytd_rec_farmland,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS SECURED BY FARMLAND
+RIAD3588,ytd_co_multifam,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+RIAD3589,ytd_rec_multifam,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+RIAD4266,ytd_co_lease,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LEASE FINANCING RECEIVABLES
+RIAD4267,ytd_rec_lease,RI-B,ytd,all,,,any,RECOVERIES ON LEASE FINANCING RECEIVABLES
+RIAD4481,ytd_co_depinst,RI-B,ytd,031+041,,2016-12-31,nonneg,CHARGE-OFFS ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
+RIAD4482,ytd_rec_depinst,RI-B,ytd,031+041,,2016-12-31,any,RECOVERIES ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
+RIAD4605,ytd_rec_tot,RI-B,ytd,all,,,any,RECOVERIES ON ALLOWANCE FOR LOAN AND LEASE LOSSES
+RIAD4608,ytd_rec_ci,RI-B,ytd,all,,,any,RECOVERIES ON COMMERCIAL AND INDUSTRIAL LOANS
+RIAD4627,ytd_rec_forgovt,RI-B,ytd,031+041,,,any,RECOVERIES ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+RIAD4628,ytd_rec_othln,RI-B,ytd,all,,,any,RECOVERIES ON ALL OTHER LOANS
+RIAD4635,ytd_co_tot,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALLOWANCE FOR LOAN AND LEASE LOSSES
+RIAD4638,ytd_co_ci,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON COMMERCIAL AND INDUSTRIAL LOANS
+RIAD4643,ytd_co_forgovt,RI-B,ytd,031+041,,,nonneg,CHARGE-OFFS ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+RIAD4644,ytd_co_othln,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALL OTHER LOANS
+RIAD4655,ytd_co_agprod,RI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
+RIAD4665,ytd_rec_agprod,RI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
+RIAD5409,ytd_co_finance_cre,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEM
+RIAD5410,ytd_rec_finance_cre,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS
+RIAD5411,ytd_co_heloc,RI-B,ytd,all,1991-03-31,,nonneg,CHARGE-OFFS ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CRED
+RIAD5412,ytd_rec_heloc,RI-B,ytd,all,1991-03-31,,any,RECOVERIES ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CREDI
+RIADB514,ytd_co_cc,RI-B,ytd,all,2001-03-31,,nonneg,CHARGE-OFFS ON LOANS TO CREDIT CARDS
+RIADB515,ytd_rec_cc,RI-B,ytd,all,2001-03-31,,any,RECOVERIES ON LOANS TO CREDIT CARDS
+RIADC217,ytd_rec_famres_first,RI-B,ytd,all,2002-03-31,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
+RIADC218,ytd_rec_famres_junior,RI-B,ytd,all,2002-03-31,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
+RIADC234,ytd_co_famres_first,RI-B,ytd,all,2002-03-31,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
+RIADC235,ytd_co_famres_junior,RI-B,ytd,all,2002-03-31,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
+RIADC388,ytd_cc_fees_reversed,RI-B,ytd,031+041,2003-03-31,,nonneg,UNCOLLECTIBLE CREDIT CARD FEES & FINANCE CHARGES REVERSED AGAINST INCOME (I.E.; NOT INCLUDED IN CHARGE-OFFS AGAINST TH
+RIADC891,ytd_co_constr_res14,RI-B,ytd,all,2007-03-31,,nonneg,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS; CHARGE-OFFS
+RIADC892,ytd_rec_constr_res14,RI-B,ytd,all,2007-03-31,,any,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS RECOVERIES
+RIADC893,ytd_co_constr_oth,RI-B,ytd,all,2007-03-31,,nonneg,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; CHARGE-OFFS
+RIADC894,ytd_rec_constr_oth,RI-B,ytd,all,2007-03-31,,any,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; RECOVERIES
+RIADC895,ytd_co_nfnres_owner,RI-B,ytd,all,2007-03-31,,nonneg,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
+RIADC896,ytd_rec_nfnres_owner,RI-B,ytd,all,2007-03-31,,any,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
+RIADC897,ytd_co_nfnres_oth,RI-B,ytd,all,2007-03-31,,nonneg,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
+RIADC898,ytd_rec_nfnres_oth,RI-B,ytd,all,2007-03-31,,any,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
+RIADK129,ytd_co_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ON AUTOMOBILE LOANS
+RIADK133,ytd_rec_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ON AUTOMOBILE LOANS
+RIADK205,ytd_co_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN 
+RIADK206,ytd_rec_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN C
 RIAD3123,alll_end,RI-B,stock,all,,,,ALLOWANCE FOR LOAN AND LEASE LOSSES
-RIADC233,alll_adjustments,RI-B,ytd,all,2002-03-31,,,ADJUSTMENTS
-RIAD5523,writedowns_transfer_to_hfs,RI-B,ytd,all,2001-06-30,,nonneg,WRITE DOWNS ARISING FROM TRANSFER TO HFS
+RIADC233,ytd_alll_adjustments,RI-B,ytd,all,2002-03-31,,,ADJUSTMENTS
+RIAD5523,ytd_writedowns_transfer_to_hfs,RI-B,ytd,all,2001-06-30,,nonneg,WRITE DOWNS ARISING FROM TRANSFER TO HFS
 RCFDJJ03,acl_oth_fin_assets,RI-B,stock,all,2020-03-31,,,Allowance for credit losses on other financial assets measured at amortized cost
-RIAD4262,co_cc_incl_revolving_4262,RI-B,ytd,041+051,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
-RIAD4656,co_cc_incl_revolving_4656,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
-RIAD4657,co_consumer_oth_4657,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
-RIADB516,co_consumer_oth_b516,RI-B,ytd,all,2001-03-31,2010-12-31,nonneg,CHARGE-OFFS ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
-RIAD4639,co_consumer_tot_4639,RI-B,ytd,all,1984-03-31,2010-12-31,nonneg,"CHARGE-OFFS ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
-RIAD4263,rec_cc_incl_revolving_4263,RI-B,ytd,041+051,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
-RIAD4666,rec_cc_incl_revolving_4666,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
-RIAD4667,rec_consumer_oth_4667,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
-RIADB517,rec_consumer_oth_b517,RI-B,ytd,all,2001-03-31,2010-12-31,any,RECOVERIES ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
-RIAD4609,rec_consumer_tot_4609,RI-B,ytd,all,1984-03-31,2010-12-31,any,"RECOVERIES ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+RIAD4262,ytd_co_cc_incl_revolving_4262,RI-B,ytd,041+051,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
+RIAD4656,ytd_co_cc_incl_revolving_4656,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+RIAD4657,ytd_co_consumer_oth_4657,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+RIADB516,ytd_co_consumer_oth_b516,RI-B,ytd,all,2001-03-31,2010-12-31,nonneg,CHARGE-OFFS ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+RIAD4639,ytd_co_consumer_tot_4639,RI-B,ytd,all,1984-03-31,2010-12-31,nonneg,"CHARGE-OFFS ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+RIAD4263,ytd_rec_cc_incl_revolving_4263,RI-B,ytd,041+051,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
+RIAD4666,ytd_rec_cc_incl_revolving_4666,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+RIAD4667,ytd_rec_consumer_oth_4667,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+RIADB517,ytd_rec_consumer_oth_b517,RI-B,ytd,all,2001-03-31,2010-12-31,any,RECOVERIES ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+RIAD4609,ytd_rec_consumer_tot_4609,RI-B,ytd,all,1984-03-31,2010-12-31,any,"RECOVERIES ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
-co_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, charge-offs, through 2000Q4 (RIAD4262; RIAD4656 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",co_cc_incl_revolving_4262.fillna(co_cc_incl_revolving_4656),thousands_usd,nonneg
-co_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, charge-offs: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4657).",(co_auto + co_consumer_oth_ex_auto).fillna(co_consumer_oth_b516).fillna(co_consumer_oth_4657),thousands_usd,nonneg
-co_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) charge-offs, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4639 for 100% of banks); the reported total RIAD4639 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(co_cc + co_auto + co_consumer_oth_ex_auto).fillna(co_cc + co_consumer_oth_b516).fillna(co_consumer_tot_4639),thousands_usd,nonneg
-rec_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, recoveries, through 2000Q4 (RIAD4263; RIAD4666 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",rec_cc_incl_revolving_4263.fillna(rec_cc_incl_revolving_4666),thousands_usd,any
-rec_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, recoveries: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4667).",(rec_auto + rec_consumer_oth_ex_auto).fillna(rec_consumer_oth_b517).fillna(rec_consumer_oth_4667),thousands_usd,any
-rec_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) recoveries, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4609 for 100% of banks); the reported total RIAD4609 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(rec_cc + rec_auto + rec_consumer_oth_ex_auto).fillna(rec_cc + rec_consumer_oth_b517).fillna(rec_consumer_tot_4609),thousands_usd,any
-net_chargeoffs_tot,RI-B,ytd,Net charge-offs: gross charge-offs less recoveries,co_tot - rec_tot,thousands_usd,
+ytd_co_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, charge-offs, through 2000Q4 (RIAD4262; RIAD4656 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",ytd_co_cc_incl_revolving_4262.fillna(ytd_co_cc_incl_revolving_4656),thousands_usd,nonneg
+ytd_co_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, charge-offs: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4657).",(ytd_co_auto + ytd_co_consumer_oth_ex_auto).fillna(ytd_co_consumer_oth_b516).fillna(ytd_co_consumer_oth_4657),thousands_usd,nonneg
+ytd_co_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) charge-offs, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4639 for 100% of banks); the reported total RIAD4639 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(ytd_co_cc + ytd_co_auto + ytd_co_consumer_oth_ex_auto).fillna(ytd_co_cc + ytd_co_consumer_oth_b516).fillna(ytd_co_consumer_tot_4639),thousands_usd,nonneg
+ytd_rec_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, recoveries, through 2000Q4 (RIAD4263; RIAD4666 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",ytd_rec_cc_incl_revolving_4263.fillna(ytd_rec_cc_incl_revolving_4666),thousands_usd,any
+ytd_rec_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, recoveries: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4667).",(ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_oth_4667),thousands_usd,any
+ytd_rec_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) recoveries, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4609 for 100% of banks); the reported total RIAD4609 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(ytd_rec_cc + ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_cc + ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_tot_4609),thousands_usd,any
+ytd_net_chargeoffs_tot,RI-B,ytd,Net charge-offs: gross charge-offs less recoveries,ytd_co_tot - ytd_rec_tot,thousands_usd,
 
 [INTERMEDIATE]
 column,reason
-co_cc_incl_revolving_4262,Era piece of co_cc_incl_revolving_pre01.
-co_cc_incl_revolving_4656,Era piece of co_cc_incl_revolving_pre01.
-co_consumer_oth_4657,Pre-2001 031 piece of co_consumer_oth.
-co_consumer_oth_b516,2001-2010 piece of co_consumer_oth.
-co_consumer_tot_4639,Reported/derived total; piece of co_consumer_tot.
-rec_cc_incl_revolving_4263,Era piece of rec_cc_incl_revolving_pre01.
-rec_cc_incl_revolving_4666,Era piece of rec_cc_incl_revolving_pre01.
-rec_consumer_oth_4667,Pre-2001 031 piece of rec_consumer_oth.
-rec_consumer_oth_b517,2001-2010 piece of rec_consumer_oth.
-rec_consumer_tot_4609,Reported/derived total; piece of rec_consumer_tot.
+ytd_co_cc_incl_revolving_4262,Era piece of ytd_co_cc_incl_revolving_pre01.
+ytd_co_cc_incl_revolving_4656,Era piece of ytd_co_cc_incl_revolving_pre01.
+ytd_co_consumer_oth_4657,Pre-2001 031 piece of ytd_co_consumer_oth.
+ytd_co_consumer_oth_b516,2001-2010 piece of ytd_co_consumer_oth.
+ytd_co_consumer_tot_4639,Reported/derived total; piece of ytd_co_consumer_tot.
+ytd_rec_cc_incl_revolving_4263,Era piece of ytd_rec_cc_incl_revolving_pre01.
+ytd_rec_cc_incl_revolving_4666,Era piece of ytd_rec_cc_incl_revolving_pre01.
+ytd_rec_consumer_oth_4667,Pre-2001 031 piece of ytd_rec_consumer_oth.
+ytd_rec_consumer_oth_b517,2001-2010 piece of ytd_rec_consumer_oth.
+ytd_rec_consumer_tot_4609,Reported/derived total; piece of ytd_rec_consumer_tot.

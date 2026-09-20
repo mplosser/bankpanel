@@ -111,7 +111,10 @@ next difference spans two quarters), a bank whose first filing of a year is not 
 year-to-date would otherwise be booked as one quarter's flow), and a bank whose previous
 quarter was filed but left the item blank (same effect, and invisible to any check based
 on the reporting calendar). Handled by an explicit `--gap-policy` and reported rather than
-absorbed. On a full 1985–2025 build these affect 13,822 bank-quarters, about 1 in 100.
+absorbed. Both representations are published: `ytd_<stem>` as filed and `q_<stem>` the
+flow, so a bank that files an item only at Q4 keeps its annual total in `ytd_` and shows
+no invented quarters in `q_`. On a full 1985–2025 build the uncomputable flows are about
+1 in 100 bank-quarters for the core income items, almost all partial first or last years.
 
 **Form awareness.** Every row carries `form_type` (31/41/51) across the whole panel,
 including the pre-2011 era where it must be derived. This is what lets you tell

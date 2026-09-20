@@ -127,12 +127,22 @@ a bank-year. Two situations have no valid difference:
   difference against; its year-to-date-through-Q3 is *not* a quarterly flow. This affects
   every de-novo bank's first partial year and every acquired bank's final year.
 
-Default policy is `nan` — an uncomputable flow is unknown. `--gap-policy spread` divides a
-k-quarter difference by k (an average, and it does **not** create rows for the missing
-quarters). `--gap-policy keep` reproduces the older, buggy behaviour for migration
-comparison only.
+- **Blank prior quarter.** The row exists but the item is blank — the annual-filer case.
+  Through 2000, 60–75% of banks filed the Schedule RI-A items (dividends, other
+  stockholder transactions) at Q4 only. The Q4 value is a year's total, not a fourth
+  quarter's flow.
 
-Affected rows are listed in `quarterize_gaps.parquet`.
+Every year-to-date item is published twice, `ytd_<stem>` as filed and `q_<stem>` the
+flow, so nothing is lost by refusing to difference: the annual filer's total is in
+`ytd_`, its `q_` is NaN for the year. Default policy is `nan` — an uncomputable flow is
+unknown. `--gap-policy spread` divides a k-quarter difference by k (an average, and it
+does **not** create rows for the missing quarters). `--gap-policy keep` reproduces the
+older, buggy behaviour (year-to-date booked as a flow) for migration comparison only.
+
+Measured on the 1985–2025 build, the cells with no clean difference are 578K blank-prior-
+quarter (annual filers), 191K row-missing (partial first/last years, five true gaps),
+and 1,818 where an earlier in-year anchor would allow an average — too rare to build a
+rule for. Structural events are listed in `quarterize_gaps.parquet`.
 
 ---
 
