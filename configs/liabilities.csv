@@ -210,3 +210,8 @@ time_gt100k,CROSS,stock,"Time Deposits of $100,000 or more [RCON2604 and others]
 brokered_lt250k_dep_pre17,CROSS,stock,Brokered Deposits <$250k pre(2010-2016) [RCON2343+RCONJ472],brokered_lt100k_dep+brokered_gt100k_lt250k_dep,thousands_usd,
 brokered_lt250k_dep,CROSS,stock,"Brokered Deposits <$250k [RCONHK05, RCON2343+RCONJ472]",brokered_lt250k_dep_17.fillna(brokered_lt250k_dep_pre17),thousands_usd,
 cet1,CROSS,stock,"Common equity tier 1 capital (RC-R Part I, from 2015Q1): RCFAP859 on the 031 / RCOAP859 on the 041 and 051; from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP859) instead. The two 031 columns are never filed together and cover every 031 filer in every quarter.",cet1_1.fillna(cet1_2),thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+cet1_1,"CET1 as filed under RCFA (031) / RCOA (041, 051); published inside cet1."
+cet1_2,"CET1 as filed in the advanced approaches column RCFW (031, from 2020Q1); published inside cet1. Banks move between the two 031 columns, so the pieces step while cet1 does not."
