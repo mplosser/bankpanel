@@ -265,3 +265,19 @@ def test_formula_can_read_form_type(panel):
     off = panel.loc[~is_031, "assets_031_only"]
     assert on.notna().all() and (on == panel.loc[is_031, "assets_total"]).all()
     assert off.isna().all()
+
+
+# --- form type before 2011 ----------------------------------------------------------
+
+
+def test_level_one_without_a_foreign_office_schedule_is_not_a_031_filer():
+    """1985-1988: CALL8786 == 1 also marks small domestic filers. A true 031 filer always
+    carries the foreign-office schedule (RCFN2200)."""
+    from bankpanel.reference.formtype import resolve_form_type
+
+    raw = pd.DataFrame({"CALL8786": [1.0, 1.0, 2.0, np.nan], "RCFN2200": [500.0, np.nan, np.nan, np.nan]})
+    out = resolve_form_type(raw)
+    assert out.form_type.tolist()[:3] == [31, 41, 41]
+    assert pd.isna(out.form_type.iloc[3])
+    # Without the column at all (a synthetic or trimmed file) the level code decides.
+    assert resolve_form_type(raw[["CALL8786"]]).form_type.tolist()[:3] == [31, 31, 41]

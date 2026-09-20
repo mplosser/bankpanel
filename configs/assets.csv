@@ -217,7 +217,7 @@ RCFDF161,ln_other_re_2_consol,RC-C,stock,031,2013-06-30,,,"Real estate loans, ot
 RCONF158,ln_condev_1,RC-C,stock,all,,,,
 RCONF159,ln_condev_2,RC-C,stock,all,,,,
 RCON1415,ln_condev_pre07,RC,stock,all,,,,
-RCON1420,ln_farm_1420,RC-C,stock,all,,,,"LOANS SECURED BY FARMLAND, as filed. Blank for ~63pct of 031 filers in 1986-1988 only"
+RCON1420,ln_farm,RC-C,stock,all,,,,
 RCON1797,ln_famres_heloc,RC-C,stock,all,,,,
 RCON1798,ln_famres_other_alt,RC,stock,all,,,,
 RCON5367,ln_famres_first,RC-C,stock,all,,,,
@@ -433,7 +433,6 @@ ln_famres_01,CROSS,stock,,ln_famres_heloc + ln_famres_other,,
 ln_famres,CROSS,stock,"Loans: Family RE [RCFD1430, 1797 + 1798, 1797 + 5367 + 5368] ln_rre",ln_famres_pre01.fillna(ln_famres_01),,
 ln_other_re_08,CROSS,stock,,ln_other_re_1+ln_other_re_2,,
 ln_other_re,CROSS,stock,"Loans: Nonfarm Nonresidential RE [1480, F160+F161] ln_nfnr",ln_other_re_pre08.fillna(ln_other_re_08),,
-ln_farm,RC-C,stock,"Loans secured by farmland (RCON1420). Where the item is blank but the bank reported a real-estate total, the blank is a zero: 5,444 bank-quarters, all 031 filers in 1986-1988 (plus 21 unclassified filings). With farmland at 0 the other four components equal the bank's own reported total RCFD1410 on 99.8pct of those rows, and 74pct of the same banks reported exactly 0 in 1985. A filing with no real-estate total at all (52 empty filings) stays blank. Maintainer decision 2026-09-21; a residual (total - others) was considered and rejected -- identical on 99.8pct, half of the rest negative, and on the 031 the total is consolidated while the components are domestic.",ln_farm_1420.fillna(ln_re_1410 * 0),thousands_usd,
 ln_re_dom,RC-C,stock,"Loans secured by real estate in DOMESTIC offices: construction + farmland + 1-4 family + multifamily + nonfarm nonresidential (RCON components, era-aware). One definition throughout. Equals the reported total RCFD1410 for 100.00% of 041 bank-quarters where both exist; for 031 filers with foreign offices it is lower by their foreign-office real estate loans (3-6% in aggregate).",ln_condev + ln_farm + ln_famres + ln_multi + ln_other_re,thousands_usd,
 ln_re,RC-C,stock,"Loans secured by real estate, CONSOLIDATED: the reported total RCFD1410 where filed; else the sum of the consolidated components (031 column A, from 2013Q2; equals RCFD1410 for every bank that filed both); else ln_re_dom, which is the consolidated figure for a bank with no foreign offices (every 041/051 filer).",ln_re_1410.fillna(ln_condev_1_consol + ln_condev_2_consol + ln_farm_consol + ln_famres_heloc_consol + ln_famres_first_consol + ln_famres_jr_consol + ln_multi_consol + ln_other_re_1_consol + ln_other_re_2_consol).fillna(ln_re_dom),thousands_usd,
 ln_dep_pre01,CROSS,stock,,ln_dep_1 + ln_dep_2,,
@@ -458,7 +457,6 @@ reven_inv,always,"RCFD3656 (revaluation/equity investments) introduced ~2005Q1, 
 
 [INTERMEDIATE]
 column,reason
-ln_farm_1420,As-filed farmland item; published as ln_farm with the 1986-1988 blanks resolved to zero.
 ln_re_1410,Reported real-estate total; published inside ln_re.
 ln_condev_1_consol,Consolidated real-estate component; published inside ln_re.
 ln_condev_2_consol,Consolidated real-estate component; published inside ln_re.

@@ -25,6 +25,16 @@ The proxy was validated against the boundary: crosstabbing 2010Q4 ``CALL8786`` a
 109 of 113 exact, and nothing misassigned into the 41 bucket. The 4 discordant banks
 genuinely changed form across the boundary.
 
+**The level code alone is not enough in 1985-1988.** In those four years ``CALL8786 == 1``
+also marks 360-470 small banks a year (median assets $163M in 1987Q2, against $2.7bn) that
+file no foreign-office schedule at all -- domestic filers on a smaller form, whose blanks
+on items that form did not collect (farmland, agricultural loans, intangibles, the
+quarterly-average loan total, total loan interest) were being read as 031 blanks. A true
+031 filer always carries the foreign-office schedule, so form 31 additionally requires
+``RCFN2200`` (deposits in foreign offices) to be present. Measured on every Q4 1985-2010:
+from 1989 on the two signals agree for every bank in every year (no level-1 bank lacks the
+schedule, no level-2 bank has it), so the rule changes nothing outside 1985-1988.
+
 Known limitation, documented rather than guessed around: before 2001 the ``8786 == 2``
 bucket also contains FFIEC 032/033/034 filers, which that field cannot separate. Those
 quarters are labelled 41 with ``form_type_source='call8786_inferred'``; consumers who
@@ -41,6 +51,10 @@ CDR_FILING_TYPE_COL = "FINANCIAL INSTITUTION FILING TYPE"
 
 #: Reporting level code, present through 2010Q4 (Chicago Fed era).
 LEGACY_REPORTING_LEVEL_COL = "CALL8786"
+
+#: Deposits in foreign offices: present for every filer of the foreign-office schedule,
+#: i.e. every true FFIEC 031 filer, and for no one else.
+LEGACY_FOREIGN_OFFICE_COL = "RCFN2200"
 
 #: Entity type code. NOT a form type -- values are 1/10/17 for domestic commercial,
 #: savings and co-operative banks. Carried into the header dataset for reference only.
@@ -105,6 +119,13 @@ def header_source_columns() -> tuple[str, ...]:
     return (CDR_FILING_TYPE_COL,) + CDR_HEADER_COLUMNS + LEGACY_HEADER_COLUMNS
 
 
+def resolver_source_columns() -> tuple[str, ...]:
+    """What to read from a raw quarter: the header columns plus the foreign-office item the
+    pre-2011 form rule needs. The latter is a balance-sheet value, not identity, so it is
+    read for the resolver and kept out of the header dataset."""
+    return header_source_columns() + (LEGACY_FOREIGN_OFFICE_COL,)
+
+
 def resolve_form_type(df: pd.DataFrame) -> pd.DataFrame:
     """Return a two-column frame ``form_type`` (Int8) and ``form_type_source``.
 
@@ -118,9 +139,14 @@ def resolve_form_type(df: pd.DataFrame) -> pd.DataFrame:
     elif LEGACY_REPORTING_LEVEL_COL in df.columns:
         level = pd.to_numeric(df[LEGACY_REPORTING_LEVEL_COL], errors="coerce")
         # 1 = consolidated incl. foreign offices -> form 031; 2 = domestic only -> 041.
+        # A level-1 bank with no foreign-office schedule is a domestic filer (1985-1988 only).
+        if LEGACY_FOREIGN_OFFICE_COL in df.columns:
+            foreign = pd.to_numeric(df[LEGACY_FOREIGN_OFFICE_COL], errors="coerce").notna()
+        else:
+            foreign = pd.Series(True, index=df.index)
         form_type = pd.Series(np.nan, index=df.index, dtype="float64")
-        form_type[level == 1] = 31
-        form_type[level == 2] = 41
+        form_type[(level == 1) & foreign] = 31
+        form_type[(level == 2) | ((level == 1) & ~foreign)] = 41
         source = pd.Series(
             np.where(form_type.notna(), "call8786_inferred", "unknown"), index=df.index
         )

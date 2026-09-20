@@ -96,12 +96,27 @@ def _load_for_validation(panel_root, columns=None):
 def cmd_expectations(args: argparse.Namespace) -> int:
     from .reference.expectations import build_expectations, read_expectations, write_expectations
 
-    root, df, cols = _load_for_validation(args.panel_root)
+    import pandas as pd
+    import pyarrow.dataset as ds
+
+    from .io.reader import _resolve_root
+
+    root = _resolve_root(args.panel_root)
     # The matrix describes THIS panel, so it lives beside it rather than in a shared
     # directory that could drift out of step with the data it describes.
     out = Path(args.out) if args.out else root / "reporting_expectations.parquet"
     if args.action == "build":
-        exp = build_expectations(df, cols)
+        # Each column is measured independently, so the panel is read in column chunks:
+        # the whole frame is ~11 GiB and build_expectations copies it.
+        reserved = {"RSSD_ID", "REPORTING_PERIOD", "form_type", "year"}
+        names = ds.dataset(root / "panel", partitioning="hive").schema.names
+        cols = [c for c in names if c not in reserved and not c.startswith("q_")]
+        parts = []
+        for i in range(0, len(cols), 350):
+            _, df, chunk = _load_for_validation(args.panel_root, columns=cols[i:i + 350])
+            parts.append(build_expectations(df, chunk))
+            del df
+        exp = pd.concat(parts, ignore_index=True)
         write_expectations(exp, out)
         print(f"{len(exp):,} expectation rows for {exp.column.nunique():,} columns -> {out}")
         print(exp.frequency.value_counts().to_string())
@@ -143,6 +158,18 @@ def cmd_validate(args: argparse.Namespace) -> int:
         )
         print(format_report(new, approved))
         saved["coverage_findings"] = new
+        saved["coverage_approved"] = approved
+        # A ledger row that matches no finding explains something that no longer happens:
+        # the construction was fixed, or the row was mis-keyed. Either way it should go.
+        from .validate.approvals import load_ledger
+
+        ledger = load_ledger(args.ledger)
+        if not ledger.empty:
+            keys = ["panel", "column", "from_date", "to_date"]
+            seen = set(map(tuple, approved[keys].astype(str).to_numpy())) if not approved.empty else set()
+            stale = ledger[[k not in seen for k in map(tuple, ledger[keys].astype(str).to_numpy())]]
+            print(f"LEDGER: {len(stale)} of {len(ledger)} row(s) match no finding (stale)")
+            saved["coverage_ledger_stale"] = stale
         if args.strict and not new.empty:
             exit_code = 1
 

@@ -110,7 +110,7 @@ def measure_codes(
         if not resolved:
             continue
         physical = sorted(set(resolved.values()))
-        extra = [c for c in ("FINANCIAL INSTITUTION FILING TYPE", "CALL8786") if c in available]
+        extra = [c for c in ("FINANCIAL INSTITUTION FILING TYPE", "CALL8786", "RCFN2200") if c in available]
         table = pq.read_table(qf.path, columns=physical + extra)
         df = table.to_pandas()
         df.columns = [str(c).upper() for c in df.columns]
