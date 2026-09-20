@@ -229,7 +229,12 @@ RCONF161,ln_other_re_2,RC-C,stock,all,,,,
 RCON1480,ln_other_re_pre08,RC,stock,all,,,,
 RCFD1489,ln_dep_1,RC,stock,all,,,,
 RCFD1755,ln_dep_2,RC,stock,all,,,,
-RCFD1288,ln_dep_01,RC,stock,all,,,,
+RCFD1288,ln_dep_01,RC-C,stock,all,,,,"LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS, total. Filed by the 041/051; derived for the 031 by the pre-2011 source files and absent for it from 2011Q1, when the 031 carries only the five components"
+RCFDB532,ln_dep_us_branches_fgn,RC-C,stock,031,2001-03-31,,,"Loans to depository institutions, to U.S. branches and agencies of foreign banks (031 only; component of the total)"
+RCFDB533,ln_dep_oth_us_combanks,RC-C,stock,031,2001-03-31,,,"Loans to depository institutions, to other commercial banks in the U.S. (031 only; component of the total)"
+RCFDB534,ln_dep_oth_us_depinst,RC-C,stock,031,2001-03-31,,,"Loans to depository institutions, to other depository institutions in the U.S. (031 only; component of the total)"
+RCFDB536,ln_dep_fgn_branches_us,RC-C,stock,031,2001-03-31,,,"Loans to depository institutions, to foreign branches of other U.S. banks (031 only; component of the total)"
+RCFDB537,ln_dep_oth_fgn_banks,RC-C,stock,031,2001-03-31,,,"Loans to depository institutions, to other banks in foreign countries (031 only; component of the total)"
 RCON1224,pdl_ci_non_1,RC,stock,all,,,,
 RCFD1253,na_ci_1253,RC-N,stock,all,,,,
 RCFD1256,na_ci_1256,RC-N,stock,all,,,,
@@ -436,7 +441,7 @@ ln_other_re,CROSS,stock,"Loans: Nonfarm Nonresidential RE [1480, F160+F161] ln_n
 ln_re_dom,RC-C,stock,"Loans secured by real estate in DOMESTIC offices: construction + farmland + 1-4 family + multifamily + nonfarm nonresidential (RCON components, era-aware). One definition throughout. Equals the reported total RCFD1410 for 100.00% of 041 bank-quarters where both exist; for 031 filers with foreign offices it is lower by their foreign-office real estate loans (3-6% in aggregate).",ln_condev + ln_farm + ln_famres + ln_multi + ln_other_re,thousands_usd,
 ln_re,RC-C,stock,"Loans secured by real estate, CONSOLIDATED: the reported total RCFD1410 where filed; else the sum of the consolidated components (031 column A, from 2013Q2; equals RCFD1410 for every bank that filed both); else ln_re_dom, which is the consolidated figure for a bank with no foreign offices (every 041/051 filer).",ln_re_1410.fillna(ln_condev_1_consol + ln_condev_2_consol + ln_farm_consol + ln_famres_heloc_consol + ln_famres_first_consol + ln_famres_jr_consol + ln_multi_consol + ln_other_re_1_consol + ln_other_re_2_consol).fillna(ln_re_dom),thousands_usd,
 ln_dep_pre01,CROSS,stock,,ln_dep_1 + ln_dep_2,,
-ln_dep,CROSS,stock,"Loans: Depository Institutions [1288, 1489+1755]",ln_dep_01.fillna(ln_dep_pre01),,
+ln_dep,RC-C,stock,"Loans to depository institutions and acceptances of other banks: the reported total RCFD1288 where filed; for 031 filers from 2011Q1, when the form carries only the components, B532+B533+B534+B536+B537 (equal to RCFD1288 for 100% of 031 filers in 2001Q4, 2005Q4 and 2010Q4); 1489+1755 before 2001. Until 2026-09 the 031 was a fabricated zero from 2011Q1 ($59bn at 2024Q4). A 041/051 blank is a zero (see the zero-fill rule).",ln_dep_01.fillna(ln_dep_us_branches_fgn + ln_dep_oth_us_combanks + ln_dep_oth_us_depinst + ln_dep_fgn_branches_us + ln_dep_oth_fgn_banks).fillna(ln_dep_pre01),thousands_usd,
 na_ci,CROSS,stock,"Nonaccrual: C&I loans. RCFD1608, else the 031 split US (1253) + non-US (1256) addressees; every row lacking 1608 carries both split codes. Replaces a fallback that added RCON1224 -- commercial AND ALL OTHER loans, broader than C&I -- and left 68,983 split-reported bank-quarters blank.",na_ci_1608.fillna(na_ci_1253 + na_ci_1256),,
 na_tot,CROSS,stock,"Total nonaccrual loans and leases. RCFD1403, else (where 1403 is missing, mostly 2011-2016) the sum of the RC-N nonaccrual column by category, each counted ONCE as its total or its breakdown, never both. Agricultural nonaccrual (1583) enters only for FFIEC 031 filers: on the 041 and 051 it is reported inside all other loans (5461), and counting it again overstated 11,732 bank-quarters by exactly that line. With it excluded the category sum matches the reported total for 100.00% of bank-quarters from 2017 on, on every form. Excludes the memorandum item RCONF663 (modified 1-4 family loans, already inside the 1-4 family lines). Blank, not zero, where no category is reported.",na_tot_1403.fillna((na_constr.fillna(0) + na_nfnres.fillna(0) + na_farmland.fillna(0) + na_heloc.fillna(0) + na_famres_first.fillna(0) + na_famres_junior.fillna(0) + na_multifam.fillna(0) + na_depinst.fillna(0) + na_agprod.where(form_type == 31).fillna(0) + na_ci.fillna(0) + na_cc.fillna(0) + na_consumer_noncc.fillna(0) + na_forgovt.fillna(0) + na_othln.fillna(0) + na_lease.fillna(0) + na_re_foreign.fillna(0)).where(na_constr.notna() | na_nfnres.notna() | na_farmland.notna() | na_heloc.notna() | na_famres_first.notna() | na_famres_junior.notna() | na_multifam.notna() | na_depinst.notna() | na_agprod.where(form_type == 31).notna() | na_ci.notna() | na_cc.notna() | na_consumer_noncc.notna() | na_forgovt.notna() | na_othln.notna() | na_lease.notna() | na_re_foreign.notna())),thousands_usd,
 uc_loans_sec_by_restate_07,CROSS,stock,,uc_loans_sec_by_restate_1 + uc_loans_sec_by_restate_2,,
@@ -452,11 +457,17 @@ ln_othernfnr,CROSS,stock,Alias for ln_other_re_2 (RCONF161),ln_other_re_2,,
 
 [ZERO_FILL]
 column,scope,reason
-ln_dep,always,Loans to depository institutions became conditional 2017Q1; 99.7pct of blanks were $0 (verified triage 2026-07-27)
+ln_dep,always,"A 041/051 blank is a zero: the line is 97pct zeros when fully reported (through 2016Q4 and again from 2023Q4), the share of banks with a positive amount is a steady 3-6pct across 2017Q1-2023Q3 while only the written zeros disappear; 99.7pct of blanks verified $0 (triage 2026-07-27). 031 filers are NOT covered by this rule in effect: their value is built from the five components, which are always filed."
 reven_inv,always,"RCFD3656 (revaluation/equity investments) introduced ~2005Q1, absent before; only ~3pct nonzero even after. Pre-2005 NaN nuked book_nonfin -> book_liquid -> dropped the whole pre-2005 window from dd3's NIE regression (pv_nie=0 for 1997-2004)."
 
 [INTERMEDIATE]
 column,reason
+ln_dep_01,"Reported total; published inside ln_dep. On the 041/051 its coverage follows whether a zero is written (eroding 2017Q1-2023Q3, back to 100pct at 2023Q4), which ln_dep resolves."
+ln_dep_us_branches_fgn,031 component of loans to depository institutions; published inside ln_dep.
+ln_dep_oth_us_combanks,031 component of loans to depository institutions; published inside ln_dep.
+ln_dep_oth_us_depinst,031 component of loans to depository institutions; published inside ln_dep.
+ln_dep_fgn_branches_us,031 component of loans to depository institutions; published inside ln_dep.
+ln_dep_oth_fgn_banks,031 component of loans to depository institutions; published inside ln_dep.
 ln_re_1410,Reported real-estate total; published inside ln_re.
 ln_condev_1_consol,Consolidated real-estate component; published inside ln_re.
 ln_condev_2_consol,Consolidated real-estate component; published inside ln_re.
