@@ -40,6 +40,38 @@ The Part II reconciliation items are *not* charge-off flows and are typed accord
 `alll_end` and `acl_oth_fin_assets` are balances (`stock`), while `alll_adjustments` and
 `writedowns_transfer_to_hfs` are flows.
 
+## Consumer loans across the 2001 and 2011 splits
+
+RI-B's consumer lines were redrawn twice, the same way RC-C's and RC-N's were:
+
+| era | charge-off codes | who reports |
+| --- | --- | --- |
+| through 2000Q4 | `4262` credit cards **and related plans**; the 031 also `4656` + `4657` (other) and the total `4639` | most forms: the card line only |
+| 2001–2010 | `B514` credit cards + `B516` other | everyone; `B514 + B516 = 4639` for 100% of banks |
+| 2011 on | `B514` + `K129` automobile + `K205` other | everyone |
+
+`K205` (and `K206` for recoveries) is **all** other consumer lending — "single payment,
+installment, all student loans, and revolving credit plans other than credit cards" — so it
+cannot be paired with `B514` to recover the pre-2001 "credit cards and related plans" line;
+that sum is consumer ex-automobile. The related plans have no code of their own after 2001.
+
+So, following the rule that a series whose definition changes does not keep one name:
+
+- **`co_consumer_tot` / `rec_consumer_tot`** — total consumer, the consistent series:
+  `B514 + K129 + K205` from 2011, `B514 + B516` for 2001–2010, the reported `4639` for 031
+  filers before 2001. Blank before 2001 for the other forms, which reported only the card
+  line.
+- **`co_consumer_oth` / `rec_consumer_oth`** — consumer other than credit cards:
+  `K129 + K205` from 2011, `B516` for 2001–2010, `4657` (031) before.
+- **`co_cc` / `rec_cc`** — credit cards alone, from 2001 (`B514` / `B515`).
+- **`co_cc_incl_revolving_pre01` / `rec_cc_incl_revolving_pre01`** — cards and related
+  plans, through 2000Q4 only.
+- **`co_auto`, `co_consumer_oth_ex_auto`** (and `rec_`) — the 2011 halves, from 2011 only.
+
+The stitch validator scores every handoff inside the series' own volatility (the largest,
+`co_consumer_tot` at 2001Q1, is robust z 2.6 at the start of the 2001 recession). The same
+construction gives `na_consumer_tot` on RC-N.
+
 ## Provisions: the flow that builds the allowance
 
 The allowance for loan and lease losses (`ll_res`, RCFD3123) is a balance-sheet **stock**.

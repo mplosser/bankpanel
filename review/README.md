@@ -16,7 +16,7 @@ descriptions and the code was the only way to tell them apart. You may know whic
 
 `verdict`: `ok` | `rename` (put the new name in `rename_to`) | `drop` | `question`
 
-## 02_derived.csv — 49 derived series
+## 02_derived.csv — 56 derived series
 
 Base columns are a code and a name. Derived columns are a *claim*. Sorted by `risk`:
 

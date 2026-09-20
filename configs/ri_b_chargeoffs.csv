@@ -67,13 +67,42 @@ RIADC897,co_nfnres_oth,RI-B,ytd,all,2007-03-31,,nonneg,LOANS SECURED BY OTHER NO
 RIADC898,rec_nfnres_oth,RI-B,ytd,all,2007-03-31,,any,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
 RIADK129,co_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ON AUTOMOBILE LOANS
 RIADK133,rec_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ON AUTOMOBILE LOANS
-RIADK205,co_consumer_oth,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN 
-RIADK206,rec_consumer_oth,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN C
+RIADK205,co_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,nonneg,CHARGE-OFFS ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN 
+RIADK206,rec_consumer_oth_ex_auto,RI-B,ytd,all,2011-03-31,,any,RECOVERIES ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN C
 RIAD3123,alll_end,RI-B,stock,all,,,,ALLOWANCE FOR LOAN AND LEASE LOSSES
 RIADC233,alll_adjustments,RI-B,ytd,all,2002-03-31,,,ADJUSTMENTS
 RIAD5523,writedowns_transfer_to_hfs,RI-B,ytd,all,2001-06-30,,nonneg,WRITE DOWNS ARISING FROM TRANSFER TO HFS
 RCFDJJ03,acl_oth_fin_assets,RI-B,stock,all,2020-03-31,,,Allowance for credit losses on other financial assets measured at amortized cost
+RIAD4262,co_cc_incl_revolving_4262,RI-B,ytd,041+051,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
+RIAD4656,co_cc_incl_revolving_4656,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+RIAD4657,co_consumer_oth_4657,RI-B,ytd,031,1984-03-31,2000-12-31,nonneg,CHARGE-OFFS ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+RIADB516,co_consumer_oth_b516,RI-B,ytd,all,2001-03-31,2010-12-31,nonneg,CHARGE-OFFS ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+RIAD4639,co_consumer_tot_4639,RI-B,ytd,all,1984-03-31,2010-12-31,nonneg,"CHARGE-OFFS ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+RIAD4263,rec_cc_incl_revolving_4263,RI-B,ytd,041+051,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; forms other than the 031)
+RIAD4666,rec_cc_incl_revolving_4666,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+RIAD4667,rec_consumer_oth_4667,RI-B,ytd,031,1984-03-31,2000-12-31,any,RECOVERIES ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+RIADB517,rec_consumer_oth_b517,RI-B,ytd,all,2001-03-31,2010-12-31,any,RECOVERIES ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+RIAD4609,rec_consumer_tot_4609,RI-B,ytd,all,1984-03-31,2010-12-31,any,"RECOVERIES ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+co_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, charge-offs, through 2000Q4 (RIAD4262; RIAD4656 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",co_cc_incl_revolving_4262.fillna(co_cc_incl_revolving_4656),thousands_usd,nonneg
+co_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, charge-offs: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4657).",(co_auto + co_consumer_oth_ex_auto).fillna(co_consumer_oth_b516).fillna(co_consumer_oth_4657),thousands_usd,nonneg
+co_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) charge-offs, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4639 for 100% of banks); the reported total RIAD4639 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(co_cc + co_auto + co_consumer_oth_ex_auto).fillna(co_cc + co_consumer_oth_b516).fillna(co_consumer_tot_4639),thousands_usd,nonneg
+rec_cc_incl_revolving_pre01,RI-B,ytd,"Credit cards AND related plans, recoveries, through 2000Q4 (RIAD4263; RIAD4666 on the 031). The post-2001 credit-card line excludes the related plans and nothing after 2001 isolates them, so this is published for its own era only.",rec_cc_incl_revolving_4263.fillna(rec_cc_incl_revolving_4666),thousands_usd,any
+rec_consumer_oth,RI-B,ytd,"Consumer loans other than credit cards, recoveries: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4667).",(rec_auto + rec_consumer_oth_ex_auto).fillna(rec_consumer_oth_b517).fillna(rec_consumer_oth_4667),thousands_usd,any
+rec_consumer_tot,RI-B,ytd,"Total consumer (loans to individuals) recoveries, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4609 for 100% of banks); the reported total RIAD4609 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(rec_cc + rec_auto + rec_consumer_oth_ex_auto).fillna(rec_cc + rec_consumer_oth_b517).fillna(rec_consumer_tot_4609),thousands_usd,any
 net_chargeoffs_tot,RI-B,ytd,Net charge-offs: gross charge-offs less recoveries,co_tot - rec_tot,thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+co_cc_incl_revolving_4262,Era piece of co_cc_incl_revolving_pre01.
+co_cc_incl_revolving_4656,Era piece of co_cc_incl_revolving_pre01.
+co_consumer_oth_4657,Pre-2001 031 piece of co_consumer_oth.
+co_consumer_oth_b516,2001-2010 piece of co_consumer_oth.
+co_consumer_tot_4639,Reported/derived total; piece of co_consumer_tot.
+rec_cc_incl_revolving_4263,Era piece of rec_cc_incl_revolving_pre01.
+rec_cc_incl_revolving_4666,Era piece of rec_cc_incl_revolving_pre01.
+rec_consumer_oth_4667,Pre-2001 031 piece of rec_consumer_oth.
+rec_consumer_oth_b517,2001-2010 piece of rec_consumer_oth.
+rec_consumer_tot_4609,Reported/derived total; piece of rec_consumer_tot.

@@ -74,6 +74,7 @@ breakdown, never both.**
 | leases | `_lease` | RCON1226 / 1227 / 1228, else the 031 split individuals + all other |
 | consumer other than credit cards | `_consumer_noncc` | auto + other from 2011 (K213/K216, K214/K217, K215/K218); the single line B578 / B579 / B580 for 2001–2010 |
 | agricultural | `_agprod` | 1594 / 1597 / 1583 — **031 filers only**; on the 041/051 it is inside all other loans |
+| consumer, total | `na_consumer_tot` | B577 + K215 + K218 from 2011; B577 + B580 for 2001–2010 (= the FDIC-derived 1981 for 100% of banks); 5385 + 5388 for 031 filers before 2001 |
 | farmland, revolving 1–4 family, closed-end first and junior liens, multifamily, credit cards, foreign governments, all other loans, real estate in foreign offices | as reported | single codes |
 
 Every "else" was tested where both sides are reported: the pre-2007 construction and

@@ -229,9 +229,11 @@ RCFDF170,pd90_lease_f170,RC-N,stock,031,2007-03-31,,,ALL OTHER LEASES - PAST DUE
 RCONB578,pd30_consumer_oth_b578,RC-N,stock,all,2001-03-31,2010-12-31,,LOANS TO INDIVIDUALS: OTHER (all consumer loans except credit cards) - PAST DUE 30-89 DAYS; replaced in 2011 by the automobile (K213) + other (K216) split
 RCONB579,pd90_consumer_oth_b579,RC-N,stock,all,2001-03-31,2010-12-31,,LOANS TO INDIVIDUALS: OTHER (all consumer loans except credit cards) - PAST DUE 90 DAYS OR MORE; replaced in 2011 by K214 + K217
 RCFDB580,na_consumer_oth_b580,RC-N,stock,all,2001-03-31,2010-12-31,,LOANS TO INDIVIDUALS: OTHER (all consumer loans except credit cards) - NONACCRUAL; replaced in 2011 by K215 + K218
+RCFD5388,na_consumer_oth_5388,RC-N,stock,031,1991-03-31,2000-12-31,,"LOANS TO INDIVIDUALS: OTHER (INCLUDING SINGLE PAYMENT, INSTALLMENT) - NONACCRUAL; 031 filers only, through 2000Q4"
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+na_consumer_tot,RC-N,stock,"Total consumer (loans to individuals) nonaccrual, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RCFD1981 for 100% of banks); for 031 filers before 2001, credit cards and related plans (5385) + other (5388). Blank before 2001 for other filers, which reported only the credit-card line. -3.2% over the same banks at 2011Q1.",(na_cc + na_auto + na_indiv).fillna(na_cc + na_consumer_oth_b580).fillna(na_cc_5385 + na_consumer_oth_5388),thousands_usd,
 pd30_consumer_noncc,RC-N,stock,"Consumer loans other than credit cards, past due 30 through 89 days and still accruing. From 2011Q1: automobile + other consumer; 2001Q1-2010Q4: the single other-consumer line RCONB578. Every pre-2011 mismatch against the reported total equalled this line exactly.",(pd30_auto + pd30_indiv).fillna(pd30_consumer_oth_b578),thousands_usd,
 pd90_consumer_noncc,RC-N,stock,"Consumer loans other than credit cards, past due 90 days or more and still accruing. From 2011Q1: automobile + other consumer; 2001Q1-2010Q4: the single other-consumer line RCONB579. Every pre-2011 mismatch against the reported total equalled this line exactly.",(pd90_auto + pd90_indiv).fillna(pd90_consumer_oth_b579),thousands_usd,
 na_consumer_noncc,RC-N,stock,"Consumer loans other than credit cards, nonaccrual. From 2011Q1: automobile + other consumer; 2001Q1-2010Q4: the single other-consumer line RCONB580 (RCFDB580). Every pre-2011 mismatch against the reported total equalled this line exactly.",(na_auto + na_indiv).fillna(na_consumer_oth_b580),thousands_usd,
@@ -262,6 +264,7 @@ na_nfnres_modified,RC-N,stock,"Modified loans secured by nonfarm nonresidential 
 
 [INTERMEDIATE]
 column,reason
+na_consumer_oth_5388,Pre-2001 031 other-consumer nonaccrual; published only inside na_consumer_tot.
 pd30_consumer_oth_b578,Pre-2011 other-consumer line; published only inside the consumer_noncc total.
 pd90_consumer_oth_b579,Pre-2011 other-consumer line; published only inside the consumer_noncc total.
 na_consumer_oth_b580,Pre-2011 other-consumer line; published only inside the consumer_noncc total.
