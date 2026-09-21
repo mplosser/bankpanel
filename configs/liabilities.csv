@@ -180,7 +180,7 @@ RCONHK17,qavg_dep_time_gt250k,RC-K,stock,all,,,,
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
 othbor_pre94,CROSS,stock,Other Borrowed Money (pre-1994) [RCFD2850+RCFD2910],othbor_1_pre94 + othbor_2,thousands_usd,
-ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap]",ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0),thousands_usd,
+ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report.",(ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0)).where(ffpurch.notna() | repo_sold.notna() | ffrepo_liab_2800.notna()),thousands_usd,
 othbor_9497,CROSS,stock,Other Borrowed Money (1994-1996) [RCFD2332+RCFD2333+RCFD2910],obm_less1yr+obm_gt1yr_pre97+othbor_2,thousands_usd,
 othbor_97,CROSS,stock,Other Borrowed Money (1997) [RCFD2332+RCFD2333],obm_less1yr+obm_gt1yr_pre97,thousands_usd,
 obm_gt1yr_9701,CROSS,stock,,obm_gt1yr_lt3yr+obm_gt3yr,thousands_usd,
