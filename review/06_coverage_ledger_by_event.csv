@@ -1,5 +1,5 @@
 event,quarters,rows,n_columns,example_columns,reason
-1,1985-06-30,3,3,"na_cc_incl_revolving_pre01, na_lease, pdl_ci_non_1",1985 vintage files (see 1986-03-31): burn-in year.
+1,1985-06-30,3,3,"na_cc_incl_revolving_pre01, na_lease, pdl_ci_non_1","Collection of these three RC-N detail items (C&I nonaccrual, credit-card nonaccrual, lease nonaccrual) begins in earnest at 1985Q2: 11pct of 041-bucket filers carry them in 1985Q1, 95pct from 1985Q2 on, steady afterwards. Start of collection at the very beginning of the panel, not a break."
 2,1987-03-31,1,1,oth_savings_dep_87,"Item introduced at 1987Q1 (other savings deposits, RCON6810 era)."
 3,1997-03-31,2,1,time_cod_gt100k_dom,"Large time-deposit item (time_cod_gt100k_dom) retired at 1997Q1, replaced by the 1997Q2 remaining-maturity schedule."
 4,1997-06-30,4,2,"debtsec_mat_repr_lte1yr, time_dep_lt100k_mat_lte1yr_9716","Items introduced at 1997Q2: the remaining-maturity/repricing schedule (debt securities, time deposits < $100k) begins with the 1997Q2 form revision."
