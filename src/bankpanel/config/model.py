@@ -44,7 +44,10 @@ FORM_SCOPES = frozenset({"031", "041", "051", "031+041", "041+051", "all"})
 #: When a ``[ZERO_FILL]`` rule applies. ``in_era`` generalizes the legacy
 #: ``prepare_structflags`` special case: never fabricate a zero before the quarter in
 #: which collection of the item actually began.
-ZERO_FILL_SCOPES = frozenset({"always", "in_era"})
+#: ``in_era_unless_reported`` needs a bank's whole year, so the year build applies it (see
+#: build/zerofill.py): a blank becomes 0 unless the bank reports the item in another quarter
+#: of that year, or no filer of its form reports it at all that year.
+ZERO_FILL_SCOPES = frozenset({"always", "in_era", "in_era_unless_reported"})
 
 #: How loudly a failed data-quality check speaks.
 SEVERITIES = frozenset({"error", "warning", "info"})

@@ -281,3 +281,43 @@ def test_level_one_without_a_foreign_office_schedule_is_not_a_031_filer():
     assert pd.isna(out.form_type.iloc[3])
     # Without the column at all (a synthetic or trimmed file) the level code decides.
     assert resolve_form_type(raw[["CALL8786"]]).form_type.tolist()[:3] == [31, 31, 41]
+
+
+# --- zero-fill that needs the bank's year --------------------------------------------
+
+
+def test_blank_is_zero_unless_the_bank_reports_that_year_or_the_form_never_does():
+    from bankpanel.build.zerofill import zero_fill_unless_reported
+
+    q = [pd.Timestamp(d) for d in ("2010-03-31", "2010-06-30", "2010-09-30", "2010-12-31")]
+    rows = []
+    for bank, form, vals in [
+        (1, 41, [np.nan] * 4),                      # has none: every blank is a zero
+        (2, 41, [np.nan, np.nan, np.nan, 2000.0]),  # annual filer: Q1-Q3 stay blank
+        (3, 41, [5.0, 6.0, np.nan, 7.0]),           # reports it: a blank is unknown
+        (6, 41, [1.0, 1.0, 1.0, 1.0]),              # a quarterly filer: the 041 collects it every quarter
+        (4, 51, [np.nan] * 4),                      # 051 collects it at Q4 only ...
+        (5, 51, [np.nan, np.nan, np.nan, 9.0]),     # ... so bank 4 is zero at Q4, blank before
+    ]:
+        rows += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "form_type": form, "x": v} for d, v in zip(q, vals)]
+    df = pd.DataFrame(rows)
+    n = zero_fill_unless_reported(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
+                                  era_start=pd.Timestamp("2010-06-30"))
+    got = {b: g.x.tolist() for b, g in df.groupby("RSSD_ID")}
+    assert np.isnan(got[1][0]) and got[1][1:] == [0.0, 0.0, 0.0]      # before the era: untouched
+    assert all(np.isnan(v) for v in got[2][:3]) and got[2][3] == 2000.0
+    assert np.isnan(got[3][2])
+    assert all(np.isnan(v) for v in got[4][:3]) and got[4][3] == 0.0
+    assert all(np.isnan(v) for v in got[5][:3])
+    assert n == 4
+
+
+def test_zero_fill_respects_the_forms_an_item_is_collected_on():
+    from bankpanel.build.zerofill import zero_fill_unless_reported
+
+    d = pd.Timestamp("2010-12-31")
+    df = pd.DataFrame({"RSSD_ID": [1, 2, 3, 4], "REPORTING_PERIOD": d, "form_type": [41, 41, 51, 51],
+                       "x": [3.0, np.nan, 8.0, np.nan]})
+    zero_fill_unless_reported(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
+                              era_start=pd.Timestamp("2005-09-30"), forms=frozenset({31, 41}))
+    assert df.x.tolist()[:3] == [3.0, 0.0, 8.0] and np.isnan(df.x.iloc[3])

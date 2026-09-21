@@ -227,3 +227,23 @@ Counted on the right line it falls to 2 rows. See [schedules/RC-N.md](schedules/
 Because these formulas are pure sums of non-negative quantities with no subtraction, the
 bias is one-directional: affected totals are too low, never too high.
 
+---
+
+## 11. Zeros the source stopped writing at 2005Q3
+
+From 2005Q3 the source files no longer write a zero for a conditional item a bank does not
+have. On 28 columns -- RC-T custody and fiduciary detail, RC-D trading detail, the
+agricultural past-due, charge-off and average-balance lines, and the credit-card fee lines
+-- the share of banks with a **non-zero** value is unchanged across 2005Q2 -> 2005Q3
+(custody 3.5% -> 3.3%, trading 0.2% -> 0.2%, agricultural nonaccrual 9.3% -> 8.6%) while
+the share reporting a zero collapses (86% -> 3%, 89% -> 3%, 86% -> 44%). This is not the
+2010Q4/2011Q1 provider change.
+
+Left as filed, those rows drop out of every sum and average after 2005Q3 but not before,
+which is a bias of its own. The panel therefore resolves the blank to zero from 2005Q3
+(`scope=in_era_unless_reported`, 9.5 million cells, no reported value altered), except
+where a zero would be invented: a bank that reports the item in another quarter of the year
+(Schedule RC-T is annual for smaller trust banks -- their Q1-Q3 stay blank), a quarter in
+which no filer of the bank's form reports the item, and forms outside the item's scope
+(the 051 has no credit-card fee lines, though two or three of its filers volunteer one).
+

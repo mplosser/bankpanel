@@ -75,7 +75,16 @@ see it. Write:
 
 ## `[ZERO_FILL]`
 
-`column, scope, reason` (+ optional `era_start`). `scope` is `always` or `in_era`.
+`column, scope, reason` (+ optional `era_start`). `scope` is `always`, `in_era` or
+`in_era_unless_reported`.
+
+`in_era_unless_reported` is for an item a bank is *expected* to file when it has any, and
+whose zeros the source stopped writing: a blank becomes 0 unless (a) the bank reports the
+item in another quarter of the same year -- annual or semiannual collection, where the
+quarterly value is unknown, not zero; (b) no filer of the bank's form reports it that
+quarter -- not collected then; or (c) the bank's form is outside the item's `form_scope`.
+It is never a general policy: each column needs its own rule and a measured reason. A zero
+is not put where the value is not required or not regularly reported.
 
 `reason` is required and enforced: zero-filling a measured value is a data-integrity
 decision. `in_era` never fabricates a zero before the quarter collection actually began.

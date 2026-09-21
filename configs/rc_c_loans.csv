@@ -38,8 +38,8 @@ RCON5370,ln_famres_first_adjrate,RC-C,stock,all,1991-03-31,,,ADJUSTABLE RATE CLO
 RCONF577,ln_famres_in_foreclosure,RC-C,stock,all,2008-03-31,,,LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES IN DOMESTIC OFFICES IN PROCESS OF FORECLOSURE (INCLUDED IN 
 RCONG376,ln_condev_interest_reserve,RC-C,stock,all,2009-06-30,,,CONSTRUCTION; LAND DEVELOPMENT; AND OTHER LAND LOANS IN DOMESTIC OFFICES WITH INTEREST RESERVES: AMOUNT OF LOA
 RCONLE75,ln_famres_heloc_converted_to_term,RC-C,stock,all,2021-03-31,,,Revolving; open-end lines of credit secured by 1-4 family residential properties that have converted to non-re
-RCFDC391,credit_card_fees_finance_charges_outstanding,RC-C,stock,031+041,2003-03-31,2025-06-30,,OUTSTANDING CREDIT CARD FEES & FINANCE CHARGES
-RCONF230,ln_closedend_negative_amortization,RC-C,stock,all,2007-03-31,2025-06-30,,TOTAL CARRYING AMOUNT OF CLOSED-END LOANS WITH NEGATIVE AMORTIZATION FEATURES SECURE BY 1-4 FAMILY RESIDENTIAL
+RCFDC391,credit_card_fees_finance_charges_outstanding,RC-C,stock,031+041,2003-03-31,,,OUTSTANDING CREDIT CARD FEES & FINANCE CHARGES
+RCONF230,ln_closedend_negative_amortization,RC-C,stock,all,2007-03-31,,,TOTAL CARRYING AMOUNT OF CLOSED-END LOANS WITH NEGATIVE AMORTIZATION FEATURES SECURE BY 1-4 FAMILY RESIDENTIAL
 RCON5564,n_ln_nfnres_lte100k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF $1
 RCON5565,amt_ln_nfnres_lte100k,RC-C,stock,all,1993-06-30,,,AMOUNT CURRENTLY OUTSTANDING OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH 
 RCON5566,n_ln_nfnres_100k_250k,RC-C,count,all,1993-06-30,,,NUMBER OF LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES (IN DOMESTIC OFFICES) WITH ORIGINAL AMOUNTS OF MO
@@ -75,6 +75,10 @@ amt_ln_smallbiz_nfnres,RC-C,stock,Amount outstanding of small nonfarm nonresiden
 amt_ln_smallbiz_tot,RC-C,stock,Total small business lending: small C&I plus small nonfarm nonresidential CRE,amt_ln_smallbiz_ci + amt_ln_smallbiz_nfnres,thousands_usd,
 amt_ln_smallfarm_tot,RC-C,stock,Total small farm lending: farmland plus agricultural production,amt_ln_farmland_lte100k + amt_ln_farmland_100k_250k + amt_ln_farmland_250k_500k + amt_ln_agprod_lte100k + amt_ln_agprod_100k_250k + amt_ln_agprod_250k_500k,thousands_usd,
 ln_oth,RC-C,stock,"Other loans: loans for purchasing or carrying securities plus all other loans not classified elsewhere in Schedule RC-C. Time-consistent total across the 2010Q1 redefinition -- the consolidated RCFD1563 where reported, otherwise RCONJ464, which from 2010Q1 is the domestic-office total on every form. The two overlap on only 28,490 bank-quarters (031 filers 2010-2024) and the consolidated figure is preferred there. Subcomponents (1545, 1564, J451) are not published separately. Coverage is 100% from 2001; before that only 031 filers report the line, reaching 19% in 1985-89.",ln_oth_consol.fillna(ln_oth_dom),thousands_usd,
+
+[ZERO_FILL]
+column,scope,reason,era_start
+credit_card_fees_finance_charges_outstanding,in_era_unless_reported,"From 2005Q3 the source files stop writing a zero for this conditional item when the bank has none: across 2005Q2 -> 2005Q3 the share of banks with a NON-ZERO value is unchanged while the written zeros vanish (measured on all 28 affected columns). A blank below a reporting threshold that is not discernible from the bank's other items is effectively zero, and dropping those rows biases every sum and average taken across 2005 (maintainer decision 2026-09-21). Not filled where the bank reports the item in another quarter of the same year (annual or semiannual collection, e.g. Schedule RC-T for smaller trust banks) or where no filer of the bank's form reports it that year (not collected on that form).",2005-09-30
 
 [INTERMEDIATE]
 column,reason

@@ -81,7 +81,7 @@ def detect_eras(
 
 def in_era_columns(cs: ConfigSet) -> list[str]:
     """Zero-fill targets that need a measured era start (no explicit one in the config)."""
-    return [r.column for r in cs.zero_fill if r.scope == "in_era" and not r.era_start]
+    return [r.column for r in cs.zero_fill if r.scope != "always" and not r.era_start]
 
 
 def write_era_cache(eras: dict[str, pd.Timestamp], path: str | Path) -> Path:
