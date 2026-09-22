@@ -194,6 +194,11 @@ def main() -> int:
                 zf.append([r[0], r[1], r[2], ""])   # era_start measured by the build, not copied
             else:
                 dropped.append({"config": cfg, "kind": "zero_fill", "name": r[0], "call_code": "", "y9c_code": "", "reason": "column not kept"})
+        zp = ROOT / "reference_data" / "y9c_zero_fill.csv"   # Y-9C-specific rules, each with a measured reason
+        if zp.exists():
+            for r in pd.read_csv(zp, dtype=str, keep_default_na=False).itertuples(index=False):
+                if r.config == cfg and r.column in kept_names:
+                    zf.append([r.column, r.scope, r.reason, r.era_start])
         if zf:
             lines += ["[ZERO_FILL]", ",".join(HEADER_OF["ZERO_FILL"]), *[row(*r) for r in zf], ""]
         ck = []

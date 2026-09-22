@@ -44,6 +44,11 @@ equity_incl_minorint_pre09,CROSS,stock,Equity Incl. Minority Interest [RCFD3210+
 equity_incl_minorint,CROSS,stock,Equity Incl. Minority Interest [RCFDG105 post09],equity_incl_minorint_09.fillna(equity_incl_minorint_pre09),thousands_usd,
 cet1,CROSS,stock,"Common equity tier 1 capital (RC-R Part I, from 2015Q1): RCFAP859 on the 031 / RCOAP859 on the 041 and 051; from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP859) instead. The two 031 columns are never filed together and cover every 031 filer in every quarter.",cet1_1.fillna(cet1_2),thousands_usd,
 
+[ZERO_FILL]
+column,scope,reason,era_start
+for_deposit_ib,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
+for_deposit_nib,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
+
 [INTERMEDIATE]
 column,reason
 cet1_1,"CET1 as filed under RCFA (031) / RCOA (041, 051); published inside cet1."
