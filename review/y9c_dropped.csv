@@ -1,5 +1,4 @@
 config,kind,name,call_code,y9c_code,reason
-assets.csv,base,ibb,RCFD0071,BHCK0071,translated code absent from every Y-9C quarter
 assets.csv,base,deriv_pos_fv,RCFDC010,BHCKC010,translated code absent from every Y-9C quarter
 assets.csv,base,debt_security_maturity_3mo_less,RCFDA549,BHCKA549,translated code absent from every Y-9C quarter
 assets.csv,base,debt_security_maturity_3mo_12mo,RCFDA550,BHCKA550,translated code absent from every Y-9C quarter
@@ -15,8 +14,6 @@ assets.csv,base,res_mbs_maturity_5y_15y,RCFDA559,BHCKA559,translated code absent
 assets.csv,base,res_mbs_maturity_15y_over,RCFDA560,BHCKA560,translated code absent from every Y-9C quarter
 assets.csv,base,other_mbs_maturity_3y_less,RCFDA561,BHCKA561,translated code absent from every Y-9C quarter
 assets.csv,base,other_mbs_maturity_3y_more,RCFDA562,BHCKA562,translated code absent from every Y-9C quarter
-assets.csv,base,htm_oth_debt_ac,RCFD1774,BHCK1774,translated code absent from every Y-9C quarter
-assets.csv,base,htm_oth_debt_fv,RCFD1775,BHCK1775,translated code absent from every Y-9C quarter
 assets.csv,base,res_loans_maturity_3mo_less,RCONA564,BHDMA564,translated code absent from every Y-9C quarter
 assets.csv,base,res_loans_maturity_3mo_12mo,RCONA565,BHDMA565,translated code absent from every Y-9C quarter
 assets.csv,base,res_loans_maturity_1y_3y,RCONA566,BHDMA566,translated code absent from every Y-9C quarter
@@ -36,7 +33,6 @@ assets.csv,base,other_loans_maturity_3y_5y_post11,RCONA573,BHDMA573,translated c
 assets.csv,base,other_loans_maturity_5y_15y_post11,RCONA574,BHDMA574,translated code absent from every Y-9C quarter
 assets.csv,base,other_loans_maturity_15y_over_post11,RCONA575,BHDMA575,translated code absent from every Y-9C quarter
 assets.csv,base,hfs_famres_ln_18_src,RCONFT05,BHDMFT05,translated code absent from every Y-9C quarter
-assets.csv,base,srv_ass_mrt_fv,RCFDA590,BHCKA590,translated code absent from every Y-9C quarter
 assets.csv,base,na_famres_first,RCONC229,BHDMC229,translated code absent from every Y-9C quarter
 assets.csv,base,na_famres_closed,RCON5403,BHDM5403,translated code absent from every Y-9C quarter
 assets.csv,base,na_re_f176,RCONF176,BHDMF176,translated code absent from every Y-9C quarter
@@ -62,7 +58,6 @@ assets.csv,base,na_ci_1256,RCFD1256,BHCK1256,translated code absent from every Y
 assets.csv,base,na_cc_1220,RCON1220,BHDM1220,translated code absent from every Y-9C quarter
 assets.csv,base,uc_ln_dep_fi,RCFDPV10,BHCKPV10,translated code absent from every Y-9C quarter
 assets.csv,base,uc_ln_non_dep_fi,RCFDPV11,BHCKPV11,translated code absent from every Y-9C quarter
-assets.csv,base,accrued_int_loans_pre01,RCFD2164,BHCK2164,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_1,RCFD1676,BHCK1676,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_2,RCFD1681,BHCK1681,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_3,RCFD1694,BHCK1694,translated code absent from every Y-9C quarter
@@ -91,13 +86,9 @@ income_statement.csv,base,ytd_int_inc_ln_cons_pre01,RIAD4055,BHCK4055,translated
 income_statement.csv,base,ytd_int_inc_ln_ci,RIAD4012,BHCK4012,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_trans_accts_dom,RIAD4508,BHCK4508,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_savings_dep_dom_01,RIAD0093,BHCK0093,translated code absent from every Y-9C quarter
-income_statement.csv,base,ytd_int_exp_subdebt,RIAD4200,BHCK4200,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_oth_time_dep,RIAD4512,BHCK4512,translated code absent from every Y-9C quarter
-income_statement.csv,base,ytd_nonint_inc_srv_chrg_dep,RIAD4080,BHCK4080,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_nonint_inc_oth_fee,RIAD5407,BHCK5407,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_nonint_inc_all_oth,RIAD5408,BHCK5408,translated code absent from every Y-9C quarter
-income_statement.csv,base,ytd_nonint_inc_net_gain_ll,RIAD5416,BHCK5416,translated code absent from every Y-9C quarter
-income_statement.csv,base,ytd_nonint_inc_oreo,RIAD5415,BHCK5415,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_savings_dep_dom_1_pre01,RIAD4509,BHCK4509,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_savings_dep_dom_2_pre01,RIAD4511,BHCK4511,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_lndom_re_agg_033,RIAD4246,BHCK4246,translated code absent from every Y-9C quarter
@@ -105,8 +96,6 @@ income_statement.csv,base,ytd_int_inc_ln_cc,RIADB485,BHCKB485,translated code ab
 income_statement.csv,base,ytd_int_inc_ln_cons,RIADB486,BHCKB486,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_tradrev_inc_2_pre01,RIAD4075,BHCK4075,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_ln_cc_pre01_033034,RIAD4248,BHCK4248,translated code absent from every Y-9C quarter
-liabilities.csv,base,subdebt,RCFD3200,BHCK3200,translated code absent from every Y-9C quarter
-liabilities.csv,base,liab_oth_2930,RCFD2930,BHCK2930,translated code absent from every Y-9C quarter
 liabilities.csv,base,operating_lease_liab,RCFDLB56,BHCKLB56,translated code absent from every Y-9C quarter
 liabilities.csv,base,fhlba_rem_mat_repr_dt_lt1yr,RCFDF055,BHCKF055,translated code absent from every Y-9C quarter
 liabilities.csv,base,fhlba_rem_mat_repr_dt_lt3yr,RCFDF056,BHCKF056,translated code absent from every Y-9C quarter
@@ -131,7 +120,6 @@ liabilities.csv,base,stable_deposits,RCON2385,BHDM2385,translated code absent fr
 liabilities.csv,base,ind_for_dep_01,RCFNB553,BHFNB553,translated code absent from every Y-9C quarter
 liabilities.csv,base,us_bank_for_dep_01,RCFNB554,BHFNB554,translated code absent from every Y-9C quarter
 liabilities.csv,base,for_bank_for_dep,RCFN2625,BHFN2625,translated code absent from every Y-9C quarter
-liabilities.csv,base,foreign_dep,RCFN2200,BHFN2200,translated code absent from every Y-9C quarter
 liabilities.csv,base,brokered_tot_dep,RCON2365,BHDM2365,translated code absent from every Y-9C quarter
 liabilities.csv,base,mmda,RCON6810,BHDM6810,translated code absent from every Y-9C quarter
 liabilities.csv,base,oth_savings_dep_87,RCON0352,BHDM0352,translated code absent from every Y-9C quarter
@@ -225,7 +213,6 @@ liabilities.csv,base,brokered_reciprocal_dep,RCONG803,BHDMG803,translated code a
 liabilities.csv,base,tot_reciprocal_dep,RCONJH83,BHDMJH83,translated code absent from every Y-9C quarter
 liabilities.csv,base,list_serv_dep,RCONK223,BHDMK223,translated code absent from every Y-9C quarter
 liabilities.csv,base,brokered_lt250k_dep_17,RCONHK05,BHDMHK05,translated code absent from every Y-9C quarter
-liabilities.csv,base,othbor_1_pre94,RCFD2850,BHCK2850,translated code absent from every Y-9C quarter
 liabilities.csv,base,ind_dep_non_trans_acc_pre01,RCON2346,BHDM2346,translated code absent from every Y-9C quarter
 liabilities.csv,base,ind_dep_trans_acc_pre01,RCON2201,BHDM2201,translated code absent from every Y-9C quarter
 liabilities.csv,base,demanddep_accounts,RCON2185,BHDM2185,translated code absent from every Y-9C quarter
@@ -302,7 +289,6 @@ rc_e_deposits.csv,base,sweep_dep_nonaffiliate_insured,RCONMT91,BHDMMT91,translat
 rc_e_deposits.csv,base,sweep_dep_nonaffiliate_uninsured,RCONMT93,BHDMMT93,translated code absent from every Y-9C quarter
 rc_e_deposits.csv,base,sweep_dep_not_brokered_tot,RCONMT95,BHDMMT95,translated code absent from every Y-9C quarter
 rc_e_deposits.csv,base,offers_consumer_dep_products,RCONP752,BHDMP752,translated code absent from every Y-9C quarter
-rc_k_quarterly_avg.csv,base,qavg_othbor,RCFD3355,BHCK3355,translated code absent from every Y-9C quarter
 rc_k_quarterly_avg.csv,base,qavg_ibb,RCFD3381,BHCK3381,translated code absent from every Y-9C quarter
 rc_n_past_due.csv,base,pd30_nondep_fin,RCFDPV23,BHCKPV23,translated code absent from every Y-9C quarter
 rc_n_past_due.csv,base,pd90_nondep_fin,RCFDPV24,BHCKPV24,translated code absent from every Y-9C quarter
@@ -356,13 +342,6 @@ rc_r_capital.csv,base,assets_for_leverage_baselI,RCFDL138,BHCKL138,translated co
 ri_a_equity.csv,base,ytd_capital_stock_net,RIADB509,BHCKB509,translated code absent from every Y-9C quarter
 ri_a_equity.csv,base,ytd_treasury_stock_net,RIADB510,BHCKB510,translated code absent from every Y-9C quarter
 ri_a_equity.csv,base,ytd_oth_stockholder_transactions,RIAD4415,BHCK4415,translated code absent from every Y-9C quarter
-ri_a_equity.csv,base,ytd_div_preferred,RIAD4470,BHCK4470,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_co_lease,RIAD4266,BHCK4266,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_rec_lease,RIAD4267,BHCK4267,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_co_depinst,RIAD4481,BHCK4481,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_rec_depinst,RIAD4482,BHCK4482,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_rec_ci,RIAD4608,BHCK4608,translated code absent from every Y-9C quarter
-ri_b_chargeoffs.csv,base,ytd_co_ci,RIAD4638,BHCK4638,translated code absent from every Y-9C quarter
 ri_b_chargeoffs.csv,base,ytd_co_cc_incl_revolving_4262,RIAD4262,BHCK4262,translated code absent from every Y-9C quarter
 ri_b_chargeoffs.csv,base,ytd_rec_cc_incl_revolving_4263,RIAD4263,BHCK4263,translated code absent from every Y-9C quarter
 assets.csv,derived,na_tot,,,formula reads form_type (no form types on the Y-9C); needs its own Y-9C formula
@@ -392,7 +371,6 @@ assets.csv,derived,ln_other_re_08,,,"input(s) not on the Y-9C: ln_other_re_1, ln
 assets.csv,derived,ln_other_re,,,input(s) not on the Y-9C: ln_other_re_08
 assets.csv,derived,ln_re_dom,,,"input(s) not on the Y-9C: ln_condev, ln_famres, ln_other_re"
 assets.csv,derived,ln_re,,,input(s) not on the Y-9C: ln_re_dom
-assets.csv,derived,ln_dep,,,"input(s) not on the Y-9C: ln_dep_fgn_branches_us, ln_dep_oth_fgn_banks, ln_dep_oth_us_combanks, ln_dep_oth_us_depinst, ln_dep_us_branches_fgn"
 assets.csv,derived,na_ci,,,"input(s) not on the Y-9C: na_ci_1253, na_ci_1256"
 assets.csv,derived,uc_other_2_24,,,"input(s) not on the Y-9C: uc_ln_dep_fi, uc_ln_non_dep_fi"
 assets.csv,derived,uc_other_2,,,input(s) not on the Y-9C: uc_other_2_24
@@ -409,13 +387,10 @@ income_statement.csv,derived,ytd_int_exp_savings_dep_dom,,,"input(s) not on the 
 income_statement.csv,derived,ytd_int_inc_ln_indiv,,,"input(s) not on the Y-9C: ytd_int_inc_ln_cc, ytd_int_inc_ln_cons"
 income_statement.csv,derived,ytd_tradrev_inc_pre01,,,input(s) not on the Y-9C: ytd_tradrev_inc_2_pre01
 income_statement.csv,derived,ytd_nonint_inc_oth_pre01,,,"input(s) not on the Y-9C: ytd_nonint_inc_all_oth, ytd_nonint_inc_oth_fee"
-income_statement.csv,derived,ytd_nonint_inc_sales,,,"input(s) not on the Y-9C: ytd_nonint_inc_net_gain_ll, ytd_nonint_inc_oreo"
-liabilities.csv,derived,othbor_pre94,,,input(s) not on the Y-9C: othbor_1_pre94
 liabilities.csv,derived,obm_gt1yr_9701,,,"input(s) not on the Y-9C: obm_gt1yr_lt3yr, obm_gt3yr"
 liabilities.csv,derived,obm_gt1yr,,,input(s) not on the Y-9C: obm_gt1yr_9701
 liabilities.csv,derived,othbor_9701,,,"input(s) not on the Y-9C: obm_gt1yr_lt3yr, obm_gt3yr"
-liabilities.csv,derived,othbor_liab,,,"input(s) not on the Y-9C: othbor_9701, othbor_pre94"
-liabilities.csv,derived,liab_oth,,,input(s) not on the Y-9C: liab_oth_2930
+liabilities.csv,derived,othbor_liab,,,input(s) not on the Y-9C: othbor_9701
 liabilities.csv,derived,ind_dep_non_trans_acc,,,"input(s) not on the Y-9C: ind_dep_non_trans_acc_01, ind_dep_non_trans_acc_pre01"
 liabilities.csv,derived,ind_dep_trans_acc,,,"input(s) not on the Y-9C: ind_dep_trans_acc_01, ind_dep_trans_acc_pre01"
 liabilities.csv,derived,us_bank_dep_non_trans_acc_pre01,,,"input(s) not on the Y-9C: us_bank_dep_non_trans_acc_1_pre01, us_bank_dep_non_trans_acc_2_pre01"
@@ -462,19 +437,18 @@ rc_n_past_due.csv,derived,na_depinst,,,input(s) not on the Y-9C: na_depinst_b836
 rc_n_past_due.csv,derived,na_lease,,,input(s) not on the Y-9C: na_lease_1228
 rc_n_past_due.csv,derived,npl_tot,,,"input(s) not on the Y-9C: na_tot, pd90_tot"
 rc_n_past_due.csv,derived,pastdue_tot,,,"input(s) not on the Y-9C: na_tot, pd30_tot, pd90_tot"
-ri_a_equity.csv,derived,ytd_div_tot,,,input(s) not on the Y-9C: ytd_div_preferred
 ri_b_chargeoffs.csv,derived,ytd_co_cc_incl_revolving_pre01,,,input(s) not on the Y-9C: ytd_co_cc_incl_revolving_4262
 ri_b_chargeoffs.csv,derived,ytd_rec_cc_incl_revolving_pre01,,,input(s) not on the Y-9C: ytd_rec_cc_incl_revolving_4263
-assets.csv,zero_fill,custody_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,custody_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,fidu_managed_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,fidu_managed_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,fidu_nonmanaged_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,fidu_nonmanaged_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,na_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,qavg_loans_ag,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-assets.csv,zero_fill,ln_dep,,,column not kept
-assets.csv,intermediate,ln_dep_01,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,zero_fill,custody_accounts,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,custody_assets,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,fidu_managed_accounts,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,fidu_managed_assets,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,fidu_nonmanaged_accounts,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,fidu_nonmanaged_assets,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,na_agprod,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,qavg_loans_ag,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,ln_dep,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+assets.csv,zero_fill,reven_inv,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 assets.csv,intermediate,ln_re_1410,,,withheld on the Call Report but its consumer was dropped here; published instead
 assets.csv,intermediate,ln_condev_1_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
 assets.csv,intermediate,ln_condev_2_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
@@ -485,32 +459,33 @@ assets.csv,intermediate,ln_famres_jr_consol,,,withheld on the Call Report but it
 assets.csv,intermediate,ln_multi_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
 assets.csv,intermediate,ln_other_re_1_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
 assets.csv,intermediate,ln_other_re_2_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
-liabilities.csv,zero_fill,custody_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-liabilities.csv,zero_fill,custody_safe_accts_non_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-liabilities.csv,zero_fill,tot_fiduc_accts_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-liabilities.csv,zero_fill,tot_fiduc_accts_non_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-liabilities.csv,zero_fill,tot_fiduc_mngd_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-liabilities.csv,zero_fill,tot_fiduc_non_mngd_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+income_statement.csv,zero_fill,ytd_structflag_business_combo,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+income_statement.csv,zero_fill,ytd_structflag_restatement,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+income_statement.csv,zero_fill,ytd_structflag_discontinued_ops,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,custody_accts_num,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,custody_safe_accts_non_mngd_ass,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,tot_fiduc_accts_mngd_ass,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,tot_fiduc_accts_non_mngd_ass,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,tot_fiduc_mngd_accts_num,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+liabilities.csv,zero_fill,tot_fiduc_non_mngd_accts_num,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 quality_checks.csv,check,nonaccrual_le_loans,,,input(s) not kept
-quality_checks.csv,check,chargeoff_ci_le_total,,,input(s) not kept
-quality_checks.csv,check,recovery_ci_le_total,,,input(s) not kept
 quality_checks.csv,check,pastdue30_ci_le_total,,,input(s) not kept
 quality_checks.csv,check,npl_le_loans,,,input(s) not kept
 quality_checks.csv,check,smallbiz_le_loans,,,input(s) not kept
 quality_checks.csv,check,sweep_le_deposits,,,input(s) not kept
 quality_checks.csv,check,deposits_le_assets,,,input(s) not kept
-rc_c_loans.csv,zero_fill,credit_card_fees_finance_charges_outstanding,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_c_loans.csv,zero_fill,credit_card_fees_finance_charges_outstanding,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 rc_c_loans.csv,intermediate,ln_oth_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
-rc_d_trading.csv,zero_fill,trad_liab_short_positions,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_oth_dom_off,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_revaluation_gains,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_revaluation_losses,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_revaluation_net,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_states,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_usagency,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_d_trading.csv,zero_fill,trad_ust,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_n_past_due.csv,zero_fill,pd30_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-rc_n_past_due.csv,zero_fill,pd90_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_liab_short_positions,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_oth_dom_off,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_revaluation_gains,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_revaluation_losses,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_revaluation_net,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_states,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_usagency,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_d_trading.csv,zero_fill,trad_ust,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_n_past_due.csv,zero_fill,pd30_agprod,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+rc_n_past_due.csv,zero_fill,pd90_agprod,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 rc_n_past_due.csv,intermediate,pd30_depinst_5377,,,withheld on the Call Report but its consumer was dropped here; published instead
 rc_n_past_due.csv,intermediate,pd30_depinst_5380,,,withheld on the Call Report but its consumer was dropped here; published instead
 rc_n_past_due.csv,intermediate,pd90_depinst_5378,,,withheld on the Call Report but its consumer was dropped here; published instead
@@ -524,8 +499,8 @@ rc_n_past_due.csv,intermediate,na_dep_5379,,,withheld on the Call Report but its
 rc_n_past_due.csv,intermediate,na_dep_5382,,,withheld on the Call Report but its consumer was dropped here; published instead
 rc_n_past_due.csv,intermediate,na_lease_f168,,,withheld on the Call Report but its consumer was dropped here; published instead
 rc_n_past_due.csv,intermediate,na_lease_f171,,,withheld on the Call Report but its consumer was dropped here; published instead
-ri_b_chargeoffs.csv,zero_fill,ytd_cc_fees_reversed,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-ri_b_chargeoffs.csv,zero_fill,ytd_co_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
-ri_b_chargeoffs.csv,zero_fill,ytd_rec_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+ri_b_chargeoffs.csv,zero_fill,ytd_cc_fees_reversed,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+ri_b_chargeoffs.csv,zero_fill,ytd_co_agprod,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
+ri_b_chargeoffs.csv,zero_fill,ytd_rec_agprod,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 ri_b_chargeoffs.csv,intermediate,ytd_co_cc_incl_revolving_4656,,,withheld on the Call Report but its consumer was dropped here; published instead
 ri_b_chargeoffs.csv,intermediate,ytd_rec_cc_incl_revolving_4666,,,withheld on the Call Report but its consumer was dropped here; published instead

@@ -13,6 +13,8 @@ BHCK3584,ytd_co_farmland,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY F
 BHCK3585,ytd_rec_farmland,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY FARMLAND
 BHCK3588,ytd_co_multifam,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
 BHCK3589,ytd_rec_multifam,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+BHCK4654,ytd_co_depinst,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
+BHCK4664,ytd_rec_depinst,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
 BHCK4605,ytd_rec_tot,HI-B,ytd,all,,,any,RECOVERIES ON ALLOWANCE FOR LOAN AND LEASE LOSSES
 BHCK4627,ytd_rec_forgovt,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
 BHCK4628,ytd_rec_othln,HI-B,ytd,all,,,any,RECOVERIES ON ALL OTHER LOANS
@@ -56,6 +58,16 @@ BHCK4666,ytd_rec_cc_incl_revolving_4666,HI-B,ytd,all,,,any,RECOVERIES ON CREDIT 
 BHCK4667,ytd_rec_consumer_oth_4667,HI-B,ytd,all,,,any,RECOVERIES ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
 BHCKB517,ytd_rec_consumer_oth_b517,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
 BHCK4609,ytd_rec_consumer_tot_4609,HI-B,ytd,all,,,any,"RECOVERIES ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+BHCK4645,ytd_co_ci_us,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES
+BHCK4646,ytd_co_ci_nonus,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON COMMERCIAL AND INDUSTRIAL LOANS TO NON-U.S. ADDRESSEES
+BHCK4617,ytd_rec_ci_us,HI-B,ytd,all,,,any,RECOVERIES ON COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES
+BHCK4618,ytd_rec_ci_nonus,HI-B,ytd,all,,,any,RECOVERIES ON COMMERCIAL AND INDUSTRIAL LOANS TO NON-U.S. ADDRESSEES
+BHCK4658,ytd_co_lease_us_pre07,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LEASE FINANCING RECEIVABLES OF U.S. ADDRESSEES (to 2006Q4)
+BHCK4659,ytd_co_lease_nonus_pre07,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LEASE FINANCING RECEIVABLES OF NON-U.S. ADDRESSEES (to 2006Q4)
+BHCK4668,ytd_rec_lease_us_pre07,HI-B,ytd,all,,,any,RECOVERIES ON LEASE FINANCING RECEIVABLES OF U.S. ADDRESSEES (to 2006Q4)
+BHCK4669,ytd_rec_lease_nonus_pre07,HI-B,ytd,all,,,any,RECOVERIES ON LEASE FINANCING RECEIVABLES OF NON-U.S. ADDRESSEES (to 2006Q4)
+BHCKC880,ytd_co_lease_oth_07,HI-B,ytd,all,,,nonneg,CHARGE-OFFS OF ALL OTHER LEASE FINANCING RECEIVABLES (2007-)
+BHCKF188,ytd_rec_lease_oth_07,HI-B,ytd,all,,,any,RECOVERIES OF ALL OTHER LEASE FINANCING RECEIVABLES (2007-)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
@@ -64,6 +76,10 @@ ytd_co_consumer_tot,HI-B,ytd,"Total consumer (loans to individuals) charge-offs,
 ytd_rec_consumer_oth,HI-B,ytd,"Consumer loans other than credit cards, recoveries: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4667).",(ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_oth_4667),thousands_usd,any
 ytd_rec_consumer_tot,HI-B,ytd,"Total consumer (loans to individuals) recoveries, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4609 for 100% of banks); the reported total RIAD4609 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(ytd_rec_cc + ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_cc + ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_tot_4609),thousands_usd,any
 ytd_net_chargeoffs_tot,HI-B,ytd,Net charge-offs: gross charge-offs less recoveries,ytd_co_tot - ytd_rec_tot,thousands_usd,
+ytd_co_ci,HI-B,ytd,"ytd_co_ci on the FR Y-9C, same definition as the Call Report column. Y-9C: charge-offs on C&I loans are filed by addressee (BHCK4645 U.S. + BHCK4646 non-U.S.).",ytd_co_ci_us + ytd_co_ci_nonus.fillna(0),thousands_usd,nonneg
+ytd_rec_ci,HI-B,ytd,"ytd_rec_ci on the FR Y-9C, same definition as the Call Report column. Y-9C: recoveries on C&I loans by addressee (BHCK4617 + BHCK4618).",ytd_rec_ci_us + ytd_rec_ci_nonus.fillna(0),thousands_usd,any
+ytd_co_lease,HI-B,ytd,"ytd_co_lease on the FR Y-9C, same definition as the Call Report column. Y-9C: by addressee (BHCK4658+4659) to 2006Q4; 'all other lease financing receivables' (BHCKC880) from 2007 (the leases-to-individuals line is separate from 2007).",(ytd_co_lease_us_pre07 + ytd_co_lease_nonus_pre07.fillna(0)).fillna(ytd_co_lease_oth_07),thousands_usd,nonneg
+ytd_rec_lease,HI-B,ytd,"ytd_rec_lease on the FR Y-9C, same definition as the Call Report column. Y-9C: by addressee (BHCK4668+4669) to 2006Q4; BHCKF188 from 2007.",(ytd_rec_lease_us_pre07 + ytd_rec_lease_nonus_pre07.fillna(0)).fillna(ytd_rec_lease_oth_07),thousands_usd,any
 
 [INTERMEDIATE]
 column,reason

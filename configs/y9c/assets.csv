@@ -113,6 +113,7 @@ BHCK2160,oth_assets_2160,HC,stock,all,,,,
 BHCK2155,accept_cust,HC,stock,all,,,,
 BHCK2170,assets,HC,stock,all,,,,
 BHCK3164,srv_ass_mrt,HC-M,stock,all,,,,
+BHCK6438,srv_ass_mrt_fv,HC-M,stock,all,,,,
 BHCK1752,eq_inv_wo_fv,HC-F,stock,all,,,,
 BHCAP838,aoci_opt_out,HC-R,stock,all,,,,
 BHCK3507,dsec_oth_ass_non,HC-N,stock,all,,,,
@@ -181,6 +182,7 @@ BHCK3818,uc_other_pre10,HC,stock,all,,,,
 BHCKJ457,uc_other_1,HC-L,stock,all,,,,
 BHCKJ458,uc_other_2_src,HC-L,stock,all,,,,
 BHCKJ459,uc_other_3,HC-L,stock,all,,,,
+BHCK5397,accrued_int_loans_pre01,HC,stock,all,,,,INCOME EARNED NOT COLLECTED ON LOANS (through 2000Q4). Narrower than accrued_int: loans only. Not stitched to it.
 BHCKA519,io_strip_1_9718,HC-F,stock,all,,,,
 BHCKA520,io_strip_2_9718,HC-F,stock,all,,,,
 BHCK1289,ac_htm_agency_1,HC-B,stock,all,,,,
@@ -241,6 +243,14 @@ BHCK3465,qavg_loans_famres,HC,stock,all,,,,
 BHCK3466,qavg_loans_othre,HC,stock,all,,,,
 BHCK0276,ffsold_8801,HC,stock,all,,,,FEDERAL FUNDS SOLD (Y-9C 1988Q2-2001Q4; the combined BHCK1350 is filed before and again in 2001Q4)
 BHCK0277,repo_purch_8801,HC,stock,all,,,,SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL (Y-9C 1988Q2-2001Q4)
+BHCK0395,ibb_us,HC,stock,all,,,,INTEREST-BEARING BALANCES IN U.S. OFFICES
+BHCK0397,ibb_foreign,HC,stock,all,,,,"INTEREST-BEARING BALANCES IN FOREIGN OFFICES, EDGE AND AGREEMENT SUBSIDIARIES, AND IBFS"
+BHCK1742,htm_oth_debt_foreign_ac,HC-B,stock,all,,,,AMORTIZED COST OF HELD-TO-MATURITY OTHER FOREIGN DEBT SECURITIES
+BHCK1743,htm_oth_debt_foreign_fv,HC-B,stock,all,,,,FAIR VALUE OF HELD-TO-MATURITY OTHER FOREIGN DEBT SECURITIES
+BHCK1737,htm_oth_debt_dom_ac,HC-B,stock,all,,,,AMORTIZED COST OF OTHER HELD-TO-MATURITY DOMESTIC DEBT SECURITIES
+BHCK1738,htm_oth_debt_dom_fv,HC-B,stock,all,,,,FAIR VALUE OF OTHER HELD-TO-MATURITY DOMESTIC DEBT SECURITIES
+BHCK1292,ln_dep_us_banks,HC-C,stock,all,,,,LOANS TO U.S. BANKS AND OTHER U.S. DEPOSITORY INSTITUTIONS (1996-)
+BHCK1296,ln_dep_foreign_banks,HC-C,stock,all,,,,LOANS TO FOREIGN BANKS (1996-)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
@@ -320,10 +330,14 @@ ln_consumer_oth,CROSS,stock,"Consumer loans other than credit cards and revolvin
 ln_famres_other,CROSS,stock,Loans: Family RE,ln_famres_other_alt.fillna(ln_famres_first + ln_famres_jr),,
 ln_famres_01,CROSS,stock,,ln_famres_heloc + ln_famres_other,,
 ln_dep_pre01,CROSS,stock,,ln_dep_1 + ln_dep_2,,
+ln_dep,HC-C,stock,"Loans to depository institutions and acceptances of other banks: the reported total RCFD1288 where filed; for 031 filers from 2011Q1, when the form carries only the components, B532+B533+B534+B536+B537 (equal to RCFD1288 for 100% of 031 filers in 2001Q4, 2005Q4 and 2010Q4); 1489+1755 before 2001. Until 2026-09 the 031 was a fabricated zero from 2011Q1 ($59bn at 2024Q4). A 041/051 blank is a zero (see the zero-fill rule). Y-9C: the total BHCK1288 (1996-) where filed, else U.S. banks (BHCK1292) + foreign banks (BHCK1296); BHCK1489 (+1755 where filed) before 1996.",ln_dep_01.fillna(ln_dep_us_banks + ln_dep_foreign_banks.fillna(0)).fillna(ln_dep_1 + ln_dep_2.fillna(0)),thousands_usd,
 uc_loans_sec_by_restate_07,CROSS,stock,,uc_loans_sec_by_restate_1 + uc_loans_sec_by_restate_2,,
 uc_re,CROSS,stock,"Commitments: Real Estate [RCFD3816, F164+F165] uc_loans_sec_by_restate",uc_loans_sec_by_restate_pre07.fillna(uc_loans_sec_by_restate_07),,
+ibb,HC,stock,"ibb on the FR Y-9C, same definition as the Call Report column. Y-9C: interest-bearing balances are filed as U.S. offices (BHCK0395) + foreign offices (BHCK0397); their sum is the consolidated line.",ibb_us + ibb_foreign,thousands_usd,
+htm_oth_debt_ac,HC,stock,"htm_oth_debt_ac on the FR Y-9C, same definition as the Call Report column. Y-9C: domestic (BHCK1737) + foreign (BHCK1742) other HTM debt securities, 2001-.",htm_oth_debt_dom_ac + htm_oth_debt_foreign_ac.fillna(0),thousands_usd,
+htm_oth_debt_fv,HC,stock,"htm_oth_debt_fv on the FR Y-9C, same definition as the Call Report column. Y-9C: domestic (BHCK1738) + foreign (BHCK1743), 2001-.",htm_oth_debt_dom_fv + htm_oth_debt_foreign_fv.fillna(0),thousands_usd,
 
-[ZERO_FILL]
-column,scope,reason,era_start
-reven_inv,always,"RCFD3656 (revaluation/equity investments) introduced ~2005Q1, absent before; only ~3pct nonzero even after. Pre-2005 NaN nuked book_nonfin -> book_liquid -> dropped the whole pre-2005 window from dd3's NIE regression (pv_nie=0 for 1997-2004).",
+[INTERMEDIATE]
+column,reason
+ln_dep_01,"Reported total; published inside ln_dep. On the 041/051 its coverage follows whether a zero is written (eroding 2017Q1-2023Q3, back to 100pct at 2023Q4), which ln_dep resolves."
 

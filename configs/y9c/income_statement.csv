@@ -26,7 +26,7 @@ BHCKJJ16,cecl_ln_cc_allow_bal,HI-C,stock,all,,,,
 BHCKJJ17,cecl_ln_oth_cons_allow_bal,HI-C,stock,all,,,,
 BHCKJJ18,cecl_ln_unalloctd_allow_bal,HI-C,stock,all,,,,
 BHCKJJ19,cecl_ln_tot_inv_allow_bal,HI-C,stock,all,,,,
-BHCK4010,ytd_int_inc_ln,HI,ytd,all,,,nonneg,
+BHCK4010,ytd_int_inc_ln_4010,HI,ytd,all,,,nonneg,
 BHCK4435,ytd_int_inc_ln_rre,HI,ytd,all,,,nonneg,
 BHCK4436,ytd_int_inc_ln_oth_re,HI,ytd,all,,,nonneg,
 BHCKHK03,ytd_int_exp_time_lt250k_dom,HI,ytd,all,,,nonneg,
@@ -34,8 +34,10 @@ BHCKHK04,ytd_int_exp_time_gt250k_dom,HI,ytd,all,,,nonneg,
 BHCK4172,ytd_int_exp_for,HI,ytd,all,,,nonneg,
 BHCKA518,ytd_int_exp_time_lt100k_dom,HI,ytd,all,,,nonneg,
 BHCK4185,ytd_int_exp_trad_othbor,HI,ytd,all,,,nonneg,
+BHCK4397,ytd_int_exp_subdebt,HI,ytd,all,,,nonneg,
 BHCK4176,ytd_int_exp_oth_dep,HI,ytd,all,,,nonneg,
 BHCK4070,ytd_fiduc_inc,HC-T,ytd,all,,,nonneg,
+BHCK4483,ytd_nonint_inc_srv_chrg_dep,HI,ytd,all,,,,
 BHCKA220,ytd_tradrev_inc,HI,ytd,all,,,,
 BHCKC886,ytd_nonint_inc_sb,HI,ytd,all,,,,
 BHCKC888,ytd_nonint_inc_fees_adv,HI,ytd,all,,,,
@@ -48,6 +50,8 @@ BHCK4079,ytd_nonint_inc,HI,ytd,all,,,,
 BHCKB494,ytd_nonint_inc_ins_fee,HI,ytd,all,,,,
 BHCKB490,ytd_nonint_inc_ib_adv_fee,HI,ytd,all,,,,
 BHCK4078,ytd_nonint_inc_oth_pre2001,HI,ytd,all,,,,
+BHCK8560,ytd_nonint_inc_net_gain_ll,HI,ytd,all,,,,
+BHCK8561,ytd_nonint_inc_oreo,HI,ytd,all,,,,
 BHCKB496,ytd_nonint_inc_net_gain_oth_ass,HI,ytd,all,,,,
 BHCK4135,ytd_nonint_exp_comp,HI,ytd,all,,,nonneg,
 BHCK4217,ytd_nonint_exp_fass,HI,ytd,all,,,nonneg,
@@ -62,15 +66,25 @@ BHCKA517,ytd_int_exp_time_gt100k_dom_97,HI,ytd,all,,,nonneg,
 BHCK4356,ytd_structflag_business_combo,HI-A,ytd,all,,,,
 BHCKB507,ytd_structflag_restatement,HI-A,ytd,all,,,,
 BHCKFT28,ytd_structflag_discontinued_ops,HI,ytd,all,,,,
+BHCK4435,ytd_int_inc_ln_rre_08,HI,ytd,all,,,nonneg,INTEREST AND FEE INCOME ON LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES (2008-)
+BHCK4436,ytd_int_inc_ln_oth_re_08,HI,ytd,all,,,nonneg,INTEREST AND FEE INCOME ON ALL OTHER LOANS SECURED BY REAL ESTATE (2008-)
+BHCKF821,ytd_int_inc_ln_alloth_dom_08,HI,ytd,all,,,nonneg,INTEREST AND FEE INCOME ON ALL OTHER LOANS IN DOMESTIC OFFICES (2008-)
+BHCK4059,ytd_int_inc_ln_foreign,HI,ytd,all,,,nonneg,"INTEREST AND FEE INCOME ON LOANS IN FOREIGN OFFICES, EDGE AND AGREEMENT SUBSIDIARIES, AND IBFS"
+BHCK4393,ytd_int_inc_ln_pre01,HI,ytd,all,,,nonneg,INTEREST AND FEE INCOME ON LOANS EXCLUDING OBLIGATIONS OF STATES AND POLITICAL SUBDIVISIONS (1986Q3-2000Q4)
+BHCK4504,ytd_int_inc_ln_taxexempt_pre01,HI,ytd,all,,,nonneg,INTEREST AND FEE INCOME ON TAX-EXEMPT OBLIGATIONS (OTHER THAN SECURITIES AND LEASES) OF STATES AND POLITICAL SUBDIVISIONS (1987Q3-2000Q4)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_nonint_inc_sales,CROSS,ytd,Noninterest Income on Sales [RIAD5416+RIAD5415+RIADB496],ytd_nonint_inc_net_gain_ll+ytd_nonint_inc_oreo+ytd_nonint_inc_net_gain_oth_ass,thousands_usd,
 ytd_int_exp_time_gt100k_dom,CROSS,ytd,"Interest on Time Deposits of $100,000 or more [RIADA517 / RIAD4174]",ytd_int_exp_time_gt100k_dom_97.fillna(ytd_int_exp_time_gt100k_dom_pre97),thousands_usd,
+ytd_int_inc_ln,HI,ytd,"ytd_int_inc_ln on the FR Y-9C, same definition as the Call Report column. Y-9C: BHCK4393 through 2000Q4 (excludes tax-exempt obligations of states, BHCK4504, kept separately); the total BHCK4010 2001-2007; from 2008 the sum of 1-4 family (4435) + other real estate (4436) + all other domestic (F821) + foreign offices (4059).",ytd_int_inc_ln_4010.fillna(ytd_int_inc_ln_pre01).fillna(ytd_int_inc_ln_rre_08 + ytd_int_inc_ln_oth_re_08 + ytd_int_inc_ln_alloth_dom_08 + ytd_int_inc_ln_foreign.fillna(0)),thousands_usd,nonneg
 
 [ZERO_FILL]
 column,scope,reason,era_start
-ytd_structflag_business_combo,in_era,"Schedule RI-A business combinations: a blank means no event once collection began, but means not collected before it did.",
-ytd_structflag_restatement,in_era,"Schedule RI-A restatements: a blank means no event once collection began, but means not collected before it did.",
-ytd_structflag_discontinued_ops,in_era,"Schedule RI-A discontinued operations: a blank means no event once collection began, but means not collected before it did.",
 ytd_int_exp_for,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
+ytd_int_inc_ln_foreign,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
+
+[INTERMEDIATE]
+column,reason
+ytd_int_inc_ln_4010,Era piece of the Call-named column rebuilt on the Y-9C.
 

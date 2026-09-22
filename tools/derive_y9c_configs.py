@@ -143,11 +143,35 @@ def main() -> int:
     if fo.exists():
         overrides_f = {r.variable_name: (r.formula, r.description_suffix)
                        for r in pd.read_csv(fo, dtype=str, keep_default_na=False).itertuples(index=False)}
+    seen_derived = {r[0] for rows_ in pending.values() for r in rows_}
     for rows_ in pending.values():
         for r in rows_:
             if r[0] in overrides_f:
                 r[4] = overrides_f[r[0]][0]
                 r[3] = (r[3] + overrides_f[r[0]][1]) if len(r) > 3 else r[3]
+    # An override for a name that was a BASE item on the Call Report (ibb, foreign_dep, ...) but
+    # is built from other codes on the Y-9C becomes a derived row here, keeping the Call name.
+    call_base = {}
+    for src in sorted((ROOT / "configs" / "call").glob("*.csv")):
+        for r in read_sections(src).get("BASE_VARIABLES", []):
+            call_base[r[1]] = (src.name, r[2] if len(r) > 2 else "CROSS", r[3] if len(r) > 3 else "stock", r[7] if len(r) > 7 else "")
+    # An override on a name that survived as a BASE row: the base row becomes a withheld piece
+    # named <name>_<code> (so the formula can still use it) and the name is rebuilt as derived.
+    renamed_pieces: dict[str, list[str]] = {}
+    for name in list(overrides_f):
+        for cfg, sec in all_sections.items():
+            for r in sec["BASE_VARIABLES"]:
+                if r[1] == name:
+                    piece = f"{name}_{r[0][4:].lower()}"
+                    r[1] = piece
+                    kept_names.discard(name); kept_names.add(piece); kept_codes[piece] = kept_codes.pop(name)
+                    renamed_pieces.setdefault(cfg, []).append(piece)
+    for name, (formula, suffix) in overrides_f.items():
+        if name not in seen_derived and name in call_base and name not in kept_names:
+            cfg, sched, ft, sign = call_base[name]
+            pending.setdefault(cfg, []).append([name, schedule_name(sched), ft, f"{name} on the FR Y-9C, same definition as the Call Report column.{suffix}",
+                                                formula, "thousands_usd", sign])
+            dropped[:] = [d for d in dropped if not (d["kind"] == "base" and d["name"] == name)]
     changed = True
     while changed:
         changed = False
@@ -185,15 +209,11 @@ def main() -> int:
         zf = []
         for r in sec.get("ZERO_FILL", []):
             r = r + [""] * (4 - len(r))
-            if r[1] == "in_era_unless_reported":
-                # Explains a Call Report source change (zeros stop being written at 2005Q3);
-                # whether the Y-9 files do the same is a separate measurement, not a copy.
-                dropped.append({"config": cfg, "kind": "zero_fill", "name": r[0], "call_code": "", "y9c_code": "",
-                                "reason": "Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C"})
-            elif r[0] in kept_names:
-                zf.append([r[0], r[1], r[2], ""])   # era_start measured by the build, not copied
-            else:
-                dropped.append({"config": cfg, "kind": "zero_fill", "name": r[0], "call_code": "", "y9c_code": "", "reason": "column not kept"})
+            # Every zero-fill rule is a measured statement about ONE report's files (which
+            # blanks are zeros, from when). None of the Call Report's carry over; the Y-9C's
+            # own rules live in reference_data/y9c_zero_fill.csv, each with its measurement.
+            dropped.append({"config": cfg, "kind": "zero_fill", "name": r[0], "call_code": "", "y9c_code": "",
+                            "reason": "Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv"})
         zp = ROOT / "reference_data" / "y9c_zero_fill.csv"   # Y-9C-specific rules, each with a measured reason
         if zp.exists():
             for r in pd.read_csv(zp, dtype=str, keep_default_na=False).itertuples(index=False):
@@ -211,7 +231,7 @@ def main() -> int:
             lines += ["[CHECKS]", ",".join(HEADER_OF["CHECKS"]), *[row(*r) for r in ck], ""]
         # an intermediate must still have a published consumer
         consumers = {d for rows_ in derived_keep.values() for r in rows_ for d in dependencies(r[4])}
-        im = []
+        im = [[piece, "Era piece of the Call-named column rebuilt on the Y-9C."] for piece in renamed_pieces.get(cfg, []) if piece in consumers]
         for r in sec.get("INTERMEDIATE", []):
             if r[0] in kept_names and r[0] in consumers:
                 im.append(r)

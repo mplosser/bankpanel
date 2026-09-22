@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from bankpanel.config import ConfigSet  # noqa: E402
 from bankpanel.profiles import get_profile  # noqa: E402
+from bankpanel.build.quarter import to_numeric  # noqa: E402  (the builder's own coercion: boolean text -> 1/0)
 
 CONFIG_DIRS = {"ffiec_call": "configs/call", "fry9c": "configs/y9c"}
 
@@ -73,9 +74,9 @@ def main() -> int:
             primary, fb = codes[n]
             expected = pd.Series(np.nan, index=m.index)
             if primary:
-                expected = pd.to_numeric(m[primary], errors="coerce")
+                expected = to_numeric(m[primary])
             if fb:
-                expected = expected.fillna(pd.to_numeric(m[fb], errors="coerce"))
+                expected = expected.fillna(to_numeric(m[fb]))
             got = m[n]
             same = (got == expected) | (got.isna() & expected.isna())
             if n in zero_filled:

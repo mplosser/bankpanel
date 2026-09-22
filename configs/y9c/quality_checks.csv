@@ -23,4 +23,6 @@ tier1_ratio_plausible,tier1_rbc_ratio <= 10,info,A tier 1 ratio above 1000pct is
 total_rbc_ge_tier1,total_rbc_ratio >= tier1_rbc_ratio,error,Total capital includes tier 1 so its ratio cannot be smaller
 cet1_le_tier1,cet1 <= tier1_capital,error,Common equity tier 1 is a component of tier 1 capital
 rwa_le_assets_x2,rwa <= 2 * assets,warning,Risk-weighted assets far above total assets suggests a units or era-stitch error
+chargeoff_ci_le_total,ytd_co_ci <= ytd_co_tot,warning,Category charge-offs cannot exceed total charge-offs
+recovery_ci_le_total,ytd_rec_ci <= ytd_rec_tot,warning,Category recoveries cannot exceed total recoveries
 

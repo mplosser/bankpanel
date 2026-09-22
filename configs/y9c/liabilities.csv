@@ -17,6 +17,8 @@ BHDMB993,ffpurch,HC,stock,all,,,,
 BHCKB995,repo_sold,HC,stock,all,,,,
 BHCK3548,trad_liab,HC,stock,all,,,,
 BHCK3190,othbor_liab_01,HC,stock,all,,,,
+BHCK4062,subdebt,HC,stock,all,,,,
+BHCK2750,liab_oth_2930,HC,stock,all,,,,
 BHCK2920,accept_liab,HC,stock,all,,,,
 BHCK3282,liab_limlife_pref,HC,stock,all,,,,
 BHCKG105,equity_incl_minorint_09,HC,stock,all,,,,
@@ -29,6 +31,7 @@ BHCK2332,obm_less1yr,HC,stock,all,,,,
 BHCK2333,obm_gt1yr_pre97,HC,stock,all,,,,
 BHCK0278,ffpurch_pre97,HC,stock,all,,,,
 BHCK0279,repo_sold_pre97,HC,stock,all,,,,
+BHCK3190,othbor_1_pre94,HC,stock,all,,,,
 BHCK2910,othbor_2,HC,stock,all,,,,
 BHCK3210,equity,HC,stock,all,,,,
 BHCK3000,minorint,HC,stock,all,,,,
@@ -37,17 +40,21 @@ BHCK0279,repo_sold_8801,HC,stock,all,,,,SECURITIES SOLD UNDER AGREEMENTS TO REPU
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+othbor_pre94,CROSS,stock,Other Borrowed Money (pre-1994) [RCFD2850+RCFD2910],othbor_1_pre94 + othbor_2,thousands_usd,
 ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report. Y-9C: BHCK0278+0279 carry 1988Q2-2001Q4, the combined BHCK2800 before that, B993+B995 from 2002.",(ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0) + ffpurch_8801.fillna(0) + repo_sold_8801.fillna(0)).where(ffpurch.notna() | repo_sold.notna() | ffrepo_liab_2800.notna() | ffpurch_8801.notna() | repo_sold_8801.notna()),thousands_usd,
 othbor_9497,CROSS,stock,Other Borrowed Money (1994-1996) [RCFD2332+RCFD2333+RCFD2910],obm_less1yr+obm_gt1yr_pre97+othbor_2,thousands_usd,
 othbor_97,CROSS,stock,Other Borrowed Money (1997) [RCFD2332+RCFD2333],obm_less1yr+obm_gt1yr_pre97,thousands_usd,
 equity_incl_minorint_pre09,CROSS,stock,Equity Incl. Minority Interest [RCFD3210+RCFD3000],equity+minorint,thousands_usd,
 equity_incl_minorint,CROSS,stock,Equity Incl. Minority Interest [RCFDG105 post09],equity_incl_minorint_09.fillna(equity_incl_minorint_pre09),thousands_usd,
+liab_oth,CROSS,stock,"Other Liabilities [RCFD2930; pre-1997 adds RCFD3282 limited-life preferred (discontinued 1996Q4); pre-2006 adds RCFD2920 bank's acceptance liability (separate line discontinued 2005Q4, folded into 2930 thereafter)]",liab_oth_2930 + liab_limlife_pref.fillna(0) + accept_liab.fillna(0),thousands_usd,
 cet1,CROSS,stock,"Common equity tier 1 capital (RC-R Part I, from 2015Q1): RCFAP859 on the 031 / RCOAP859 on the 041 and 051; from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP859) instead. The two 031 columns are never filed together and cover every 031 filer in every quarter.",cet1_1.fillna(cet1_2),thousands_usd,
+foreign_dep,HC,stock,"foreign_dep on the FR Y-9C, same definition as the Call Report column. Y-9C: deposits in foreign offices = noninterest-bearing (BHFN6631) + interest-bearing (BHFN6636).",for_deposit_nib + for_deposit_ib,thousands_usd,
 
 [ZERO_FILL]
 column,scope,reason,era_start
 for_deposit_ib,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
 for_deposit_nib,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter.",2025-06-30
+foreign_dep,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop writing a zero for this foreign-office item when the holding company has no foreign offices: across 2025Q1 -> 2025Q2 the share of filers with a NON-ZERO value is unchanged (0.06-0.07) while the share reporting a zero falls from ~0.93 to ~0.10 (measured on all three affected columns; no other column shows the signature). Same rule as the Call Report's 2005Q3 items (maintainer, 2026-09-22): a blank below the reporting threshold that is not discernible from the bank's other items is zero, and dropping those rows biases sums across the change. Not filled where the holding company reports the item in another quarter of the year or where no filer of its tier reports it that quarter. foreign_dep is derived from the two filled deposit items, but derivation runs before the year-level fill, so the derived column carries its own rule.",2025-06-30
 
 [INTERMEDIATE]
 column,reason
