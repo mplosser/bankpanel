@@ -1,0 +1,76 @@
+# Derived from configs/call/ri_b_chargeoffs.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,ri_b_chargeoffs
+schedule,RI-B
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK3584,ytd_co_farmland,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY FARMLAND
+BHCK3585,ytd_rec_farmland,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY FARMLAND
+BHCK3588,ytd_co_multifam,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+BHCK3589,ytd_rec_multifam,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+BHCK4605,ytd_rec_tot,HI-B,ytd,all,,,any,RECOVERIES ON ALLOWANCE FOR LOAN AND LEASE LOSSES
+BHCK4627,ytd_rec_forgovt,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+BHCK4628,ytd_rec_othln,HI-B,ytd,all,,,any,RECOVERIES ON ALL OTHER LOANS
+BHCK4635,ytd_co_tot,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALLOWANCE FOR LOAN AND LEASE LOSSES
+BHCK4643,ytd_co_forgovt,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+BHCK4644,ytd_co_othln,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON ALL OTHER LOANS
+BHCK4655,ytd_co_agprod,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
+BHCK4665,ytd_rec_agprod,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS
+BHCK5409,ytd_co_finance_cre,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEM
+BHCK5410,ytd_rec_finance_cre,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS
+BHCK5411,ytd_co_heloc,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CRED
+BHCK5412,ytd_rec_heloc,HI-B,ytd,all,,,any,RECOVERIES ON REVOLVING; OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CREDI
+BHCKB514,ytd_co_cc,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO CREDIT CARDS
+BHCKB515,ytd_rec_cc,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO CREDIT CARDS
+BHCKC217,ytd_rec_famres_first,HI-B,ytd,all,,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
+BHCKC218,ytd_rec_famres_junior,HI-B,ytd,all,,,any,RECOVERIES ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
+BHCKC234,ytd_co_famres_first,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY FIRST LIENS
+BHCKC235,ytd_co_famres_junior,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES:SECURED BY JUNIOR LIENS
+BHCKC388,ytd_cc_fees_reversed,HI-B,ytd,all,,,nonneg,UNCOLLECTIBLE CREDIT CARD FEES & FINANCE CHARGES REVERSED AGAINST INCOME (I.E.; NOT INCLUDED IN CHARGE-OFFS AGAINST TH
+BHCKC891,ytd_co_constr_res14,HI-B,ytd,all,,,nonneg,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS; CHARGE-OFFS
+BHCKC892,ytd_rec_constr_res14,HI-B,ytd,all,,,any,1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS RECOVERIES
+BHCKC893,ytd_co_constr_oth,HI-B,ytd,all,,,nonneg,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; CHARGE-OFFS
+BHCKC894,ytd_rec_constr_oth,HI-B,ytd,all,,,any,OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS; RECOVERIES
+BHCKC895,ytd_co_nfnres_owner,HI-B,ytd,all,,,nonneg,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
+BHCKC896,ytd_rec_nfnres_owner,HI-B,ytd,all,,,any,LOANS SECURED BY OWNER-OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
+BHCKC897,ytd_co_nfnres_oth,HI-B,ytd,all,,,nonneg,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: CHARGE-OFFS
+BHCKC898,ytd_rec_nfnres_oth,HI-B,ytd,all,,,any,LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES: RECOVERIES
+BHCKK129,ytd_co_auto,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON AUTOMOBILE LOANS
+BHCKK133,ytd_rec_auto,HI-B,ytd,all,,,any,RECOVERIES ON AUTOMOBILE LOANS
+BHCKK205,ytd_co_consumer_oth_ex_auto,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN 
+BHCKK206,ytd_rec_consumer_oth_ex_auto,HI-B,ytd,all,,,any,RECOVERIES ALL OTHER (INCLUDES SINGLE PAYMENT; INSTALLMENT; ALL STUDENT LOANS; AND REVOLVING CREDIT PLANS OTHER THAN C
+BHCK3123,alll_end,HI-B,stock,all,,,,ALLOWANCE FOR LOAN AND LEASE LOSSES
+BHCKC233,ytd_alll_adjustments,HI-B,ytd,all,,,,ADJUSTMENTS
+BHCK5523,ytd_writedowns_transfer_to_hfs,HI-B,ytd,all,,,nonneg,WRITE DOWNS ARISING FROM TRANSFER TO HFS
+BHCKJJ03,acl_oth_fin_assets,HI-B,stock,all,,,,Allowance for credit losses on other financial assets measured at amortized cost
+BHCK4656,ytd_co_cc_incl_revolving_4656,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+BHCK4657,ytd_co_consumer_oth_4657,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+BHCKB516,ytd_co_consumer_oth_b516,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+BHCK4639,ytd_co_consumer_tot_4639,HI-B,ytd,all,,,nonneg,"CHARGE-OFFS ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+BHCK4666,ytd_rec_cc_incl_revolving_4666,HI-B,ytd,all,,,any,RECOVERIES ON CREDIT CARDS AND RELATED PLANS (through 2000Q4; 031 filers)
+BHCK4667,ytd_rec_consumer_oth_4667,HI-B,ytd,all,,,any,RECOVERIES ON OTHER LOANS TO INDIVIDUALS (through 2000Q4; 031 filers)
+BHCKB517,ytd_rec_consumer_oth_b517,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO INDIVIDUALS OTHER THAN CREDIT CARDS (2001Q1-2010Q4; = automobile + other from 2011)
+BHCK4609,ytd_rec_consumer_tot_4609,HI-B,ytd,all,,,any,"RECOVERIES ON LOANS TO INDIVIDUALS, TOTAL (031 filers through 2000Q4; FDIC-derived for all 2001-2010; = credit cards + other for 100% of banks)"
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_co_consumer_oth,HI-B,ytd,"Consumer loans other than credit cards, charge-offs: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4657).",(ytd_co_auto + ytd_co_consumer_oth_ex_auto).fillna(ytd_co_consumer_oth_b516).fillna(ytd_co_consumer_oth_4657),thousands_usd,nonneg
+ytd_co_consumer_tot,HI-B,ytd,"Total consumer (loans to individuals) charge-offs, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4639 for 100% of banks); the reported total RIAD4639 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(ytd_co_cc + ytd_co_auto + ytd_co_consumer_oth_ex_auto).fillna(ytd_co_cc + ytd_co_consumer_oth_b516).fillna(ytd_co_consumer_tot_4639),thousands_usd,nonneg
+ytd_rec_consumer_oth,HI-B,ytd,"Consumer loans other than credit cards, recoveries: automobile + other from 2011, the single other line 2001Q1-2010Q4. Consistent from 2001; before 2001 only 031 filers reported it (RIAD4667).",(ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_oth_4667),thousands_usd,any
+ytd_rec_consumer_tot,HI-B,ytd,"Total consumer (loans to individuals) recoveries, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RIAD4609 for 100% of banks); the reported total RIAD4609 for 031 filers before 2001. Blank before 2001 for other filers, which reported only credit cards and related plans.",(ytd_rec_cc + ytd_rec_auto + ytd_rec_consumer_oth_ex_auto).fillna(ytd_rec_cc + ytd_rec_consumer_oth_b517).fillna(ytd_rec_consumer_tot_4609),thousands_usd,any
+ytd_net_chargeoffs_tot,HI-B,ytd,Net charge-offs: gross charge-offs less recoveries,ytd_co_tot - ytd_rec_tot,thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+ytd_co_consumer_oth_4657,Pre-2001 031 piece of ytd_co_consumer_oth.
+ytd_co_consumer_oth_b516,2001-2010 piece of ytd_co_consumer_oth.
+ytd_co_consumer_tot_4639,Reported/derived total; piece of ytd_co_consumer_tot.
+ytd_rec_consumer_oth_4667,Pre-2001 031 piece of ytd_rec_consumer_oth.
+ytd_rec_consumer_oth_b517,2001-2010 piece of ytd_rec_consumer_oth.
+ytd_rec_consumer_tot_4609,Reported/derived total; piece of ytd_rec_consumer_tot.
+

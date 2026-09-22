@@ -1,0 +1,24 @@
+# Derived from configs/call/rc_k_quarterly_avg.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_k_quarterly_avg
+schedule,RC-K
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK3365,qavg_ffsold_resell,HC-K,stock,all,,,,QUARTERLY AVERAGE OF FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+BHCK3353,qavg_ffpurch_repo,HC-K,stock,all,,,,QUARTERLY AVERAGE OF FEDERAL FUNDS PURCHASED AND SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE
+BHCK3401,qavg_trading_assets,HC-K,stock,all,,,,QUARTERLY AVERAGE OF ASSETS HELD IN TRADING ACCOUNTS
+BHCKB558,qavg_sec_ust_agency,HC-K,stock,all,,,,U.S. TREASURY SECURITIES AND U.S. GOVERNMENT AGENCY OBLIGATIONS (EXCLUDING MORTGAGE-BACKED SECURITIES)
+BHCKB559,qavg_sec_mbs,HC-K,stock,all,,,,MORTGAGE-BACKED SECURITIES
+BHCKB560,qavg_sec_oth,HC-K,stock,all,,,,ALL OTHER SECURITIES
+BHDMB561,qavg_ln_indiv_cc,HC-K,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: CREDIT CARDS
+BHDMB562,qavg_ln_indiv_oth,HC-K,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: OTHER
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+qavg_sec_tot,HC-K,stock,Quarterly average of securities across the three reported categories (2001Q1 onward),qavg_sec_ust_agency + qavg_sec_mbs + qavg_sec_oth,thousands_usd,
+

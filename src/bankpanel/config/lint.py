@@ -198,7 +198,7 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
                     )
                 )
         for var in cfg.base:
-            if var.flow_type == "ytd" and not var.schedule.startswith("RI"):
+            if var.flow_type == "ytd" and not var.schedule.startswith(("RI", "HI")):
                 issues.append(
                     LintIssue(
                         "warning",

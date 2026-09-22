@@ -1,0 +1,53 @@
+# Derived from configs/call/rc_r_capital.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_r_capital
+schedule,RC-R-I
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK8274,tier1_capital_baselI,HC-R-I,stock,all,,,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
+BHCK5311,tier2_capital_baselI,HC-R-I,stock,all,,,,TIER 2 (SUPPLEMENTARY) CAPITAL
+BHCKA223,rwa_baselI,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
+BHCK7204,leverage_ratio_reported_baselI,HC-R-I,stock,all,,,,TIER 1 LEVERAGE CAPITAL RATIO
+BHCK7205,total_rbc_ratio_reported_baselI,HC-R-I,stock,all,,,,TOTAL RISK-BASED CAPITAL RATIO
+BHCK7206,tier1_rbc_ratio_reported_baselI,HC-R-I,stock,all,,,,TIER 1 RISK-BASED CAPITAL RATIO
+BHCKB704,rwa_before_excess_allowance,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS BEFORE DEDUCTIONS FOR EXCESS ALLOWANCE FOR LOAN AND LEASE LOSSES AND ALLOCATED TRANSFER RISK RESE
+BHCKB700,rwa_bucket_0pct_baselI,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 0%
+BHCKB701,rwa_bucket_20pct_baselI,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 20%
+BHCKB702,rwa_bucket_50pct_baselI,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 50%
+BHCKB703,rwa_bucket_100pct_baselI,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS BY RISK WEIGHT CATEGORY - 100%
+BHCA8274,tier1_capital_baselIII,HC-R-I,stock,all,,,,TIER 1 CAPITAL ALLOWABLE UNDER THE RISK-BASED CAPITAL GUIDELINES
+BHCA5311,tier2_capital_baselIII,HC-R-I,stock,all,,,,TIER 2 (SUPPLEMENTARY) CAPITAL
+BHCAA223,rwa_baselIII,HC-R-I,stock,all,,,,RISK-WEIGHTED ASSETS (NET OF ALLOWANCES AND OTHER DEDUCTIONS)
+BHCAP742,cet1_common_stock_surplus,HC-R-I,stock,all,,,,COMMON EQUITY TIER 1 CAPITAL: COMMON STOCK PLUS RELATED SURPLUS; NET OF TREASURY STOCK AND UNEARNED EMPLOYEE STOCK OWN
+BHCAP839,cet1_minority_interest,HC-R-I,stock,all,,,,COMMON EQUITY TIER 1 MINORITY INTEREST INCLUDABLE IN COMMON EQUITY TIER 1 CAPITAL
+BHCAP858,cet1_adjustments_deductions_p858,HC-R-I,stock,all,,,,TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL
+BHCWP858,cet1_adjustments_deductions_aa,HC-R-I,stock,all,,,,"TOTAL ADJUSTMENTS AND DEDUCTIONS FOR COMMON EQUITY TIER 1 CAPITAL -- advanced approaches institutions' column (RCFW) on the 031, from 2020Q1"
+BHCAP862,tier1_minority_interest_not_cet1,HC-R-I,stock,all,,,,TIER 1 MINORITY INTEREST NOT INCLUDED IN COMMON EQUITY TIER 1 CAPITAL
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+cet1_adjustments_deductions,HC-R-I,stock,"Total adjustments and deductions for common equity tier 1 capital: RCFAP858 (031) / RCOAP858 (041, 051); from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP858) instead. The two are never filed together and cover every 031 filer.",cet1_adjustments_deductions_p858.fillna(cet1_adjustments_deductions_aa),thousands_usd,
+tier1_capital,HC-R-I,stock,Tier 1 capital on a consistent basis; Basel III (RCOA8274) from 2015Q1 falling back to Basel I (RCFD8274) before,tier1_capital_baselIII.fillna(tier1_capital_baselI),thousands_usd,
+tier2_capital,HC-R-I,stock,Tier 2 capital on a consistent basis across the Basel I / Basel III change,tier2_capital_baselIII.fillna(tier2_capital_baselI),thousands_usd,
+rwa,HC-R-I,stock,Risk-weighted assets on a consistent basis across the Basel I / Basel III change,rwa_baselIII.fillna(rwa_baselI),thousands_usd,
+total_capital,HC-R-I,stock,Total regulatory capital: tier 1 plus tier 2,tier1_capital + tier2_capital,thousands_usd,
+tier1_rbc_ratio,HC-R-I,rate,Tier 1 risk-based capital ratio; COMPUTED as tier 1 capital over risk-weighted assets. Computed rather than read because the reported ratio is confidential from 2015Q1; see docs/schedules/RC-R-I.md,tier1_capital / rwa,ratio,
+total_rbc_ratio,HC-R-I,rate,Total risk-based capital ratio; COMPUTED as total capital over risk-weighted assets,total_capital / rwa,ratio,
+cet1_ratio,HC-R-I,rate,Common equity tier 1 ratio; COMPUTED as cet1 over risk-weighted assets. Basel III only; so NaN before 2015Q1,cet1 / rwa,ratio,
+
+[INTERMEDIATE]
+column,reason
+cet1_adjustments_deductions_p858,Era/column piece of cet1_adjustments_deductions.
+cet1_adjustments_deductions_aa,Advanced-approaches column piece of cet1_adjustments_deductions.
+tier1_capital_baselI,"Era piece of tier1_capital: the pre-2015 Basel I measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+tier1_capital_baselIII,"Era piece of tier1_capital: the Basel III from 2015Q1 measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+tier2_capital_baselI,"Era piece of tier2_capital: the pre-2015 Basel I measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+tier2_capital_baselIII,"Era piece of tier2_capital: the Basel III from 2015Q1 measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+rwa_baselI,"Era piece of rwa: the pre-2015 Basel I measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+rwa_baselIII,"Era piece of rwa: the Basel III from 2015Q1 measure. Withheld because the stitch is not a compromise -- in the 48 bank-quarters filing both regimes the ratio of the two is 1.0000 at the median and at p10 and p90 -- so publishing both is two names for one series. The Basel-I-only content that has no Basel III counterpart (rwa_bucket_*pct_baselI, assets_for_leverage_baselI) and the pre-2015 reported ratios used to validate the computed ones are all still published."
+

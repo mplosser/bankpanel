@@ -55,7 +55,7 @@ def build_dictionary(cs: ConfigSet, descriptions: dict[str, str] | None = None) 
                 "published": var.variable_name not in withheld,
                 "schedule": var.schedule,
                 "flow_type": var.flow_type,
-                "unit": "thousands_usd" if var.flow_type in ("stock", "ytd") else "",
+                "unit": "thousands_usd" if var.flow_type in ("stock", "ytd", "ytd_event") else "",
                 "sign": var.sign,
                 "mdrm_code": var.mdrm_code,
                 "form_scope": var.form_scope,

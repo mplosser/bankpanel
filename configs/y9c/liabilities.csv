@@ -1,0 +1,49 @@
+# Derived from configs/call/liabilities.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,liabilities
+profile,ffiec_call
+source,bec_migration/liabilities.csv
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHDM6631,dom_deposit_nib,HC,stock,all,,,,
+BHDM6636,dom_deposit_ib,HC,stock,all,,,,
+BHFN6631,for_deposit_nib,HC,stock,all,,,,
+BHFN6636,for_deposit_ib,HC,stock,all,,,,
+BHDMB993,ffpurch,HC,stock,all,,,,
+BHCKB995,repo_sold,HC,stock,all,,,,
+BHCK3548,trad_liab,HC,stock,all,,,,
+BHCK3190,othbor_liab_01,HC,stock,all,,,,
+BHCK2920,accept_liab,HC,stock,all,,,,
+BHCK3282,liab_limlife_pref,HC,stock,all,,,,
+BHCKG105,equity_incl_minorint_09,HC,stock,all,,,,
+BHCK3049,t1_netdef_taxliab,HC-G,stock,all,,,,
+BHCAP840,t1_cet1_before_adj,HC-R,stock,all,,,,
+BHCAP859,cet1_1,HC-R,stock,all,,,,
+BHCWP859,cet1_2,HC-R,stock,all,,,,
+BHCK2800,ffrepo_liab_2800,HC,stock,all,,,,
+BHCK2332,obm_less1yr,HC,stock,all,,,,
+BHCK2333,obm_gt1yr_pre97,HC,stock,all,,,,
+BHCK0278,ffpurch_pre97,HC,stock,all,,,,
+BHCK0279,repo_sold_pre97,HC,stock,all,,,,
+BHCK2910,othbor_2,HC,stock,all,,,,
+BHCK3210,equity,HC,stock,all,,,,
+BHCK3000,minorint,HC,stock,all,,,,
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report.",(ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0)).where(ffpurch.notna() | repo_sold.notna() | ffrepo_liab_2800.notna()),thousands_usd,
+othbor_9497,CROSS,stock,Other Borrowed Money (1994-1996) [RCFD2332+RCFD2333+RCFD2910],obm_less1yr+obm_gt1yr_pre97+othbor_2,thousands_usd,
+othbor_97,CROSS,stock,Other Borrowed Money (1997) [RCFD2332+RCFD2333],obm_less1yr+obm_gt1yr_pre97,thousands_usd,
+equity_incl_minorint_pre09,CROSS,stock,Equity Incl. Minority Interest [RCFD3210+RCFD3000],equity+minorint,thousands_usd,
+equity_incl_minorint,CROSS,stock,Equity Incl. Minority Interest [RCFDG105 post09],equity_incl_minorint_09.fillna(equity_incl_minorint_pre09),thousands_usd,
+cet1,CROSS,stock,"Common equity tier 1 capital (RC-R Part I, from 2015Q1): RCFAP859 on the 031 / RCOAP859 on the 041 and 051; from 2020Q1 advanced approaches institutions on the 031 file the line in their own column (RCFWP859) instead. The two 031 columns are never filed together and cover every 031 filer in every quarter.",cet1_1.fillna(cet1_2),thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+cet1_1,"CET1 as filed under RCFA (031) / RCOA (041, 051); published inside cet1."
+cet1_2,"CET1 as filed in the advanced approaches column RCFW (031, from 2020Q1); published inside cet1. Banks move between the two 031 columns, so the pieces step while cet1 does not."
+

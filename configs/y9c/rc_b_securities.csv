@@ -1,0 +1,27 @@
+# Derived from configs/call/rc_b_securities.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_b_securities
+schedule,RC-B
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK1286,ac_afs_ust,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. TREASURY SECURITIES
+BHCK1291,ac_afs_usagency_9418,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT AGEN
+BHCK1297,ac_afs_usgse_9418,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT- SPO
+BHCK8498,ac_afs_states,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+BHCK1739,ac_afs_oth_dom,HC-B,stock,all,,,,AMORTIZED COST OF OTHER AVAILABLE-FOR-SALE DOMESTIC DEBT SECURITIES
+BHCK1744,ac_afs_oth_fgn,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE OTHER FOREIGN DEBT SECURITIES
+BHCKA510,ac_afs_mutual_funds_9720,HC-B,stock,all,,,,AMORTIZED COST OF AVAILABLE-FOR-SALE INVESTMENTS IN MUTUAL FUNDS AND OTHER EQUITY SECURITIES WITH READILY DETERMINABLE
+BHCKC989,ac_afs_abs,HC-B,stock,all,,,,ASSET-BACKED SECURITIES: AVAILABLE-FOR-SALE AMORTIZED COST
+BHCK8782,ac_structured_notes,HC-B,stock,all,,,,AMORTIZED COST OF STRUCTURED NOTES
+BHCK1778,ac_htm_sold_or_transferred_ytd,HC-B,stock,all,,,,AMORTIZED COST OF HELD-TO-MATURITY SECURITIES SOLD OR TRANSFERRED TO AVAILABLE-FOR-SALE OR TRADING SECURITIES DURING T
+BHCK0416,pledged_sec,HC-B,stock,all,,,,PLEDGED SECURITIES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ac_afs_tot_toplevel,HC-B,stock,Amortized cost of AFS securities across the top-level categories carried here; see docs/schedules/RC-B.md on what is and is not included,(ac_afs_ust.fillna(0) + ac_afs_states.fillna(0) + ac_afs_oth_dom.fillna(0) + ac_afs_oth_fgn.fillna(0) + ac_afs_abs.fillna(0)).where(ac_afs_ust.notna() | ac_afs_states.notna() | ac_afs_oth_dom.notna() | ac_afs_oth_fgn.notna() | ac_afs_abs.notna()),thousands_usd,
+

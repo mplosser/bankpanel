@@ -1,0 +1,32 @@
+# Derived from configs/call/rc_d_trading.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_d_trading
+schedule,RC-D
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK3531,trad_ust,HC-D,stock,all,,,,TRADING ASSETS - U.S. TREASURY SECURITIES
+BHCK3532,trad_usagency,HC-D,stock,all,,,,TRADING ASSETS - U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS
+BHCK3533,trad_states,HC-D,stock,all,,,,TRADING ASSETS - SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+BHCK3541,trad_oth_dom_off,HC-D,stock,all,,,,OTHER TRADING ASSETS (IN DOMESTIC OFFICES)
+BHCK3543,trad_revaluation_gains,HC-D,stock,all,,,,REVALUATION GAINS ON INTEREST RATE; FOREIGN EXCHANGE RATE; AND OTHER COMMODITY AND EQUITY CONTRACTS
+BHCK3547,trad_revaluation_losses,HC-D,stock,all,,,,REVALUATION LOSSES ON INTEREST RATE; FOREIGN EXCHANGE RATE; AND OTHER COMMODITY AND EQUITY CONTRACTS
+BHCK3546,trad_liab_short_positions,HC-D,stock,all,,,,LIABILITY FOR SHORT POSITIONS
+BHCKF614,trad_ln_ci,HC-D,stock,all,,,,TRADING ASSETS - COMMERCIAL AND INDUSTRIAL LOANS
+BHCKF618,trad_ln_oth,HC-D,stock,all,,,,TRADING ASSETS - OTHER LOANS
+BHCKF624,trad_liab_oth,HC-D,stock,all,,,,OTHER TRADING LIABILITIES
+BHCKF610,trad_ln_re_0818,HC-D,stock,all,,,,TRADING ASSETS - LOANS SECURED BY REAL ESTATE
+BHCKF615,trad_ln_indiv_a_0818,HC-D,stock,all,,,,TRADING ASSETS - LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES - CREDIT CARD
+BHCKF616,trad_ln_indiv_b_0818,HC-D,stock,all,,,,TRADING ASSETS - LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES - OTHER REVOLVING CREDIT 
+BHCKF632,trad_upb_ln_0818,HC-D,stock,all,,,,UNPAID PRINCIPAL BALANCES OF LOANS MEASURED AT FAIR VALUE - COMMERCIAL AND INDUSTRIAL LOANS
+BHCKF636,trad_upb_ln_oth,HC-D,stock,all,,,,UNPAID PRINCIPAL BALANCES OF LOANS MEASURED AT FAIR VALUE - OTHER LOANS
+BHCKF643,trad_abs_0810,HC-D,stock,all,,,,TRADING ASSETS: ASSET-BACKED SECURITIES:  CREDIT CARD RECEIVABLES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+trad_revaluation_net,HC-D,stock,Net revaluation gains less losses on trading positions,trad_revaluation_gains - trad_revaluation_losses,thousands_usd,
+

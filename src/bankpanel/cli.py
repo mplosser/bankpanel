@@ -16,8 +16,21 @@ from . import __version__
 
 def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
-        "--config-dir", default="configs", help="directory of config CSVs (default: configs)"
+        "--config-dir", default=None,
+        help="directory of config CSVs (default: configs/<profile>, i.e. configs/call or configs/y9c)",
     )
+    parser.add_argument(
+        "--profile", default="ffiec_call", choices=("ffiec_call", "fry9c"),
+        help="which report the configs and raw files describe (default: ffiec_call)",
+    )
+
+
+CONFIG_DIRS = {"ffiec_call": "configs/call", "fry9c": "configs/y9c"}
+
+
+def _config_dir(args: argparse.Namespace) -> str:
+    """The config directory: explicit, else the one that goes with the profile."""
+    return args.config_dir or CONFIG_DIRS[args.profile]
 
 
 def _parse_years(text: str | None) -> tuple[int, int] | None:
@@ -34,7 +47,7 @@ def cmd_lint(args: argparse.Namespace) -> int:
     from .config import ConfigError, ConfigSet
 
     try:
-        cs = ConfigSet.load(args.config_dir)
+        cs = ConfigSet.load(_config_dir(args))
         issues = cs.lint(strict=args.strict)
     except ConfigError as exc:
         print(str(exc), file=sys.stderr)
@@ -58,7 +71,7 @@ def cmd_build(args: argparse.Namespace) -> int:
         build(
             raw_dir=args.raw_dir,
             out=args.out,
-            config_dir=args.config_dir,
+            config_dir=_config_dir(args),
             profile=get_profile(args.profile),
             years=_parse_years(args.years),
             jobs=args.jobs,
@@ -188,6 +201,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
     exit_code = 0
     saved: dict[str, pd.DataFrame] = {}
 
+    ledger = args.ledger or str(Path(_config_dir(args)) / "coverage_expected.csv")
     if args.check in ("coverage", "all"):
         from .validate.coverage import coverage_scan, format_report
 
@@ -200,7 +214,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
             print("[warn] without it, FFIEC 051 semiannual items will dominate the output.")
         scans = [
             coverage_scan(frame, part, panel="panel", expectations=expectations,
-                          ledger_path=args.ledger)
+                          ledger_path=ledger)
             for frame, part in column_chunks()
         ]
         new, approved = concat(n for n, _ in scans), concat(a for _, a in scans)
@@ -211,7 +225,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
         # the construction was fixed, or the row was mis-keyed. Either way it should go.
         from .validate.approvals import load_ledger
 
-        ledger = load_ledger(args.ledger)
+        ledger = load_ledger(ledger)
         if not ledger.empty:
             keys = ["panel", "column", "from_date", "to_date"]
             seen = set(map(tuple, approved[keys].astype(str).to_numpy())) if not approved.empty else set()
@@ -239,7 +253,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
 
         from .expr import FormulaError, dependencies
 
-        cs = ConfigSet.load(args.config_dir)
+        cs = ConfigSet.load(_config_dir(args))
         check_cols: set[str] = set()
         for check in cs.checks:
             try:
@@ -283,7 +297,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
 
         steps = concat(
             find_stitch_steps(frame, subset)
-            for frame, subset in formula_batches(ConfigSet.load(args.config_dir))
+            for frame, subset in formula_batches(ConfigSet.load(_config_dir(args)))
         )
         print(format_stitches(steps))
         saved["stitches"] = steps
@@ -292,7 +306,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.check in ("quarterize", "all"):
         from .validate.quarterize_audit import attribute, audit, format_report
 
-        cs = ConfigSet.load(args.config_dir)
+        cs = ConfigSet.load(_config_dir(args))
         flows = cs.flow_columns()  # the sign check runs on the q_ companions, not the as-filed ytd_
         nonneg = [
             flows[v.variable_name] for v in (*cs.base, *cs.derived)
@@ -337,7 +351,7 @@ def cmd_propose(args: argparse.Namespace) -> int:
     from .reference.mdrm import load_mdrm
 
     profile = get_profile(args.profile)
-    cs = ConfigSet.load(args.config_dir)
+    cs = ConfigSet.load(_config_dir(args))
     existing_names = {v.variable_name for v in (*cs.base, *cs.derived)}
 
     # A claimed code also claims its coalesce sibling. RCON1766 is the domestic twin of
@@ -510,7 +524,6 @@ def main(argv: list[str] | None = None) -> int:
     _add_common(p_build)
     p_build.add_argument("--raw-dir", required=True, help="directory of raw quarterly parquets")
     p_build.add_argument("--out", required=True, help="panel root to write")
-    p_build.add_argument("--profile", default="ffiec_call")
     p_build.add_argument("--years", default=None, help="YYYY or YYYY:YYYY")
     p_build.add_argument("--jobs", type=int, default=1, help="parallel year workers")
     p_build.add_argument(
@@ -525,6 +538,7 @@ def main(argv: list[str] | None = None) -> int:
     p_build.set_defaults(func=cmd_build)
 
     p_exp = sub.add_parser("expectations", help="build or report the reporting-expectations matrix")
+    _add_common(p_exp)
     p_exp.add_argument("action", choices=("build", "report"))
     p_exp.add_argument("--panel-root", default=None)
     p_exp.add_argument("--out", default=None, help="default: <panel-root>/reporting_expectations.parquet")
@@ -537,7 +551,7 @@ def main(argv: list[str] | None = None) -> int:
     p_val.add_argument("--panel-root", default=None)
     _add_common(p_val)
     p_val.add_argument("--expectations", default=None)
-    p_val.add_argument("--ledger", default="configs/coverage_expected.csv")
+    p_val.add_argument("--ledger", default=None, help="approval ledger (default: <config-dir>/coverage_expected.csv)")
     p_val.add_argument("--strict", action="store_true", help="exit non-zero on new findings")
     p_val.add_argument("--save", action="store_true")
     p_val.set_defaults(func=cmd_validate)
@@ -546,7 +560,6 @@ def main(argv: list[str] | None = None) -> int:
     _add_common(p_prop)
     p_prop.add_argument("--schedule", required=True, help="e.g. RC-C")
     p_prop.add_argument("--raw-dir", required=True)
-    p_prop.add_argument("--profile", default="ffiec_call")
     p_prop.add_argument("--schedule-map", default="reference_data/mdrm_to_schedule.csv")
     p_prop.add_argument("--mdrm", default=None)
     p_prop.add_argument("--years", default=None)
@@ -555,9 +568,9 @@ def main(argv: list[str] | None = None) -> int:
     p_prop.set_defaults(func=cmd_propose)
 
     p_enr = sub.add_parser("enrich", help="fill blank metadata on a config from measured data")
+    _add_common(p_enr)
     p_enr.add_argument("--config", required=True)
     p_enr.add_argument("--raw-dir", required=True)
-    p_enr.add_argument("--profile", default="ffiec_call")
     p_enr.add_argument("--mdrm", default=None)
     p_enr.add_argument("--years", default=None)
     p_enr.add_argument("--out", default=None, help="default: edit the config in place")
@@ -568,6 +581,7 @@ def main(argv: list[str] | None = None) -> int:
     p_info.set_defaults(func=cmd_info)
 
     p_dict = sub.add_parser("dictionary", help="print or export the data dictionary")
+    _add_common(p_dict)
     p_dict.add_argument("--panel-root", default=None)
     p_dict.add_argument("--schedule", default=None)
     p_dict.add_argument("--format", default="table", choices=("table", "csv", "json"))

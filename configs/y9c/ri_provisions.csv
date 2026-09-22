@@ -1,0 +1,25 @@
+# Derived from configs/call/ri_provisions.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,ri_provisions
+schedule,RI
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK4230,ytd_provision_ll,HI,ytd,all,,,any,PROVISION FOR LOAN AND LEASE LOSSES (before 2001Q1 also includes off-balance-sheet and allocated transfer risk provisions)
+BHCKJJ33,ytd_provision_credit_tot,HI,ytd,all,,,any,PROVISIONS FOR CREDIT LOSSES ON FINANCIAL ASSETS (CECL total; equals RIAD4230 for non-adopters)
+BHCKJH90,ytd_provision_htm,HI-B,ytd,all,,,any,PROVISIONS FOR CREDIT LOSSES ON HELD-TO-MATURITY DEBT SECURITIES
+BHCKJH96,ytd_provision_afs,HI-B,ytd,all,,,any,PROVISIONS FOR CREDIT LOSSES ON AVAILABLE-FOR-SALE DEBT SECURITIES
+BHCKJJ02,ytd_provision_oth_fin,HI-B,ytd,all,,,any,PROVISIONS FOR CREDIT LOSSES ON OTHER FINANCIAL ASSETS MEASURED AT AMORTIZED COST
+BHCKMG93,ytd_provision_obs,HI-B,ytd,all,,,any,PROVISIONS FOR CREDIT LOSSES ON OFF-BALANCE-SHEET CREDIT EXPOSURES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+
+[CHECKS]
+name,expression,severity,description
+provision_cecl_identity,(ytd_provision_credit_tot - (ytd_provision_ll + ytd_provision_htm + ytd_provision_afs + ytd_provision_oth_fin + ytd_provision_obs)).abs() <= 5,warning,The CECL provision total is the sum of its five components (holds for 99.9% of banks in 2024Q4); tolerance covers rounding across five year-to-date items
+

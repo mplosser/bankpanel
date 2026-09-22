@@ -4,7 +4,7 @@ Quick start::
 
     import bankpanel as bp
 
-    bp.build(raw_dir=..., out='panel_root', config_dir='configs')   # or: bankpanel build
+    bp.build(raw_dir=..., out='panel_root', config_dir='configs/call')   # or: bankpanel build
     bp.list_variables(schedule='RC-C')
     df = bp.read_panel(columns=['assets_total', 'ln_condev'], start='2000Q1')
 

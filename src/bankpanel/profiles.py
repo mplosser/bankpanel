@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .reference.formtype import resolve_form_type
+from .reference.formtype import HEADER_RENAMES, header_source_columns, resolve_form_type, resolver_source_columns
 
 
 @dataclass(frozen=True)
@@ -57,6 +57,12 @@ class ReportProfile:
     #: Optional MDRM dictionary parquet, used by ``bankpanel enrich``.
     dictionary_path: Path | None = field(default=None)
 
+    #: Raw identity columns copied into the header dataset, and their stable names.
+    header_columns: tuple[str, ...] = header_source_columns()
+    header_renames: dict[str, str] = field(default_factory=lambda: dict(HEADER_RENAMES))
+    #: Everything the resolver and header need read from a raw quarter.
+    source_columns: tuple[str, ...] = resolver_source_columns()
+
 
 #: The FFIEC Call Report (forms 031 / 041 / 051), as published by ``data_call_report``.
 FFIEC_CALL = ReportProfile(
@@ -64,7 +70,35 @@ FFIEC_CALL = ReportProfile(
     form_type_resolver=resolve_form_type,
 )
 
-PROFILES: dict[str, ReportProfile] = {FFIEC_CALL.name: FFIEC_CALL}
+#: Raw identity fields on the FR Y-9 files (Chicago Fed and FFIEC eras share them).
+FRY9C_HEADER = {
+    "RSSD9017": "institution_name",
+    "RSSD9010": "short_name",
+    "RSSD9130": "city",
+    "RSSD9200": "state",
+    "RSSD9220": "zip_code",
+    "RSSD9050": "legacy_country",
+    "RSSD9053": "date_end",
+    "RSSD9032": "entity_type_code",
+    "RSSD9146": "financial_sub_indicator",
+}
+
+#: The FR Y-9C (consolidated bank holding company financial statements), as published by
+#: ``data_fry9``. One form, so no form type. BHCK is the consolidated prefix and BHDM the
+#: domestic-office one -- the RCFD/RCON pairing; BHCA/BHCW are the standardized and
+#: advanced-approaches capital columns -- the RCFA/RCFW pairing. BHBC carries the
+#: income of predecessor institutions in the quarter of a business combination.
+FRY9C = ReportProfile(
+    name="fry9c",
+    prefix_aliases=(),
+    coalesce_rules=(("BHCK", "BHDM"),),
+    form_type_resolver=None,
+    header_columns=tuple(FRY9C_HEADER),
+    header_renames=dict(FRY9C_HEADER),
+    source_columns=tuple(FRY9C_HEADER),
+)
+
+PROFILES: dict[str, ReportProfile] = {FFIEC_CALL.name: FFIEC_CALL, FRY9C.name: FRY9C}
 
 
 def get_profile(name: str) -> ReportProfile:

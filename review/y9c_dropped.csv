@@ -1,0 +1,531 @@
+config,kind,name,call_code,y9c_code,reason
+assets.csv,base,ibb,RCFD0071,BHCK0071,translated code absent from every Y-9C quarter
+assets.csv,base,deriv_pos_fv,RCFDC010,BHCKC010,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_3mo_less,RCFDA549,BHCKA549,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_3mo_12mo,RCFDA550,BHCKA550,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_1y_3y,RCFDA551,BHCKA551,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_3y_5y,RCFDA552,BHCKA552,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_5y_15y,RCFDA553,BHCKA553,translated code absent from every Y-9C quarter
+assets.csv,base,debt_security_maturity_15y_over,RCFDA554,BHCKA554,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_3mo_less,RCFDA555,BHCKA555,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_3mo_12mo,RCFDA556,BHCKA556,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_1y_3y,RCFDA557,BHCKA557,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_3y_5y,RCFDA558,BHCKA558,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_5y_15y,RCFDA559,BHCKA559,translated code absent from every Y-9C quarter
+assets.csv,base,res_mbs_maturity_15y_over,RCFDA560,BHCKA560,translated code absent from every Y-9C quarter
+assets.csv,base,other_mbs_maturity_3y_less,RCFDA561,BHCKA561,translated code absent from every Y-9C quarter
+assets.csv,base,other_mbs_maturity_3y_more,RCFDA562,BHCKA562,translated code absent from every Y-9C quarter
+assets.csv,base,htm_oth_debt_ac,RCFD1774,BHCK1774,translated code absent from every Y-9C quarter
+assets.csv,base,htm_oth_debt_fv,RCFD1775,BHCK1775,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_3mo_less,RCONA564,BHDMA564,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_3mo_12mo,RCONA565,BHDMA565,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_1y_3y,RCONA566,BHDMA566,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_3y_5y,RCONA567,BHDMA567,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_5y_15y,RCONA568,BHDMA568,translated code absent from every Y-9C quarter
+assets.csv,base,res_loans_maturity_15y_over,RCONA569,BHDMA569,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3mo_less_pre11,RCFDA570,BHCKA570,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3mo_12mo_pre11,RCFDA571,BHCKA571,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_1y_3y_pre11,RCFDA572,BHCKA572,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3y_5y_pre11,RCFDA573,BHCKA573,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_5y_15y_pre11,RCFDA574,BHCKA574,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_15y_over_pre11,RCFDA575,BHCKA575,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3mo_less_post11,RCONA570,BHDMA570,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3mo_12mo_post11,RCONA571,BHDMA571,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_1y_3y_post11,RCONA572,BHDMA572,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_3y_5y_post11,RCONA573,BHDMA573,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_5y_15y_post11,RCONA574,BHDMA574,translated code absent from every Y-9C quarter
+assets.csv,base,other_loans_maturity_15y_over_post11,RCONA575,BHDMA575,translated code absent from every Y-9C quarter
+assets.csv,base,hfs_famres_ln_18_src,RCONFT05,BHDMFT05,translated code absent from every Y-9C quarter
+assets.csv,base,srv_ass_mrt_fv,RCFDA590,BHCKA590,translated code absent from every Y-9C quarter
+assets.csv,base,na_famres_first,RCONC229,BHDMC229,translated code absent from every Y-9C quarter
+assets.csv,base,na_famres_closed,RCON5403,BHDM5403,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_f176,RCONF176,BHDMF176,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_f177,RCONF177,BHDMF177,translated code absent from every Y-9C quarter
+assets.csv,base,na_famres_junior,RCONC230,BHDMC230,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_f182,RCONF182,BHDMF182,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_f183,RCONF183,BHDMF183,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_foreign,RCFNB574,BHFNB574,translated code absent from every Y-9C quarter
+assets.csv,base,na_re_f663,RCONF663,BHDMF663,translated code absent from every Y-9C quarter
+assets.csv,base,ln_condev_1,RCONF158,BHDMF158,translated code absent from every Y-9C quarter
+assets.csv,base,ln_condev_2,RCONF159,BHDMF159,translated code absent from every Y-9C quarter
+assets.csv,base,ln_famres_pre01,RCON1430,BHDM1430,translated code absent from every Y-9C quarter
+assets.csv,base,ln_other_re_1,RCONF160,BHDMF160,translated code absent from every Y-9C quarter
+assets.csv,base,ln_other_re_2,RCONF161,BHDMF161,translated code absent from every Y-9C quarter
+assets.csv,base,ln_dep_us_branches_fgn,RCFDB532,BHCKB532,translated code absent from every Y-9C quarter
+assets.csv,base,ln_dep_oth_us_combanks,RCFDB533,BHCKB533,translated code absent from every Y-9C quarter
+assets.csv,base,ln_dep_oth_us_depinst,RCFDB534,BHCKB534,translated code absent from every Y-9C quarter
+assets.csv,base,ln_dep_fgn_branches_us,RCFDB536,BHCKB536,translated code absent from every Y-9C quarter
+assets.csv,base,ln_dep_oth_fgn_banks,RCFDB537,BHCKB537,translated code absent from every Y-9C quarter
+assets.csv,base,pdl_ci_non_1,RCON1224,BHDM1224,translated code absent from every Y-9C quarter
+assets.csv,base,na_ci_1253,RCFD1253,BHCK1253,translated code absent from every Y-9C quarter
+assets.csv,base,na_ci_1256,RCFD1256,BHCK1256,translated code absent from every Y-9C quarter
+assets.csv,base,na_cc_1220,RCON1220,BHDM1220,translated code absent from every Y-9C quarter
+assets.csv,base,uc_ln_dep_fi,RCFDPV10,BHCKPV10,translated code absent from every Y-9C quarter
+assets.csv,base,uc_ln_non_dep_fi,RCFDPV11,BHCKPV11,translated code absent from every Y-9C quarter
+assets.csv,base,accrued_int_loans_pre01,RCFD2164,BHCK2164,translated code absent from every Y-9C quarter
+assets.csv,base,ac_htm_states_1,RCFD1676,BHCK1676,translated code absent from every Y-9C quarter
+assets.csv,base,ac_htm_states_2,RCFD1681,BHCK1681,translated code absent from every Y-9C quarter
+assets.csv,base,ac_htm_states_3,RCFD1694,BHCK1694,translated code absent from every Y-9C quarter
+assets.csv,base,fv_afs_states_1,RCFD1679,BHCK1679,translated code absent from every Y-9C quarter
+assets.csv,base,fv_afs_states_2,RCFD1691,BHCK1691,translated code absent from every Y-9C quarter
+assets.csv,base,fv_afs_states_3,RCFD1697,BHCK1697,translated code absent from every Y-9C quarter
+assets.csv,base,ac_htm_mbs_18,RCONHT54,BHDMHT54,translated code absent from every Y-9C quarter
+assets.csv,base,fv_htm_mbs_18,RCONHT55,BHDMHT55,translated code absent from every Y-9C quarter
+assets.csv,base,fv_afs_mbs_18,RCONHT57,BHDMHT57,translated code absent from every Y-9C quarter
+assets.csv,base,hfs_famres_ln_18_alt,RCONHT84,BHDMHT84,translated code absent from every Y-9C quarter
+assets.csv,base,hfs_famres_first_lien,RCONF072,BHDMF072,translated code absent from every Y-9C quarter
+assets.csv,base,hfs_famres_jr_lien,RCONF073,BHDMF073,translated code absent from every Y-9C quarter
+assets.csv,base,custody_bank,RCFDK659,BHCKK659,translated code absent from every Y-9C quarter
+assets.csv,base,fidu_managed_assets,RCFDB894,BHCKB894,translated code absent from every Y-9C quarter
+assets.csv,base,fidu_nonmanaged_assets,RCFDB895,BHCKB895,translated code absent from every Y-9C quarter
+assets.csv,base,fidu_managed_accounts,RCFDB896,BHCKB896,translated code absent from every Y-9C quarter
+assets.csv,base,fidu_nonmanaged_accounts,RCFDB897,BHCKB897,translated code absent from every Y-9C quarter
+assets.csv,base,custody_assets,RCFDB898,BHCKB898,translated code absent from every Y-9C quarter
+assets.csv,base,custody_accounts,RCFDB899,BHCKB899,translated code absent from every Y-9C quarter
+assets.csv,base,qavg_loans_tot,RCFD3360,BHCK3360,translated code absent from every Y-9C quarter
+assets.csv,base,qavg_loans_re_agg_pre08,RCFD3385,BHCK3385,translated code absent from every Y-9C quarter
+assets.csv,base,qavg_leases,RCFD3484,BHCK3484,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_lndom_re_agg_031032,RIAD4011,BHCK4011,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_cc_pre01_031032,RIAD4054,BHCK4054,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_cons_pre01,RIAD4055,BHCK4055,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_ci,RIAD4012,BHCK4012,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_trans_accts_dom,RIAD4508,BHCK4508,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_savings_dep_dom_01,RIAD0093,BHCK0093,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_subdebt,RIAD4200,BHCK4200,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_oth_time_dep,RIAD4512,BHCK4512,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_nonint_inc_srv_chrg_dep,RIAD4080,BHCK4080,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_nonint_inc_oth_fee,RIAD5407,BHCK5407,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_nonint_inc_all_oth,RIAD5408,BHCK5408,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_nonint_inc_net_gain_ll,RIAD5416,BHCK5416,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_nonint_inc_oreo,RIAD5415,BHCK5415,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_savings_dep_dom_1_pre01,RIAD4509,BHCK4509,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_exp_savings_dep_dom_2_pre01,RIAD4511,BHCK4511,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_lndom_re_agg_033,RIAD4246,BHCK4246,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_cc,RIADB485,BHCKB485,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_cons,RIADB486,BHCKB486,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_tradrev_inc_2_pre01,RIAD4075,BHCK4075,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_int_inc_ln_cc_pre01_033034,RIAD4248,BHCK4248,translated code absent from every Y-9C quarter
+liabilities.csv,base,subdebt,RCFD3200,BHCK3200,translated code absent from every Y-9C quarter
+liabilities.csv,base,liab_oth_2930,RCFD2930,BHCK2930,translated code absent from every Y-9C quarter
+liabilities.csv,base,operating_lease_liab,RCFDLB56,BHCKLB56,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_repr_dt_lt1yr,RCFDF055,BHCKF055,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_repr_dt_lt3yr,RCFDF056,BHCKF056,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_repr_dt_lt5yr,RCFDF057,BHCKF057,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_repr_dt_gt5yr,RCFDF058,BHCKF058,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_repr_lte1yr,RCFDF060,BHCKF060,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_repr_gt1yr_lt3yr,RCFDF061,BHCKF061,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_repr_gt3yr_lt5yr,RCFDF062,BHCKF062,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_repr_gt5yr,RCFDF063,BHCKF063,translated code absent from every Y-9C quarter
+liabilities.csv,base,subdebt_rem_mat_lte1yr,RCFDG469,BHCKG469,translated code absent from every Y-9C quarter
+liabilities.csv,base,subdebt_rem_mat_gt1yr_lte3yr,RCFDG470,BHCKG470,translated code absent from every Y-9C quarter
+liabilities.csv,base,subdebt_rem_mat_gt3yr_lte5yr,RCFDG471,BHCKG471,translated code absent from every Y-9C quarter
+liabilities.csv,base,subdebt_rem_mat_gt5yr,RCFDG472,BHCKG472,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_dep_trans_acc_01,RCONB549,BHDMB549,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_dep_trans_acc,RCONB551,BHDMB551,translated code absent from every Y-9C quarter
+liabilities.csv,base,for_bank_dep_trans_acc,RCON2213,BHDM2213,translated code absent from every Y-9C quarter
+liabilities.csv,base,transaction_dep,RCON2215,BHDM2215,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_dep_non_trans_acc_01,RCONB550,BHDMB550,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_dep_non_trans_acc_01,RCONB552,BHDMB552,translated code absent from every Y-9C quarter
+liabilities.csv,base,for_bank_dep_non_trans_acc,RCON2236,BHDM2236,translated code absent from every Y-9C quarter
+liabilities.csv,base,stable_deposits,RCON2385,BHDM2385,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_for_dep_01,RCFNB553,BHFNB553,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_for_dep_01,RCFNB554,BHFNB554,translated code absent from every Y-9C quarter
+liabilities.csv,base,for_bank_for_dep,RCFN2625,BHFN2625,translated code absent from every Y-9C quarter
+liabilities.csv,base,foreign_dep,RCFN2200,BHFN2200,translated code absent from every Y-9C quarter
+liabilities.csv,base,brokered_tot_dep,RCON2365,BHDM2365,translated code absent from every Y-9C quarter
+liabilities.csv,base,mmda,RCON6810,BHDM6810,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_savings_dep_87,RCON0352,BHDM0352,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt100k_dep,RCON6648,BHDM6648,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt100k_lt250k,RCONJ473,BHDMJ473,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt250k,RCONJ474,BHDMJ474,translated code absent from every Y-9C quarter
+liabilities.csv,base,ira_acc_gte100k,RCONF233,BHDMF233,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt250k_matrp_lt3mo,RCONHK07,BHDMHK07,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt250k_matrp_gt3mo_lt1yr,RCONHK08,BHDMHK08,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt250k_matrp_gt1yr_lt3yr,RCONHK09,BHDMHK09,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt250k_matrp_gt3yr,RCONHK10,BHDMHK10,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_dep_gt250k_lt3mo_mat,RCONHK12,BHDMHK12,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_dep_gt250k_gt3mo_lt1yr_mat,RCONHK13,BHDMHK13,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt250k_matrp_gt1yr_lt3yr,RCONHK14,BHDMHK14,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt250k_matrp_gt3yr,RCONHK15,BHDMHK15,translated code absent from every Y-9C quarter
+liabilities.csv,base,non_ib_trans_acc_dep_indv,RCONP753,BHDMP753,translated code absent from every Y-9C quarter
+liabilities.csv,base,ib_trans_acc_dep_indv,RCONP754,BHDMP754,translated code absent from every Y-9C quarter
+liabilities.csv,base,mmda_dep_indv,RCONP756,BHDMP756,translated code absent from every Y-9C quarter
+liabilities.csv,base,mmda_nonindv,RCONP757,BHDMP757,translated code absent from every Y-9C quarter
+liabilities.csv,base,sav_dep_indv,RCONP758,BHDMP758,translated code absent from every Y-9C quarter
+liabilities.csv,base,savedep_nonindv,RCONP759,BHDMP759,translated code absent from every Y-9C quarter
+liabilities.csv,base,dep_lt_250k,RCONF049,BHDMF049,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_number_underlimit,RCONF050,BHDMF050,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_acc_amt_over250k,RCONF051,BHDMF051,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_number_overlimit,RCONF052,BHDMF052,translated code absent from every Y-9C quarter
+liabilities.csv,base,ret_dep_lt_250k,RCONF045,BHDMF045,translated code absent from every Y-9C quarter
+liabilities.csv,base,retire_number_underlimit,RCONF046,BHDMF046,translated code absent from every Y-9C quarter
+liabilities.csv,base,ret_dep_acc_amt_gt250k,RCONF047,BHDMF047,translated code absent from every Y-9C quarter
+liabilities.csv,base,retire_number_overlimit,RCONF048,BHDMF048,translated code absent from every Y-9C quarter
+liabilities.csv,base,fdic_uninsur_depos,RCON5597,BHDM5597,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt100k_matrp_lt3mo,RCONA579,BHDMA579,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt100k_matrp_gt3mo_lt1yr,RCONA580,BHDMA580,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt100k_matrp_gt1yr_lt3yr,RCONA581,BHDMA581,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_lt100k_matrp_gt3yr,RCONA582,BHDMA582,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_dep_gt100k_lt3mo_mat_97,RCONA584,BHDMA584,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_dep_gt100k_gt3mo_lt1yr_mat_97,RCONA585,BHDMA585,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt100k_matrp_gt1yr_lt3yr,RCONA586,BHDMA586,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt100k_matrp_gt3yr,RCONA587,BHDMA587,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_number_under100k,RCON3779,BHDM3779,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_acc_amt_over100k,RCON2710,BHDM2710,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_number_over100k,RCON2722,BHDM2722,translated code absent from every Y-9C quarter
+liabilities.csv,base,ira_acc_tot,RCON6835,BHDM6835,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_lte1yr,RCFDB571,BHCKB571,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_gt1yr_lte3yr,RCFDB567,BHCKB567,translated code absent from every Y-9C quarter
+liabilities.csv,base,oth_bor_rem_mat_gt3yr,RCFDB568,BHCKB568,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_dt_lt1yr,RCFD2651,BHCK2651,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_gt1yr_lte3yr,RCFDB565,BHCKB565,translated code absent from every Y-9C quarter
+liabilities.csv,base,fhlba_rem_mat_gt3yr,RCFDB566,BHCKB566,translated code absent from every Y-9C quarter
+liabilities.csv,base,demand_notes_treas,RCFD2840,BHCK2840,translated code absent from every Y-9C quarter
+liabilities.csv,base,obm_gt1yr_lt3yr,RCFDA547,BHCKA547,translated code absent from every Y-9C quarter
+liabilities.csv,base,obm_gt3yr,RCFDA548,BHCKA548,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_gt100k_dep_9701,RCON2604,BHDM2604,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_lt100k_lt3mo_mat,RCONA225,BHDMA225,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_lt100k_gt3mo_lt1yr_mat,RCONA226,BHDMA226,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_lt100k_gt1yr_mat,RCONA227,BHDMA227,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_lt100k_qrt_rp,RCONA228,BHDMA228,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_lt100k_qrt_1yr_rp,RCONA229,BHDMA229,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_lt100k_1yr_rp,RCONA230,BHDMA230,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_lt3mo_mat,RCONA232,BHDMA232,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_gt3mo_lt1yr_mat,RCONA233,BHDMA233,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_gt1yr_lt5yr_mat,RCONA234,BHDMA234,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_gt5yr_mat,RCONA235,BHDMA235,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_qrt_rp,RCONA236,BHDMA236,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_qrt_1yr_rp,RCONA237,BHDMA237,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_1yr_5yr_rp,RCONA238,BHDMA238,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_5yr_rp,RCONA239,BHDMA239,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_lt100k_lt3m_matrp,RCON0359,BHDM0359,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_lt100k_gt3m_lt1yr_matrp,RCON3644,BHDM3644,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_3m_mat_no_oa,RCON2761,BHDM2761,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_3m_1yr_mat_no_oa,RCON2762,BHDM2762,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_1_5yr_mat_no_oa,RCON2763,BHDM2763,translated code absent from every Y-9C quarter
+liabilities.csv,base,fix_time_gt100k_5yr_mat_no_oa,RCON2765,BHDM2765,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_qrt_rp_no_oa,RCON4568,BHDM4568,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_qrt_1yr_rp_no_oa,RCON4569,BHDM4569,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_1yr_5yr_rp_no_oa,RCON4571,BHDM4571,translated code absent from every Y-9C quarter
+liabilities.csv,base,flo_time_gt100k_5yr_rp_no_oa,RCON4572,BHDM4572,translated code absent from every Y-9C quarter
+liabilities.csv,base,deposit_acc_amt_under100k,RCON2702,BHDM2702,translated code absent from every Y-9C quarter
+liabilities.csv,base,fdic_tag_nibta_amt_over250k,RCONG167,BHDMG167,translated code absent from every Y-9C quarter
+liabilities.csv,base,fdic_tag_nibta_num_over250k,RCONG168,BHDMG168,translated code absent from every Y-9C quarter
+liabilities.csv,base,fdic_tag_nibta_avg_amt_over250k,RCONJ651,BHDMJ651,translated code absent from every Y-9C quarter
+liabilities.csv,base,fdic_tag_nibta_avg_num_over250k,RCONJ652,BHDMJ652,translated code absent from every Y-9C quarter
+liabilities.csv,base,df_tag_nibta_amt_over250k,RCONJ944,BHDMJ944,translated code absent from every Y-9C quarter
+liabilities.csv,base,df_tag_nibta_num_over250k,RCONJ945,BHDMJ945,translated code absent from every Y-9C quarter
+liabilities.csv,base,tot_fiduc_accts_mngd_ass,RCFDB894,BHCKB894,translated code absent from every Y-9C quarter
+liabilities.csv,base,tot_fiduc_accts_non_mngd_ass,RCFDB895,BHCKB895,translated code absent from every Y-9C quarter
+liabilities.csv,base,custody_safe_accts_non_mngd_ass,RCFDB898,BHCKB898,translated code absent from every Y-9C quarter
+liabilities.csv,base,custody_accts_num,RCFDB899,BHCKB899,translated code absent from every Y-9C quarter
+liabilities.csv,base,tot_fiduc_mngd_accts_num,RCFDB896,BHCKB896,translated code absent from every Y-9C quarter
+liabilities.csv,base,tot_fiduc_non_mngd_accts_num,RCFDB897,BHCKB897,translated code absent from every Y-9C quarter
+liabilities.csv,base,brokered_reciprocal_dep,RCONG803,BHDMG803,translated code absent from every Y-9C quarter
+liabilities.csv,base,tot_reciprocal_dep,RCONJH83,BHDMJH83,translated code absent from every Y-9C quarter
+liabilities.csv,base,list_serv_dep,RCONK223,BHDMK223,translated code absent from every Y-9C quarter
+liabilities.csv,base,brokered_lt250k_dep_17,RCONHK05,BHDMHK05,translated code absent from every Y-9C quarter
+liabilities.csv,base,othbor_1_pre94,RCFD2850,BHCK2850,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_dep_non_trans_acc_pre01,RCON2346,BHDM2346,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_dep_trans_acc_pre01,RCON2201,BHDM2201,translated code absent from every Y-9C quarter
+liabilities.csv,base,demanddep_accounts,RCON2185,BHDM2185,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_dep_non_trans_acc_1_pre01,RCON2550,BHDM2550,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_dep_non_trans_acc_2_pre01,RCON2349,BHDM2349,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_for_dep_1_pre01,RCFN2621,BHFN2621,translated code absent from every Y-9C quarter
+liabilities.csv,base,ind_for_dep_2_pre01,RCFN2330,BHFN2330,translated code absent from every Y-9C quarter
+liabilities.csv,base,us_bank_for_dep_pre01,RCFN2623,BHFN2623,translated code absent from every Y-9C quarter
+liabilities.csv,base,savings_dep,RCON2389,BHDM2389,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_cod_gt100k_dom,RCON6645,BHDM6645,translated code absent from every Y-9C quarter
+liabilities.csv,base,time_dep_gt100k_dom,RCON6646,BHDM6646,translated code absent from every Y-9C quarter
+liabilities.csv,base,brokered_lt100k_dep,RCON2343,BHDM2343,translated code absent from every Y-9C quarter
+liabilities.csv,base,brokered_gt100k_lt250k_dep,RCONJ472,BHDMJ472,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_trans,RCON3485,BHDM3485,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_mmda,RCON3486,BHDM3486,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_savings,RCON3487,BHDM3487,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_sav_mmda,RCONB563,BHDMB563,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_foreign_ib,RCFN3404,BHFN3404,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_time_ge100k,RCONA514,BHDMA514,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_time_lt100k,RCONA529,BHDMA529,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_time_le250k,RCONHK16,BHDMHK16,translated code absent from every Y-9C quarter
+liabilities.csv,base,qavg_dep_time_gt250k,RCONHK17,BHDMHK17,translated code absent from every Y-9C quarter
+rc_b_securities.csv,base,debtsec_mat_repr_lte1yr,RCFDA248,BHCKA248,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_statelocal_oblig,RCFD2107,BHCK2107,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_oth_dom,RCONJ464,BHDMJ464,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_famres_first_adjrate,RCON5370,BHDM5370,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_condev_interest_reserve,RCONG376,BHDMG376,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_famres_heloc_converted_to_term,RCONLE75,BHDMLE75,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,ln_closedend_negative_amortization,RCONF230,BHDMF230,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_nfnres_lte100k,RCON5564,BHDM5564,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_nfnres_lte100k,RCON5565,BHDM5565,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_nfnres_100k_250k,RCON5566,BHDM5566,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_nfnres_100k_250k,RCON5567,BHDM5567,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_nfnres_250k_1m,RCON5568,BHDM5568,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_nfnres_250k_1m,RCON5569,BHDM5569,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_ci_lte100k,RCON5570,BHDM5570,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_ci_lte100k,RCON5571,BHDM5571,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_ci_100k_250k,RCON5572,BHDM5572,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_ci_100k_250k,RCON5573,BHDM5573,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_ci_250k_1m,RCON5574,BHDM5574,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_ci_250k_1m,RCON5575,BHDM5575,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_farmland_lte100k,RCON5578,BHDM5578,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_farmland_lte100k,RCON5579,BHDM5579,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_farmland_100k_250k,RCON5580,BHDM5580,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_farmland_100k_250k,RCON5581,BHDM5581,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_farmland_250k_500k,RCON5582,BHDM5582,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_farmland_250k_500k,RCON5583,BHDM5583,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_agprod_lte100k,RCON5584,BHDM5584,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_agprod_lte100k,RCON5585,BHDM5585,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_agprod_100k_250k,RCON5586,BHDM5586,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_agprod_100k_250k,RCON5587,BHDM5587,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,n_ln_agprod_250k_500k,RCON5588,BHDM5588,translated code absent from every Y-9C quarter
+rc_c_loans.csv,base,amt_ln_agprod_250k_500k,RCON5589,BHDM5589,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_tot_dom,RCON2200,BHDM2200,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_usgovt_trans,RCON2202,BHDM2202,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_statelocal_trans,RCON2203,BHDM2203,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,demand_dep_tot,RCON2210,BHDM2210,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_forgovt_trans,RCON2216,BHDM2216,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_forgovt_nontrans,RCON2377,BHDM2377,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_usgovt_nontrans,RCON2520,BHDM2520,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,dep_statelocal_nontrans,RCON2530,BHDM2530,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,preferred_dep,RCON5590,BHDM5590,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,time_dep_lt100k_mat_lte1yr_9716,RCONA241,BHDMA241,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,brokered_dep_gte100k_mat_lte1yr_9610,RCONA244,BHDMA244,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,time_dep_lte250k_mat_lte1yr,RCONHK11,BHDMHK11,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,reciprocal_dep_jun2018,RCONJH84,BHDMJH84,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,brokered_dep_100k_250k_mat_lte1yr_1116,RCONK219,BHDMK219,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,brokered_dep_gt250k_mat_lte1yr,RCONK220,BHDMK220,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,time_dep_100k_250k_mat_lte1yr_1116,RCONK221,BHDMK221,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,time_dep_gt250k_mat_lte1yr,RCONK222,BHDMK222,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,sweep_dep_affiliate_insured,RCONMT87,BHDMMT87,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,sweep_dep_affiliate_uninsured,RCONMT89,BHDMMT89,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,sweep_dep_nonaffiliate_insured,RCONMT91,BHDMMT91,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,sweep_dep_nonaffiliate_uninsured,RCONMT93,BHDMMT93,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,sweep_dep_not_brokered_tot,RCONMT95,BHDMMT95,translated code absent from every Y-9C quarter
+rc_e_deposits.csv,base,offers_consumer_dep_products,RCONP752,BHDMP752,translated code absent from every Y-9C quarter
+rc_k_quarterly_avg.csv,base,qavg_othbor,RCFD3355,BHCK3355,translated code absent from every Y-9C quarter
+rc_k_quarterly_avg.csv,base,qavg_ibb,RCFD3381,BHCK3381,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_nondep_fin,RCFDPV23,BHCKPV23,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_nondep_fin,RCFDPV24,BHCKPV24,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_nondep_fin,RCFDPV25,BHCKPV25,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_lease_1226,RCON1226,BHDM1226,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_lease_1227,RCON1227,BHDM1227,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_lease_1228,RCON1228,BHDM1228,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_ci_1606,RCON1606,BHDM1606,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_ci_1607,RCON1607,BHDM1607,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_farmland,RCON3493,BHDM3493,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_farmland,RCON3494,BHDM3494,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_multifam,RCON3499,BHDM3499,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_multifam,RCON3500,BHDM3500,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_heloc,RCON5398,BHDM5398,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_heloc,RCON5399,BHDM5399,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_depinst_b834,RCONB834,BHDMB834,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_depinst_b835,RCONB835,BHDMB835,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_depinst_b836,RCONB836,BHDMB836,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_constr_3492,RCON3492,BHDM3492,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_constr_5426,RCON5426,BHDM5426,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_nfnres_3504,RCON3504,BHDM3504,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_nfnres_5441,RCON5441,BHDM5441,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_famres_first,RCONC236,BHDMC236,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_famres_first,RCONC237,BHDMC237,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_famres_junior,RCONC238,BHDMC238,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_famres_junior,RCONC239,BHDMC239,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_constr_res14,RCONF172,BHDMF172,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_constr_oth,RCONF173,BHDMF173,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_constr_res14,RCONF174,BHDMF174,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_constr_oth,RCONF175,BHDMF175,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_ci_modified,RCONK257,BHDMK257,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_ci_modified,RCONK258,BHDMK258,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,na_ci_modified,RCONK259,BHDMK259,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_nfnres_owner_f178,RCONF178,BHDMF178,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_nfnres_oth_f179,RCONF179,BHDMF179,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_nfnres_owner_f180,RCONF180,BHDMF180,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_nfnres_oth_f181,RCONF181,BHDMF181,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_nfnres_3502,RCON3502,BHDM3502,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_nfnres_3503,RCON3503,BHDM3503,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_constr_2759,RCON2759,BHDM2759,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_constr_2769,RCON2769,BHDM2769,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_re_foreign,RCFNB572,BHFNB572,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_re_foreign,RCFNB573,BHFNB573,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_ci_1251,RCFD1251,BHCK1251,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_ci_1254,RCFD1254,BHCK1254,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_ci_1252,RCFD1252,BHCK1252,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_ci_1255,RCFD1255,BHCK1255,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd30_consumer_oth_b578,RCONB578,BHDMB578,translated code absent from every Y-9C quarter
+rc_n_past_due.csv,base,pd90_consumer_oth_b579,RCONB579,BHDMB579,translated code absent from every Y-9C quarter
+rc_r_capital.csv,base,assets_for_leverage_baselI,RCFDL138,BHCKL138,translated code absent from every Y-9C quarter
+ri_a_equity.csv,base,ytd_capital_stock_net,RIADB509,BHCKB509,translated code absent from every Y-9C quarter
+ri_a_equity.csv,base,ytd_treasury_stock_net,RIADB510,BHCKB510,translated code absent from every Y-9C quarter
+ri_a_equity.csv,base,ytd_oth_stockholder_transactions,RIAD4415,BHCK4415,translated code absent from every Y-9C quarter
+ri_a_equity.csv,base,ytd_div_preferred,RIAD4470,BHCK4470,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_co_lease,RIAD4266,BHCK4266,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_rec_lease,RIAD4267,BHCK4267,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_co_depinst,RIAD4481,BHCK4481,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_rec_depinst,RIAD4482,BHCK4482,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_rec_ci,RIAD4608,BHCK4608,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_co_ci,RIAD4638,BHCK4638,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_co_cc_incl_revolving_4262,RIAD4262,BHCK4262,translated code absent from every Y-9C quarter
+ri_b_chargeoffs.csv,base,ytd_rec_cc_incl_revolving_4263,RIAD4263,BHCK4263,translated code absent from every Y-9C quarter
+assets.csv,derived,na_tot,,,formula reads form_type (no form types on the Y-9C); needs its own Y-9C formula
+rc_n_past_due.csv,derived,pd30_tot,,,formula reads form_type (no form types on the Y-9C); needs its own Y-9C formula
+rc_n_past_due.csv,derived,pd90_tot,,,formula reads form_type (no form types on the Y-9C); needs its own Y-9C formula
+assets.csv,derived,na_cc_incl_revolving_pre01,,,input(s) not on the Y-9C: na_cc_1220
+assets.csv,derived,other_loans_maturity_3mo_less,,,"input(s) not on the Y-9C: other_loans_maturity_3mo_less_post11, other_loans_maturity_3mo_less_pre11"
+assets.csv,derived,other_loans_maturity_3mo_12mo,,,"input(s) not on the Y-9C: other_loans_maturity_3mo_12mo_post11, other_loans_maturity_3mo_12mo_pre11"
+assets.csv,derived,other_loans_maturity_1y_3y,,,"input(s) not on the Y-9C: other_loans_maturity_1y_3y_post11, other_loans_maturity_1y_3y_pre11"
+assets.csv,derived,other_loans_maturity_3y_5y,,,"input(s) not on the Y-9C: other_loans_maturity_3y_5y_post11, other_loans_maturity_3y_5y_pre11"
+assets.csv,derived,other_loans_maturity_5y_15y,,,"input(s) not on the Y-9C: other_loans_maturity_5y_15y_post11, other_loans_maturity_5y_15y_pre11"
+assets.csv,derived,other_loans_maturity_15y_over,,,"input(s) not on the Y-9C: other_loans_maturity_15y_over_post11, other_loans_maturity_15y_over_pre11"
+assets.csv,derived,ac_htm_states_9401,,,"input(s) not on the Y-9C: ac_htm_states_1, ac_htm_states_2, ac_htm_states_3"
+assets.csv,derived,ac_htm_states,,,input(s) not on the Y-9C: ac_htm_states_9401
+assets.csv,derived,fv_afs_states_9401,,,"input(s) not on the Y-9C: fv_afs_states_1, fv_afs_states_2, fv_afs_states_3"
+assets.csv,derived,fv_afs_states,,,input(s) not on the Y-9C: fv_afs_states_9401
+assets.csv,derived,ac_htm_mbs,,,input(s) not on the Y-9C: ac_htm_mbs_18
+assets.csv,derived,fv_htm_mbs,,,input(s) not on the Y-9C: fv_htm_mbs_18
+assets.csv,derived,fv_afs_mbs,,,input(s) not on the Y-9C: fv_afs_mbs_18
+assets.csv,derived,hfs_famres_ln_18,,,"input(s) not on the Y-9C: hfs_famres_ln_18_alt, hfs_famres_ln_18_src"
+assets.csv,derived,hfs_famres_ln_pre18,,,"input(s) not on the Y-9C: hfs_famres_first_lien, hfs_famres_jr_lien"
+assets.csv,derived,hfs_famres_ln,,,"input(s) not on the Y-9C: hfs_famres_ln_18, hfs_famres_ln_pre18"
+assets.csv,derived,ln_condev_07,,,"input(s) not on the Y-9C: ln_condev_1, ln_condev_2"
+assets.csv,derived,ln_condev,,,input(s) not on the Y-9C: ln_condev_07
+assets.csv,derived,ln_famres,,,input(s) not on the Y-9C: ln_famres_pre01
+assets.csv,derived,ln_other_re_08,,,"input(s) not on the Y-9C: ln_other_re_1, ln_other_re_2"
+assets.csv,derived,ln_other_re,,,input(s) not on the Y-9C: ln_other_re_08
+assets.csv,derived,ln_re_dom,,,"input(s) not on the Y-9C: ln_condev, ln_famres, ln_other_re"
+assets.csv,derived,ln_re,,,input(s) not on the Y-9C: ln_re_dom
+assets.csv,derived,ln_dep,,,"input(s) not on the Y-9C: ln_dep_fgn_branches_us, ln_dep_oth_fgn_banks, ln_dep_oth_us_combanks, ln_dep_oth_us_depinst, ln_dep_us_branches_fgn"
+assets.csv,derived,na_ci,,,"input(s) not on the Y-9C: na_ci_1253, na_ci_1256"
+assets.csv,derived,uc_other_2_24,,,"input(s) not on the Y-9C: uc_ln_dep_fi, uc_ln_non_dep_fi"
+assets.csv,derived,uc_other_2,,,input(s) not on the Y-9C: uc_other_2_24
+assets.csv,derived,uc_other_10,,,input(s) not on the Y-9C: uc_other_2
+assets.csv,derived,uc_other,,,input(s) not on the Y-9C: uc_other_10
+assets.csv,derived,ln_resconst,,,input(s) not on the Y-9C: ln_condev_1
+assets.csv,derived,ln_crelandconst,,,input(s) not on the Y-9C: ln_condev_2
+assets.csv,derived,ln_ownoccnfnr,,,input(s) not on the Y-9C: ln_other_re_1
+assets.csv,derived,ln_othernfnr,,,input(s) not on the Y-9C: ln_other_re_2
+income_statement.csv,derived,ytd_int_inc_ln_cc_pre01,,,"input(s) not on the Y-9C: ytd_int_inc_ln_cc_pre01_031032, ytd_int_inc_ln_cc_pre01_033034"
+income_statement.csv,derived,ytd_int_inc_lndom_re_agg,,,"input(s) not on the Y-9C: ytd_int_inc_lndom_re_agg_031032, ytd_int_inc_lndom_re_agg_033"
+income_statement.csv,derived,ytd_int_inc_ln_indiv_pre01,,,"input(s) not on the Y-9C: ytd_int_inc_ln_cc_pre01, ytd_int_inc_ln_cons_pre01"
+income_statement.csv,derived,ytd_int_exp_savings_dep_dom,,,"input(s) not on the Y-9C: ytd_int_exp_savings_dep_dom_01, ytd_int_exp_savings_dep_dom_1_pre01, ytd_int_exp_savings_dep_dom_2_pre01"
+income_statement.csv,derived,ytd_int_inc_ln_indiv,,,"input(s) not on the Y-9C: ytd_int_inc_ln_cc, ytd_int_inc_ln_cons"
+income_statement.csv,derived,ytd_tradrev_inc_pre01,,,input(s) not on the Y-9C: ytd_tradrev_inc_2_pre01
+income_statement.csv,derived,ytd_nonint_inc_oth_pre01,,,"input(s) not on the Y-9C: ytd_nonint_inc_all_oth, ytd_nonint_inc_oth_fee"
+income_statement.csv,derived,ytd_nonint_inc_sales,,,"input(s) not on the Y-9C: ytd_nonint_inc_net_gain_ll, ytd_nonint_inc_oreo"
+liabilities.csv,derived,othbor_pre94,,,input(s) not on the Y-9C: othbor_1_pre94
+liabilities.csv,derived,obm_gt1yr_9701,,,"input(s) not on the Y-9C: obm_gt1yr_lt3yr, obm_gt3yr"
+liabilities.csv,derived,obm_gt1yr,,,input(s) not on the Y-9C: obm_gt1yr_9701
+liabilities.csv,derived,othbor_9701,,,"input(s) not on the Y-9C: obm_gt1yr_lt3yr, obm_gt3yr"
+liabilities.csv,derived,othbor_liab,,,"input(s) not on the Y-9C: othbor_9701, othbor_pre94"
+liabilities.csv,derived,liab_oth,,,input(s) not on the Y-9C: liab_oth_2930
+liabilities.csv,derived,ind_dep_non_trans_acc,,,"input(s) not on the Y-9C: ind_dep_non_trans_acc_01, ind_dep_non_trans_acc_pre01"
+liabilities.csv,derived,ind_dep_trans_acc,,,"input(s) not on the Y-9C: ind_dep_trans_acc_01, ind_dep_trans_acc_pre01"
+liabilities.csv,derived,us_bank_dep_non_trans_acc_pre01,,,"input(s) not on the Y-9C: us_bank_dep_non_trans_acc_1_pre01, us_bank_dep_non_trans_acc_2_pre01"
+liabilities.csv,derived,us_bank_dep_non_trans_acc,,,"input(s) not on the Y-9C: us_bank_dep_non_trans_acc_01, us_bank_dep_non_trans_acc_pre01"
+liabilities.csv,derived,ind_for_dep_pre01,,,"input(s) not on the Y-9C: ind_for_dep_1_pre01, ind_for_dep_2_pre01"
+liabilities.csv,derived,ind_for_dep,,,"input(s) not on the Y-9C: ind_for_dep_01, ind_for_dep_pre01"
+liabilities.csv,derived,us_bank_for_dep,,,"input(s) not on the Y-9C: us_bank_for_dep_01, us_bank_for_dep_pre01"
+liabilities.csv,derived,oth_savings_dep_pre87,,,"input(s) not on the Y-9C: mmda, savings_dep"
+liabilities.csv,derived,oth_savings_dep,,,"input(s) not on the Y-9C: oth_savings_dep_87, oth_savings_dep_pre87"
+liabilities.csv,derived,trandep_indv,,,"input(s) not on the Y-9C: ib_trans_acc_dep_indv, non_ib_trans_acc_dep_indv"
+liabilities.csv,derived,time_dep_gt100k_lt3mo_mat_pre97,,,"input(s) not on the Y-9C: fix_time_gt100k_lt3mo_mat, flo_time_gt100k_qrt_rp"
+liabilities.csv,derived,time_dep_gt100k_lt3mo_mat,,,"input(s) not on the Y-9C: time_dep_gt100k_lt3mo_mat_97, time_dep_gt100k_lt3mo_mat_pre97"
+liabilities.csv,derived,time_dep_gt100k_gt3mo_lt1yr_mat_pre97,,,"input(s) not on the Y-9C: fix_time_gt100k_gt3mo_lt1yr_mat, flo_time_gt100k_qrt_1yr_rp"
+liabilities.csv,derived,time_dep_gt100k_gt3mo_lt1yr_mat,,,"input(s) not on the Y-9C: time_dep_gt100k_gt3mo_lt1yr_mat_97, time_dep_gt100k_gt3mo_lt1yr_mat_pre97"
+liabilities.csv,derived,time_gt100k_dep_pre97,,,"input(s) not on the Y-9C: time_cod_gt100k_dom, time_dep_gt100k_dom"
+liabilities.csv,derived,time_gt100k_dep_post01,,,"input(s) not on the Y-9C: time_gt100k_lt250k, time_gt250k"
+liabilities.csv,derived,time_gt100k,,,"input(s) not on the Y-9C: time_gt100k_dep_9701, time_gt100k_dep_post01, time_gt100k_dep_pre97"
+liabilities.csv,derived,brokered_lt250k_dep_pre17,,,"input(s) not on the Y-9C: brokered_gt100k_lt250k_dep, brokered_lt100k_dep"
+liabilities.csv,derived,brokered_lt250k_dep,,,"input(s) not on the Y-9C: brokered_lt250k_dep_17, brokered_lt250k_dep_pre17"
+rc_c_loans.csv,derived,amt_ln_smallbiz_ci,,,"input(s) not on the Y-9C: amt_ln_ci_100k_250k, amt_ln_ci_250k_1m, amt_ln_ci_lte100k"
+rc_c_loans.csv,derived,amt_ln_smallbiz_nfnres,,,"input(s) not on the Y-9C: amt_ln_nfnres_100k_250k, amt_ln_nfnres_250k_1m, amt_ln_nfnres_lte100k"
+rc_c_loans.csv,derived,amt_ln_smallbiz_tot,,,"input(s) not on the Y-9C: amt_ln_smallbiz_ci, amt_ln_smallbiz_nfnres"
+rc_c_loans.csv,derived,amt_ln_smallfarm_tot,,,"input(s) not on the Y-9C: amt_ln_agprod_100k_250k, amt_ln_agprod_250k_500k, amt_ln_agprod_lte100k, amt_ln_farmland_100k_250k, amt_ln_farmland_250k_500k, amt_ln_farmland_lte100k"
+rc_c_loans.csv,derived,ln_oth,,,input(s) not on the Y-9C: ln_oth_dom
+rc_e_deposits.csv,derived,sweep_dep_insured,,,"input(s) not on the Y-9C: sweep_dep_affiliate_insured, sweep_dep_nonaffiliate_insured"
+rc_e_deposits.csv,derived,sweep_dep_uninsured,,,"input(s) not on the Y-9C: sweep_dep_affiliate_uninsured, sweep_dep_nonaffiliate_uninsured"
+rc_e_deposits.csv,derived,sweep_dep_tot,,,"input(s) not on the Y-9C: sweep_dep_insured, sweep_dep_uninsured"
+rc_e_deposits.csv,derived,brokered_dep_mat_lte1yr,,,"input(s) not on the Y-9C: brokered_dep_100k_250k_mat_lte1yr_1116, brokered_dep_gt250k_mat_lte1yr, brokered_dep_gte100k_mat_lte1yr_9610"
+rc_n_past_due.csv,derived,pd30_consumer_noncc,,,input(s) not on the Y-9C: pd30_consumer_oth_b578
+rc_n_past_due.csv,derived,pd90_consumer_noncc,,,input(s) not on the Y-9C: pd90_consumer_oth_b579
+rc_n_past_due.csv,derived,pd30_constr,,,"input(s) not on the Y-9C: pd30_constr_2759, pd30_constr_oth, pd30_constr_res14"
+rc_n_past_due.csv,derived,pd30_nfnres,,,"input(s) not on the Y-9C: pd30_nfnres_3502, pd30_nfnres_oth_f179, pd30_nfnres_owner_f178"
+rc_n_past_due.csv,derived,pd30_ci,,,"input(s) not on the Y-9C: pd30_ci_1251, pd30_ci_1254, pd30_ci_1606"
+rc_n_past_due.csv,derived,pd30_depinst,,,input(s) not on the Y-9C: pd30_depinst_b834
+rc_n_past_due.csv,derived,pd30_lease,,,input(s) not on the Y-9C: pd30_lease_1226
+rc_n_past_due.csv,derived,pd90_constr,,,"input(s) not on the Y-9C: pd90_constr_2769, pd90_constr_oth, pd90_constr_res14"
+rc_n_past_due.csv,derived,pd90_nfnres,,,"input(s) not on the Y-9C: pd90_nfnres_3503, pd90_nfnres_oth_f181, pd90_nfnres_owner_f180"
+rc_n_past_due.csv,derived,pd90_ci,,,"input(s) not on the Y-9C: pd90_ci_1252, pd90_ci_1255, pd90_ci_1607"
+rc_n_past_due.csv,derived,pd90_depinst,,,input(s) not on the Y-9C: pd90_depinst_b835
+rc_n_past_due.csv,derived,pd90_lease,,,input(s) not on the Y-9C: pd90_lease_1227
+rc_n_past_due.csv,derived,na_constr,,,"input(s) not on the Y-9C: na_constr_3492, na_constr_5426, na_re_f176, na_re_f177"
+rc_n_past_due.csv,derived,na_nfnres,,,"input(s) not on the Y-9C: na_nfnres_3504, na_nfnres_5441, na_re_f182, na_re_f183"
+rc_n_past_due.csv,derived,na_depinst,,,input(s) not on the Y-9C: na_depinst_b836
+rc_n_past_due.csv,derived,na_lease,,,input(s) not on the Y-9C: na_lease_1228
+rc_n_past_due.csv,derived,npl_tot,,,"input(s) not on the Y-9C: na_tot, pd90_tot"
+rc_n_past_due.csv,derived,pastdue_tot,,,"input(s) not on the Y-9C: na_tot, pd30_tot, pd90_tot"
+ri_a_equity.csv,derived,ytd_div_tot,,,input(s) not on the Y-9C: ytd_div_preferred
+ri_b_chargeoffs.csv,derived,ytd_co_cc_incl_revolving_pre01,,,input(s) not on the Y-9C: ytd_co_cc_incl_revolving_4262
+ri_b_chargeoffs.csv,derived,ytd_rec_cc_incl_revolving_pre01,,,input(s) not on the Y-9C: ytd_rec_cc_incl_revolving_4263
+assets.csv,zero_fill,custody_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,custody_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,fidu_managed_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,fidu_managed_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,fidu_nonmanaged_accounts,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,fidu_nonmanaged_assets,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,na_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,qavg_loans_ag,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+assets.csv,zero_fill,ln_dep,,,column not kept
+assets.csv,intermediate,ln_dep_01,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_re_1410,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_condev_1_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_condev_2_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_farm_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_famres_heloc_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_famres_first_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_famres_jr_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_multi_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_other_re_1_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+assets.csv,intermediate,ln_other_re_2_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+liabilities.csv,zero_fill,custody_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+liabilities.csv,zero_fill,custody_safe_accts_non_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+liabilities.csv,zero_fill,tot_fiduc_accts_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+liabilities.csv,zero_fill,tot_fiduc_accts_non_mngd_ass,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+liabilities.csv,zero_fill,tot_fiduc_mngd_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+liabilities.csv,zero_fill,tot_fiduc_non_mngd_accts_num,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+quality_checks.csv,check,nonaccrual_le_loans,,,input(s) not kept
+quality_checks.csv,check,chargeoff_ci_le_total,,,input(s) not kept
+quality_checks.csv,check,recovery_ci_le_total,,,input(s) not kept
+quality_checks.csv,check,pastdue30_ci_le_total,,,input(s) not kept
+quality_checks.csv,check,npl_le_loans,,,input(s) not kept
+quality_checks.csv,check,smallbiz_le_loans,,,input(s) not kept
+quality_checks.csv,check,sweep_le_deposits,,,input(s) not kept
+quality_checks.csv,check,deposits_le_assets,,,input(s) not kept
+rc_c_loans.csv,zero_fill,credit_card_fees_finance_charges_outstanding,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_c_loans.csv,intermediate,ln_oth_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_d_trading.csv,zero_fill,trad_liab_short_positions,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_oth_dom_off,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_revaluation_gains,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_revaluation_losses,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_revaluation_net,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_states,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_usagency,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_d_trading.csv,zero_fill,trad_ust,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_n_past_due.csv,zero_fill,pd30_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_n_past_due.csv,zero_fill,pd90_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+rc_n_past_due.csv,intermediate,pd30_depinst_5377,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd30_depinst_5380,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd90_depinst_5378,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd90_depinst_5381,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd30_lease_f166,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd30_lease_f169,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd90_lease_f167,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,pd90_lease_f170,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,na_ci_1608,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,na_dep_5379,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,na_dep_5382,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,na_lease_f168,,,withheld on the Call Report but its consumer was dropped here; published instead
+rc_n_past_due.csv,intermediate,na_lease_f171,,,withheld on the Call Report but its consumer was dropped here; published instead
+ri_b_chargeoffs.csv,zero_fill,ytd_cc_fees_reversed,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+ri_b_chargeoffs.csv,zero_fill,ytd_co_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+ri_b_chargeoffs.csv,zero_fill,ytd_rec_agprod,,,Call Report 2005Q3 zero-representation rule; measure separately on the Y-9C
+ri_b_chargeoffs.csv,intermediate,ytd_co_cc_incl_revolving_4656,,,withheld on the Call Report but its consumer was dropped here; published instead
+ri_b_chargeoffs.csv,intermediate,ytd_rec_cc_incl_revolving_4666,,,withheld on the Call Report but its consumer was dropped here; published instead

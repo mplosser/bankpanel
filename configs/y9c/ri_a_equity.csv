@@ -1,0 +1,20 @@
+# Derived from configs/call/ri_a_equity.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,ri_a_equity
+schedule,RI-A
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK3210,equity_end,HI-A,stock,all,,,,TOTAL EQUITY CAPITAL
+BHCK3217,equity_prev_yearend,HI-A,stock,all,,,,EQUITY CAPITAL; MOST RECENTLY REPORTED FOR THE END OF PREVIOUS CALENDAR YEAR (I.E.; AFTER ADJUSTMENTS FROM AMENDED REP
+BHCKB508,equity_prev_yearend_restated,HI-A,stock,all,,,,BALANCE END OF PREVIOUS CALENDAR YEAR AS RESTATED
+BHCKB511,ytd_oth_comprehensive_income,HI-A,ytd,all,,,,OTHER COMPREHENSIVE INCOME
+BHCK4460,ytd_div_common,HI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON COMMON STOCK
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+

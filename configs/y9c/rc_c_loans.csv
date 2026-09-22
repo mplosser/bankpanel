@@ -1,0 +1,30 @@
+# Derived from configs/call/rc_c_loans.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_c_loans
+schedule,RC-C
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK2081,ln_forgovt,HC-C,stock,all,,,,LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+BHCK2123,unearned_income_ln,HC-C,stock,all,,,,UNEARNED INCOME ON LOANS
+BHDM2165,lease_fin_recv_net,HC-C,stock,all,,,,LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME)
+BHCK1563,ln_oth_consol,HC-C,stock,all,,,,OTHER LOANS (consolidated bank; = 1545 loans for purchasing or carrying securities + 1564 all other loans)
+BHCKJ454,ln_nondep_fin_inst,HC-C,stock,all,,,,LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS AND OTHER LOANS: LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS
+BHCK2746,ln_finance_cre_constr,HC-C,stock,all,,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS 1766;
+BHDMF577,ln_famres_in_foreclosure,HC-C,stock,all,,,,LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES IN DOMESTIC OFFICES IN PROCESS OF FORECLOSURE (INCLUDED IN 
+BHCKC391,credit_card_fees_finance_charges_outstanding,HC-C,stock,all,,,,OUTSTANDING CREDIT CARD FEES & FINANCE CHARGES
+BHCKF597,upb_ln_ci_fv,HC-C,stock,all,,,,UNPAID PRINCIPAL BALANCE OF COMMERICIAL AND INDUSTRIAL LOANS MEASURED AT FAIR VALUE:
+BHCKF601,upb_ln_oth_fv,HC-C,stock,all,,,,UNPAID PRINCIPAL BALANCE OF OTHER LOANS
+BHCKG378,ln_pledged,HC-C,stock,all,,,,PLEDGED LOANS AND LEASES
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+
+[INTERMEDIATE]
+column,reason
+ln_consumer_oth_pre11,"Pre-2011 other-consumer line RCFD2011; published only inside ln_consumer_oth. From 2011 the line is ln_auto + ln_consumer_oth_ex_auto, both published."
+

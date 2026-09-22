@@ -265,7 +265,8 @@ def _verify(panel_root: Path) -> None:
     except FileNotFoundError:
         warnings.warn(f"no build manifest in {panel_root}; cannot verify provenance.", stacklevel=3)
         return
-    config_dir = Path("configs")
+    # The configs that built this panel live under configs/<profile>.
+    config_dir = Path("configs") / {"ffiec_call": "call", "fry9c": "y9c"}.get(manifest.profile, manifest.profile)
     if not config_dir.is_dir():
         return
     try:

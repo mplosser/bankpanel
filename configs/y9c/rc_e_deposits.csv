@@ -1,0 +1,17 @@
+# Derived from configs/call/rc_e_deposits.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_e_deposits
+schedule,RC-E
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHDMA243,brokered_dep_lt100k_mat_lte1yr_9716,HC-E,stock,all,,,,BROKERED DEPOSITS ISSUED IN DENOMINATIONS OF LESS THAN $100;000 WITH A REMAINING MATURITY OF ONE YEAR OR LESS
+BHDMHK06,brokered_dep_lte250k_mat_lte1yr,HC-E,stock,all,,,,SELECTED COMPONENTS OF TOTAL DEPOSITS; BROKERED DEPOSITS OF 250000 OR LESS WITH A REMAINING MATURITY OF ONE YE
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+

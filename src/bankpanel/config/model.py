@@ -19,7 +19,11 @@ from pathlib import Path
 #: name prefix meant the output name could never be chosen freely, forced a rename map
 #: (``ytd_x`` -> ``qx``) implemented in two places, and silently collided whenever
 #: ``ytd_foo`` and ``ytdfoo`` both existed.
-FLOW_TYPES = frozenset({"stock", "ytd", "flag", "count", "rate", "text"})
+#: ``ytd_event``: a year-to-date amount reported once, in the quarter of an event (the FR Y-9C's
+#: income of predecessor institutions, filed in the quarter of a business combination for the
+#: period before the acquisition). It is an amount, not a running total, so it is never
+#: differenced and gets no q_ companion.
+FLOW_TYPES = frozenset({"stock", "ytd", "ytd_event", "flag", "count", "rate", "text"})
 
 #: Sign constraint used by the quarterize audit. ``nonneg`` marks gross additive flows
 #: that cannot legitimately be negative over a quarter (interest income/expense,
@@ -34,6 +38,10 @@ SCHEDULES = frozenset({
     "RC-L", "RC-M", "RC-N", "RC-O", "RC-P", "RC-Q", "RC-R", "RC-R-I", "RC-R-II",
     "RC-S", "RC-T", "RC-V",
     "RI", "RI-A", "RI-B", "RI-C", "RI-D", "RI-E",
+    # FR Y-9C: HC mirrors RC, HI mirrors RI (same item codes under BHCK/BHDM).
+    "HC", "HC-B", "HC-C", "HC-D", "HC-E", "HC-F", "HC-G", "HC-H", "HC-I", "HC-K",
+    "HC-L", "HC-M", "HC-N", "HC-P", "HC-Q", "HC-R", "HC-R-I", "HC-R-II", "HC-S", "HC-T", "HC-V",
+    "HI", "HI-A", "HI-B", "HI-C",
     "CROSS",
 })
 

@@ -146,7 +146,7 @@ def _decisions(out: Path) -> dict:
 def build(panel_root: Path, out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
     decided = _decisions(out)
-    cs = ConfigSet.load("configs")
+    cs = ConfigSet.load("configs/call")
     dictionary = pd.read_csv(panel_root / "dictionary.csv", keep_default_na=False)
     desc = dict(zip(dictionary.variable_name, dictionary.description, strict=True))
 

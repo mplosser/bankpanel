@@ -1,0 +1,75 @@
+# Derived from configs/call/income_statement.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,income_statement
+profile,ffiec_call
+source,bec_migration/income_statement.csv
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCKJH93,ytd_cecl_htm_dsec_cp_bal,HI-B,ytd,all,,,,
+BHCKF551,ytd_net_gain_ass_fv,HI,ytd,all,,,,
+BHCKJJ04,cecl_ln_const_am_cost,HI-C,stock,all,,,,
+BHCKJJ05,cecl_ln_cre_am_cost,HI-C,stock,all,,,,
+BHCKJJ06,cecl_ln_rre_am_cost,HI-C,stock,all,,,,
+BHCKJJ07,cecl_ln_com_am_cost,HI-C,stock,all,,,,
+BHCKJJ08,cecl_ln_cc_am_cost,HI-C,stock,all,,,,
+BHCKJJ09,cecl_ln_oth_cons_am_cost,HI-C,stock,all,,,,
+BHCKJJ11,cecl_ln_tot_inv_am_cost,HI-C,stock,all,,,,
+BHCKJJ12,cecl_ln_const_allow_bal,HI-C,stock,all,,,,
+BHCKJJ13,cecl_ln_cre_allow_bal,HI-C,stock,all,,,,
+BHCKJJ14,cecl_ln_rre_allow_bal,HI-C,stock,all,,,,
+BHCKJJ15,cecl_ln_com_allow_bal,HI-C,stock,all,,,,
+BHCKJJ16,cecl_ln_cc_allow_bal,HI-C,stock,all,,,,
+BHCKJJ17,cecl_ln_oth_cons_allow_bal,HI-C,stock,all,,,,
+BHCKJJ18,cecl_ln_unalloctd_allow_bal,HI-C,stock,all,,,,
+BHCKJJ19,cecl_ln_tot_inv_allow_bal,HI-C,stock,all,,,,
+BHCK4010,ytd_int_inc_ln,HI,ytd,all,,,nonneg,
+BHCK4435,ytd_int_inc_ln_rre,HI,ytd,all,,,nonneg,
+BHCK4436,ytd_int_inc_ln_oth_re,HI,ytd,all,,,nonneg,
+BHCKHK03,ytd_int_exp_time_lt250k_dom,HI,ytd,all,,,nonneg,
+BHCKHK04,ytd_int_exp_time_gt250k_dom,HI,ytd,all,,,nonneg,
+BHCK4172,ytd_int_exp_for,HI,ytd,all,,,nonneg,
+BHCKA518,ytd_int_exp_time_lt100k_dom,HI,ytd,all,,,nonneg,
+BHCK4185,ytd_int_exp_trad_othbor,HI,ytd,all,,,nonneg,
+BHCK4176,ytd_int_exp_oth_dep,HI,ytd,all,,,nonneg,
+BHCK4070,ytd_fiduc_inc,HC-T,ytd,all,,,nonneg,
+BHCKA220,ytd_tradrev_inc,HI,ytd,all,,,,
+BHCKC886,ytd_nonint_inc_sb,HI,ytd,all,,,,
+BHCKC888,ytd_nonint_inc_fees_adv,HI,ytd,all,,,,
+BHCKC887,ytd_nonint_inc_fees_annu,HI,ytd,all,,,,
+BHCKC386,ytd_nonint_inc_ins_underw,HI,ytd,all,,,,
+BHCKC387,ytd_nonint_inc_oth_ins_act,HI,ytd,all,,,,
+BHCKB493,ytd_sectn_inc,HI,ytd,all,,,,
+BHCKB497,ytd_nonint_inc_oth,HI,ytd,all,,,,
+BHCK4079,ytd_nonint_inc,HI,ytd,all,,,,
+BHCKB494,ytd_nonint_inc_ins_fee,HI,ytd,all,,,,
+BHCKB490,ytd_nonint_inc_ib_adv_fee,HI,ytd,all,,,,
+BHCK4078,ytd_nonint_inc_oth_pre2001,HI,ytd,all,,,,
+BHCKB496,ytd_nonint_inc_net_gain_oth_ass,HI,ytd,all,,,,
+BHCK4135,ytd_nonint_exp_comp,HI,ytd,all,,,nonneg,
+BHCK4217,ytd_nonint_exp_fass,HI,ytd,all,,,nonneg,
+BHCK4092,ytd_nonint_exp_oth,HI,ytd,all,,,nonneg,
+BHCK4093,ytd_nonint_exp,HI,ytd,all,,,nonneg,
+BHCK4302,ytd_taxes_inc,HI,ytd,all,,,,
+BHCK4107,ytd_int_inc,HI,ytd,all,,,nonneg,
+BHCK4073,ytd_int_exp,HI,ytd,all,,,nonneg,
+BHCK4077,ytd_tradrev_inc_1_pre01,HI,ytd,all,,,,
+BHCK4174,ytd_int_exp_time_gt100k_dom_pre97,HI,ytd,all,,,nonneg,
+BHCKA517,ytd_int_exp_time_gt100k_dom_97,HI,ytd,all,,,nonneg,
+BHCK4356,ytd_structflag_business_combo,HI-A,ytd,all,,,,
+BHCKB507,ytd_structflag_restatement,HI-A,ytd,all,,,,
+BHCKFT28,ytd_structflag_discontinued_ops,HI,ytd,all,,,,
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_int_exp_time_gt100k_dom,CROSS,ytd,"Interest on Time Deposits of $100,000 or more [RIADA517 / RIAD4174]",ytd_int_exp_time_gt100k_dom_97.fillna(ytd_int_exp_time_gt100k_dom_pre97),thousands_usd,
+
+[ZERO_FILL]
+column,scope,reason,era_start
+ytd_structflag_business_combo,in_era,"Schedule RI-A business combinations: a blank means no event once collection began, but means not collected before it did.",
+ytd_structflag_restatement,in_era,"Schedule RI-A restatements: a blank means no event once collection began, but means not collected before it did.",
+ytd_structflag_discontinued_ops,in_era,"Schedule RI-A discontinued operations: a blank means no event once collection began, but means not collected before it did.",
+

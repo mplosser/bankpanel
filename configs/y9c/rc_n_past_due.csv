@@ -1,0 +1,204 @@
+# Derived from configs/call/rc_n_past_due.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,rc_n_past_due
+schedule,RC-N
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK1406,pd30_tot_1406,HC-N,stock,all,,,,TOTAL LOANS AND LEASE FINANCING RECEIVABLES: PAST DUE 30-89 DAYS AND STILL ACCRUING
+BHCK1407,pd90_tot_1407,HC-N,stock,all,,,,TOTAL LOANS AND LEASE FINANCING RECEIVABLES: PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCK1594,pd30_agprod,HC-N,stock,all,,,,LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS - PAST DUE 30-89 DAYS AND STILL ACCRUING
+BHCK1597,pd90_agprod,HC-N,stock,all,,,,LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCK3505,pd30_debtsec,HC-N,stock,all,,,,DEBT SECURITIES AND OTHER ASSETS - PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING
+BHCK3506,pd90_debtsec,HC-N,stock,all,,,,DEBT SECURITIES AND OTHER ASSETS - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCK5389,pd30_forgovt,HC-N,stock,all,,,,LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS - PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING
+BHCK5390,pd90_forgovt,HC-N,stock,all,,,,LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCK5459,pd30_othln,HC-N,stock,all,,,,ALL OTHER LOANS - PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING
+BHCK5460,pd90_othln,HC-N,stock,all,,,,ALL OTHER LOANS - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCK6558,pd30_finance_cre,HC-N,stock,all,,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES - PAST DUE 30 THROUGH 89 DAYS A
+BHCK6559,pd90_finance_cre,HC-N,stock,all,,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES - PAST DUE 90 DAYS OR MORE AND 
+BHCK6560,na_finance_cre,HC-N,stock,all,,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES - NONACCRUAL
+BHCKB575,pd30_cc,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: CREDIT CARDS - PAST DUE 30 THROUGH 89 DAY
+BHCKB576,pd90_cc,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY; AND OTHER PERSONAL EXPENDITURES: CREDIT CARDS - PAST DUE 90 DAYS OR MORE A
+BHCKC240,pd30_hfs,HC-N,stock,all,,,,LOANS AND LEASES HELD FOR SALE-PAST DUE 30 THRU 89 DAYS AND STILL ACCRUING
+BHCKC241,pd90_hfs,HC-N,stock,all,,,,LOANS AND LEASES HELD FOR SALE-PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCKF664,pd30_hfs_fv,HC-N,stock,all,,,,FAIR VALUE OF LOANS AND LEASES HELD FOR SALE - PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING.
+BHCKF665,pd90_hfs_fv,HC-N,stock,all,,,,FAIR VALUE OF LOANS AND LEASES HELD FOR SALE - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCKF666,na_hfs_fv,HC-N,stock,all,,,,FAIR VALUE OF LOANS AND LEASES HELD FOR SALE- NONACCRUAL
+BHCKF667,pd30_hfs_upb,HC-N,stock,all,,,,UNPAID PRINCIPAL BALANCE OF LOANS AND LEASES HELD FOR SALE - PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING.
+BHCKF668,pd90_hfs_upb,HC-N,stock,all,,,,UNPAID PRINCIPAL BALANCE OF LOANS AND LEASES HELD FOR SALE - PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCKF669,na_hfs_upb,HC-N,stock,all,,,,UNPAID PRINCIPAL BALANCE OF LOANS AND LEASES HELD FOR SALE- NONACCRUAL
+BHCKHK26,pd30_tot_modified,HC-N,stock,all,,,,TOTAL LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY INCLUDED IN SCHEDULE RC-N ITEMS 1 THROUGH 7 AB
+BHCKHK27,pd90_tot_modified,HC-N,stock,all,,,,TOTAL LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY INCLUDED IN SCHEDULE RC-N ITEMS 1 THROUGH 7 AB
+BHCKHK28,na_tot_modified,HC-N,stock,all,,,,TOTAL LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY INCLUDED IN SCHEDULE RC-N ITEMS 1 THROUGH 7 AB
+BHCKK036,pd30_tot_lossshare,HC-N,stock,all,,,,LOANS AND LEASES REPORTED IN THE PAST DUE AND NONACCRUAL LOANS; LEASES AND OTHER ASSETS WHICH ARE WHOLLY OR PARTIALLY 
+BHCKK037,pd90_tot_lossshare,HC-N,stock,all,,,,LOANS AND LEASES REPORTED IN THE PAST DUE AND NONACCRUAL LOANS; LEASES AND OTHER ASSETS WHICH ARE WHOLLY OR PARTIALLY 
+BHCKK038,na_tot_lossshare,HC-N,stock,all,,,,LOANS AND LEASES REPORTED IN THE PAST DUE AND NONACCRUAL LOANS; LEASES AND OTHER ASSETS WHICH ARE WHOLLY OR PARTIALLY 
+BHCKK039,pd30_tot_usgtd_portion,HC-N,stock,all,,,,GUARANTEED PORTION OF LOANS AND LEASES INCLUDED IN ITEM 10; EXCLUDING REBOOKED 'GNMA LOANS' PAST DUE 30 THROUGH 89 DAY
+BHCKK040,pd90_tot_usgtd_portion,HC-N,stock,all,,,,GUARANTEED PORTION OF LOANS AND LEASES INCLUDED IN ITEM 10; EXCLUDING REBOOKED 'GNMA LOANS' PAST DUE 90 DAYS OR MORE A
+BHCKK041,na_tot_usgtd_portion,HC-N,stock,all,,,,GUARANTEED PORTION OF LOANS AND LEASES INCLUDED IN ITEM 10; EXCLUDING REBOOKED 'GNMA LOANS' : NONACCRUAL
+BHCKK042,pd30_tot_gnma_rebooked,HC-N,stock,all,,,,REBOOKED 'GNMA LOANS' THAT HAVE BEEN REPURCHASED OR ARE ELIGIBLE FOR REPURCHASE INCLUDED IN ITEM 10 - PAST DUE 30 THRO
+BHCKK043,pd90_tot_gnma_rebooked,HC-N,stock,all,,,,REBOOKED 'GNMA LOANS' THAT HAVE BEEN REPURCHASED OR ARE ELIGIBLE FOR REPURCHASE INCLUDED IN ITEM 10 - PAST DUE 90 DAYS
+BHCKK044,na_tot_gnma_rebooked,HC-N,stock,all,,,,REBOOKED 'GNMA LOANS' THAT HAVE BEEN REPURCHASED OR ARE ELIGIBLE FOR REPURCHASE INCLUDED IN ITEM 10 - NONACCRUAL
+BHCKK072,pd30_othln_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO FINANCE AGRICULTURE PRODUCTION AND OTHER 
+BHCKK073,pd90_othln_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO FINANCE AGRICULTURE PRODUCTION AND OTHER 
+BHCKK074,na_othln_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO FINANCE AGRICULTURE PRODUCTION AND OTHER 
+BHCKK075,pd30_ci_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  COMMERCIAL AND INDUSTRIAL LOANS - PAST DUE 30 THRO
+BHCKK076,pd90_ci_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  COMMERCIAL AND INDUSTRIAL LOANS - PAST DUE 90 DAYS
+BHCKK077,na_ci_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  COMMERCIAL AND INDUSTRIAL LOANS - NONACCRUAL
+BHCKK078,pd30_cc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK079,pd90_cc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK080,na_cc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK081,pd30_auto_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK082,pd90_auto_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK083,na_auto_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  LOANS TO INDIVIDUAL FOR HOUSEHOLD; FAMILY; PERSONA
+BHCKK087,pd30_lease_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  ALL OTHER LOANS AND ALL LEASES: PAST DUE 30 THROUG
+BHCKK088,pd90_lease_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  ALL OTHER LOANS AND ALL LEASES: PAST DUE 90 DAYS O
+BHCKK089,na_lease_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  ALL OTHER LOANS AND ALL LEASES: NONACCRUAL
+BHCKK091,pd30_depinst_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO DEPOSITORY INSTITUTIONS A
+BHCKK092,pd90_depinst_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO DEPOSITORY INSTITUTIONS A
+BHCKK093,na_depinst_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO DEPOSITORY INSTITUTIONS A
+BHCKK095,pd30_forgovt_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO FOREIGN GOVERNMENTS AND O
+BHCKK096,pd90_forgovt_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO FOREIGN GOVERNMENTS AND O
+BHCKK097,na_forgovt_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LOANS TO FOREIGN GOVERNMENTS AND O
+BHCKK099,pd30_othln_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: OTHER LOANS - PAST DUE 30 THROUGH 
+BHCKK100,pd90_othln_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: OTHER LOANS: PAST DUE 90 DAYS OR M
+BHCKK101,na_othln_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: OTHER LOANS: NONACCRUAL LOANS
+BHCKK126,pd30_othln_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY: ALL OTHER LOANS - PAST DUE 30 THROUGH 89 DAYS AND S
+BHCKK127,pd90_othln_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY : ALL OTHER LOANS - PAST DUE 90 DAYS OR MORE AND STI
+BHCKK128,na_othln_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY : ALL OTHER LOANS - NONACCRUAL
+BHCKK134,pd30_depinst_b,HC-N,stock,all,,,,ITEMIZE LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS INCLUDED IN ALL OTHER LOANS PAST DUE 30 THROUG
+BHCKK135,pd90_depinst_b,HC-N,stock,all,,,,ITEMIZE LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS INCLUDED IN ALL OTHER LOANS PAST DUE 30 THROUG
+BHCKK136,na_depinst_b,HC-N,stock,all,,,,ITEMIZE LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS INCLUDED IN ALL OTHER LOANS PAST DUE 30 THROUG
+BHCKK138,pd30_agprod_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY TO FINANCE AGRICULTURAL PRODUCTION AND OTHER
+BHCKK139,pd90_agprod_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY TO FINANCE AGRICULTURAL PRODUCTION AND OTHER
+BHCKK140,na_agprod_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY TO FINANCE AGRICULTURAL PRODUCTION AND OTHER
+BHCKK213,pd30_auto,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY AND OTHER PERSONAL EXPENDITURES: AUTOMOBILE LOANS - PAST DUE 30 THROUGH 89 
+BHCKK214,pd90_auto,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY AND OTHER PERSONAL EXPENDITURES: AUTOMOBILE LOANS - PAST DUE 90 DAYS OR MOR
+BHCKK216,pd30_indiv,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY AND OTHER PERSONAL EXPENDITURES: OTHER - PAST DUE 30 THROUGH 89 DAYS AND ST
+BHCKK217,pd90_indiv,HC-N,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD; FAMILY AND OTHER PERSONAL EXPENDITURES: OTHER - PAST DUE 90 DAYS OR MORE AND STILL
+BHCKK269,pd30_lease_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LEASE FINANCING RECEIVABLES - PAST
+BHCKK271,pd90_lease_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LEASE FINANCING RECEIVABLES - PAST
+BHCKK272,na_lease_a,HC-N,stock,all,,,,ITEMIZE PAST DUE AND NONACCRUAL AMOUNTS INCLUDED IN ALL OTHER LOANS AND ALL LEASES: LEASE FINANCING RECEIVABLES -  NON
+BHCKK274,pd30_indiv_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY CREDIT CARD LOANS TO INDIVIDUALS FOR HOUSEHO
+BHCKK275,pd90_indiv_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY CREDIT CARD LOANS TO INDIVIDUALS FOR HOUSEHO
+BHCKK276,na_indiv_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY CREDIT CARD LOANS TO INDIVIDUALS FOR HOUSEHO
+BHCKK277,pd30_auto_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY AUTOMOBILE LOANS TO INDIVIDUALS FOR HOUSEHOL
+BHCKK278,pd90_auto_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY AUTOMOBILE LOANS TO INDIVIDUALS FOR HOUSEHOL
+BHCKK279,na_auto_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY AUTOMOBILE LOANS TO INDIVIDUALS FOR HOUSEHOL
+BHCKK280,pd30_cc_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSUMER (INCLUDES SINGLE PAYMENT; INS
+BHCKK281,pd90_cc_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSUMER (INCLUDES SINGLE PAYMENT; INS
+BHCKK282,na_cc_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSUMER (INCLUDES SINGLE PAYMENT; INS
+BHCKK283,pd30_forgovt_b,HC-N,stock,all,,,,ITEMIZE LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS: PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING
+BHCKK284,pd90_forgovt_b,HC-N,stock,all,,,,ITEMIZE LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS: PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCKK285,na_forgovt_b,HC-N,stock,all,,,,ITEMIZE LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS: NONACCRUAL
+BHCKK286,pd30_othln_b,HC-N,stock,all,,,,ITEMIZE OTHER LOANS: PAST DUE 30 THROUGH 89 DAYS AND STILL ACCRUING
+BHCKK287,pd90_othln_b,HC-N,stock,all,,,,ITEMIZE OTHER LOANS: PAST DUE 90 DAYS OR MORE AND STILL ACCRUING
+BHCKK288,na_othln_b,HC-N,stock,all,,,,ITEMIZE OTHER LOANS: NONACCRUAL
+BHCKL183,pci_balance_pd30,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHCKL184,pci_balance_pd90,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHCKL185,pci_balance_na,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHCKL186,pci_carrying_pd30,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHCKL187,pci_carrying_pd90,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHCKL188,pci_carrying_na,HC-N,stock,all,,,,PURCHASED CREDIT-IMPAIRED LOANS ACCOUNTED FOR IN ACCORDANCE WITH FASB ASC 310-30 (FORMER AICPA STATEMENT OF POSITION 0
+BHDMK045,pd30_constr_res14_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE-1-4 FAMILY RESIDENTIAL CONSTRUC
+BHDMK046,pd90_constr_res14_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE-1-4 FAMILY RESIDENTIAL CONSTRUC
+BHDMK047,na_constr_res14_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE-1-4 FAMILY RESIDENTIAL CONSTRUC
+BHDMK051,pd30_farmland_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY FARMLAND -PAST DUE 
+BHDMK052,pd90_farmland_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY FARMLAND -PAST DUE 
+BHDMK053,na_farmland_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY FARMLAND -NONACCRUA
+BHDMK054,pd30_heloc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES-
+BHDMK055,pd90_heloc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES-
+BHDMK056,na_heloc_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES-
+BHDMK057,pd30_famres_first_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL
+BHDMK058,pd90_famres_first_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL 
+BHDMK059,na_famres_first_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: CLOSED-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL 
+BHDMK060,pd30_famres_junior_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC:  CLOSED END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL
+BHDMK061,pd90_famres_junior_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: CLOSED END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL 
+BHDMK062,na_famres_junior_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: CLOSED END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL 
+BHDMK063,pd30_multifam_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY MULTIFAMILY (5 OR M
+BHDMK064,pd90_multifam_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY MULTIFAMILY (5 OR M
+BHDMK065,na_multifam_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY MULTIFAMILY (5 OR M
+BHDMK066,pd30_nfnres_owner_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK067,pd90_nfnres_owner_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK068,na_nfnres_owner_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK069,pd30_nfnres_oth_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK070,pd90_nfnres_oth_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK071,na_nfnres_oth_lossshare,HC-N,stock,all,,,,LOANS AND LEASES COVERED BY LOSS SHARING AGREEMENTS WITH THE FDIC: LOANS SECURED BY RE: SECURED BY NONFARM NONRESIDENT
+BHDMK105,pd30_constr_res14_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY 1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS :PAST DUE 
+BHDMK106,pd90_constr_res14_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY 1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS : PAST DUE
+BHDMK107,na_constr_res14_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY 1-4 FAMILY RESIDENTIAL CONSTRUCTION LOANS -NONACCRUA
+BHDMK108,pd30_constr_oth_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AN
+BHDMK109,pd90_constr_oth_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AN
+BHDMK110,na_constr_oth_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AN
+BHDMK111,pd30_multifam_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY MULTIFAMILY RESIDENTIAL PROPERTIES IN DOM
+BHDMK112,pd90_multifam_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY MULTIFAMILY RESIDENTIAL PROPERTIES IN DOM
+BHDMK113,na_multifam_modified,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY MULTIFAMILY RESIDENTIAL PROPERTIES IN DOM
+BHDMK114,pd30_nfnres_owner,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY LOANS SECURED BY OWNER OCCUPIED NONFARM NONRESIDENTI
+BHDMK115,pd90_nfnres_owner,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY LOANS SECURED BY OWNER OCCUPIED NONFARM NONRESIDENTI
+BHDMK116,na_nfnres_owner,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY LOANS SECURED BY OWNER OCCUPIED NONFARM NONRESIDENTI
+BHDMK117,pd30_nfnres_oth,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY LOANS SECURED BY OWNER OCCUPIED NONFARM NONRESIDENTI
+BHDMK118,pd90_nfnres_oth,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPER
+BHDMK119,na_nfnres_oth,HC-N,stock,all,,,,LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY  -LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROP
+BHDMK130,pd30_farmland_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY FARMLAND IN DOMESTIC OFFICES INCL
+BHDMK131,pd90_farmland_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY FARMLAND IN DOMESTIC OFFICES INCL
+BHDMK132,na_farmland_modified,HC-N,stock,all,,,,ITEMIZE LOAN MODIFICATIONS TO BORROWERS EXPERIENCING FINANCIAL DIFFICULTY SECURED BY FARMLAND IN DOMESTIC OFFICES INCL
+BHCK5377,pd30_depinst_5377,HC-N,stock,all,,,,LOANS TO DEPOSITORY INSTITUTIONS: TO U.S. BANKS - PAST DUE 30 THROUGH 89 DAYS (031 split)
+BHCK5380,pd30_depinst_5380,HC-N,stock,all,,,,LOANS TO DEPOSITORY INSTITUTIONS: TO FOREIGN BANKS - PAST DUE 30 THROUGH 89 DAYS (031 split)
+BHCK5378,pd90_depinst_5378,HC-N,stock,all,,,,LOANS TO DEPOSITORY INSTITUTIONS: TO U.S. BANKS - PAST DUE 90 DAYS OR MORE (031 split)
+BHCK5381,pd90_depinst_5381,HC-N,stock,all,,,,LOANS TO DEPOSITORY INSTITUTIONS: TO FOREIGN BANKS - PAST DUE 90 DAYS OR MORE (031 split)
+BHCKF166,pd30_lease_f166,HC-N,stock,all,,,,LEASES TO INDIVIDUALS - PAST DUE 30-89 DAYS (031 split)
+BHCKF169,pd30_lease_f169,HC-N,stock,all,,,,ALL OTHER LEASES - PAST DUE 30-89 DAYS (031 split)
+BHCKF167,pd90_lease_f167,HC-N,stock,all,,,,LEASES TO INDIVIDUALS - PAST DUE 90 OR MORE DAYS (031 split)
+BHCKF170,pd90_lease_f170,HC-N,stock,all,,,,ALL OTHER LEASES - PAST DUE 90 OR MORE DAYS (031 split)
+BHCKB580,na_consumer_oth_b580,HC-N,stock,all,,,,LOANS TO INDIVIDUALS: OTHER (all consumer loans except credit cards) - NONACCRUAL; replaced in 2011 by K215 + K218
+BHCK5388,na_consumer_oth_5388,HC-N,stock,all,,,,"LOANS TO INDIVIDUALS: OTHER (INCLUDING SINGLE PAYMENT, INSTALLMENT) - NONACCRUAL; 031 filers only, through 2000Q4"
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+na_consumer_tot,HC-N,stock,"Total consumer (loans to individuals) nonaccrual, consistent across the 2001 and 2011 splits: credit cards + automobile + other from 2011; credit cards + other 2001-2010 (equals the FDIC-derived RCFD1981 for 100% of banks); for 031 filers before 2001, credit cards and related plans (5385) + other (5388). Blank before 2001 for other filers, which reported only the credit-card line. -3.2% over the same banks at 2011Q1.",(na_cc + na_auto + na_indiv).fillna(na_cc + na_consumer_oth_b580).fillna(na_cc_5385 + na_consumer_oth_5388),thousands_usd,
+na_consumer_noncc,HC-N,stock,"Consumer loans other than credit cards, nonaccrual. From 2011Q1: automobile + other consumer; 2001Q1-2010Q4: the single other-consumer line RCONB580 (RCFDB580). Every pre-2011 mismatch against the reported total equalled this line exactly.",(na_auto + na_indiv).fillna(na_consumer_oth_b580),thousands_usd,
+pd30_othln_leases_itemized,HC-N,stock,"All other loans and leases, past due 30 through 89 days and still accruing: the RC-N memorandum itemisation summed across loans to depository institutions, loans to foreign governments, other loans and lease financing receivables. Two parallel code blocks (K091-K101/K269-K272 and K134-K136/K283-K288) carry this memorandum; both are summed because they are near-disjoint in practice -- of ~2,700 populated bank-quarters only 29 report in both, and where both are populated the values differ, so they are distinct itemisations rather than duplicate filings. Memo item only: already included in the loan totals above. Collected 2011Q1-2016Q2.",(pd30_depinst_a.fillna(0) + pd30_forgovt_a.fillna(0) + pd30_othln_a.fillna(0) + pd30_lease_a.fillna(0) + pd30_depinst_b.fillna(0) + pd30_forgovt_b.fillna(0) + pd30_othln_b.fillna(0)).where(pd30_depinst_a.notna() | pd30_forgovt_a.notna() | pd30_othln_a.notna() | pd30_lease_a.notna() | pd30_depinst_b.notna() | pd30_forgovt_b.notna() | pd30_othln_b.notna()),thousands_usd,
+pd90_othln_leases_itemized,HC-N,stock,"All other loans and leases, past due 90 days or more and still accruing: the RC-N memorandum itemisation summed across loans to depository institutions, loans to foreign governments, other loans and lease financing receivables. Two parallel code blocks (K091-K101/K269-K272 and K134-K136/K283-K288) carry this memorandum; both are summed because they are near-disjoint in practice -- of ~2,700 populated bank-quarters only 29 report in both, and where both are populated the values differ, so they are distinct itemisations rather than duplicate filings. Memo item only: already included in the loan totals above. Collected 2011Q1-2016Q2.",(pd90_depinst_a.fillna(0) + pd90_forgovt_a.fillna(0) + pd90_othln_a.fillna(0) + pd90_lease_a.fillna(0) + pd90_depinst_b.fillna(0) + pd90_forgovt_b.fillna(0) + pd90_othln_b.fillna(0)).where(pd90_depinst_a.notna() | pd90_forgovt_a.notna() | pd90_othln_a.notna() | pd90_lease_a.notna() | pd90_depinst_b.notna() | pd90_forgovt_b.notna() | pd90_othln_b.notna()),thousands_usd,
+na_othln_leases_itemized,HC-N,stock,"All other loans and leases, nonaccrual: the RC-N memorandum itemisation summed across loans to depository institutions, loans to foreign governments, other loans and lease financing receivables. Two parallel code blocks (K091-K101/K269-K272 and K134-K136/K283-K288) carry this memorandum; both are summed because they are near-disjoint in practice -- of ~2,700 populated bank-quarters only 29 report in both, and where both are populated the values differ, so they are distinct itemisations rather than duplicate filings. Memo item only: already included in the loan totals above. Collected 2011Q1-2016Q2.",(na_depinst_a.fillna(0) + na_forgovt_a.fillna(0) + na_othln_a.fillna(0) + na_lease_a.fillna(0) + na_depinst_b.fillna(0) + na_forgovt_b.fillna(0) + na_othln_b.fillna(0)).where(na_depinst_a.notna() | na_forgovt_a.notna() | na_othln_a.notna() | na_lease_a.notna() | na_depinst_b.notna() | na_forgovt_b.notna() | na_othln_b.notna()),thousands_usd,
+pd30_nfnres_modified,HC-N,stock,"Modified loans secured by nonfarm nonresidential properties, past due 30 through 89 days and still accruing: owner-occupied plus other nonfarm nonresidential. Loan modifications to borrowers experiencing financial difficulty (troubled debt restructurings before ASU 2022-02). Collected from 2011Q1.",(pd30_nfnres_owner.fillna(0) + pd30_nfnres_oth.fillna(0)).where(pd30_nfnres_owner.notna() | pd30_nfnres_oth.notna()),thousands_usd,
+pd90_nfnres_modified,HC-N,stock,"Modified loans secured by nonfarm nonresidential properties, past due 90 days or more and still accruing: owner-occupied plus other nonfarm nonresidential. Loan modifications to borrowers experiencing financial difficulty (troubled debt restructurings before ASU 2022-02). Collected from 2011Q1.",(pd90_nfnres_owner.fillna(0) + pd90_nfnres_oth.fillna(0)).where(pd90_nfnres_owner.notna() | pd90_nfnres_oth.notna()),thousands_usd,
+na_nfnres_modified,HC-N,stock,"Modified loans secured by nonfarm nonresidential properties, nonaccrual: owner-occupied plus other nonfarm nonresidential. Loan modifications to borrowers experiencing financial difficulty (troubled debt restructurings before ASU 2022-02). Collected from 2011Q1.",(na_nfnres_owner.fillna(0) + na_nfnres_oth.fillna(0)).where(na_nfnres_owner.notna() | na_nfnres_oth.notna()),thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+na_consumer_oth_5388,Pre-2001 031 other-consumer nonaccrual; published only inside na_consumer_tot.
+na_consumer_oth_b580,Pre-2011 other-consumer line; published only inside the consumer_noncc total.
+na_cc_5385,"Credit-card nonaccrual, RCFD5385 (031 filers, 1991-2000); published only inside na_cc_incl_revolving_pre01."
+pd30_depinst_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd30_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd30_forgovt_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd30_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd30_othln_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd30_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd30_lease_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd30_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd30_depinst_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd30_othln_leases_itemized.
+pd30_forgovt_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd30_othln_leases_itemized.
+pd30_othln_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd30_othln_leases_itemized.
+pd30_nfnres_owner,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total pd30_nfnres_modified.
+pd30_nfnres_oth,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total pd30_nfnres_modified.
+pd90_depinst_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd90_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd90_forgovt_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd90_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd90_othln_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd90_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd90_lease_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total pd90_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+pd90_depinst_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd90_othln_leases_itemized.
+pd90_forgovt_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd90_othln_leases_itemized.
+pd90_othln_b,Cell of the second RC-N itemisation code block; published only as the bucket total pd90_othln_leases_itemized.
+pd90_nfnres_owner,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total pd90_nfnres_modified.
+pd90_nfnres_oth,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total pd90_nfnres_modified.
+na_depinst_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total na_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+na_forgovt_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total na_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+na_othln_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total na_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+na_lease_a,"Cell of the RC-N 'all other loans and all leases' itemisation grid; published only as the bucket total na_othln_leases_itemized. The fullest cell has 214 non-zero values in 148,899 bank-quarters."
+na_depinst_b,Cell of the second RC-N itemisation code block; published only as the bucket total na_othln_leases_itemized.
+na_forgovt_b,Cell of the second RC-N itemisation code block; published only as the bucket total na_othln_leases_itemized.
+na_othln_b,Cell of the second RC-N itemisation code block; published only as the bucket total na_othln_leases_itemized.
+na_nfnres_owner,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total na_nfnres_modified.
+na_nfnres_oth,Owner-occupied / other split of modified nonfarm nonresidential loans; published only as the total na_nfnres_modified.
+
