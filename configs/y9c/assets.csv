@@ -239,6 +239,8 @@ BHCK3387,qavg_loans_ci,HC,stock,all,,,,
 BHCK3386,qavg_loans_ag,HC,stock,all,,,,
 BHCK3465,qavg_loans_famres,HC,stock,all,,,,
 BHCK3466,qavg_loans_othre,HC,stock,all,,,,
+BHCK0276,ffsold_8801,HC,stock,all,,,,FEDERAL FUNDS SOLD (Y-9C 1988Q2-2001Q4; the combined BHCK1350 is filed before and again in 2001Q4)
+BHCK0277,repo_purch_8801,HC,stock,all,,,,SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL (Y-9C 1988Q2-2001Q4)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
@@ -280,7 +282,7 @@ fv_afs_sfp,CROSS,stock,FV AFS SFP [RCFDHT61] afs_fv_sfp,fv_afs_sfp_18.fillna(fv_
 equitysec,CROSS,stock,AFS Equity Securities [RCFDJA22 or RCFDA511],equitysec_20.fillna(afs_inv_mf_eqsec),,
 intang,CROSS,stock,Intangible assets [RCFD2143; goodwill RCFD3163 + other RCFD0426 during the 2011Q1-2017 window when the RCFD2143 aggregate was discontinued],intang_total.fillna(intang_goodwill + intang_other),,
 oth_assets,CROSS,stock,"Other assets [RCFD2160; pre-2006 adds RCFD2155 customers' liability on acceptances, a separate asset line discontinued 2005Q4 and folded into 2160 thereafter]",oth_assets_2160 + accept_cust.fillna(0),,
-ffrepo_ass,CROSS,stock,"Fed funds sold + securities purchased under resale [2002+: RCONB987 ffsold + RCFDB989 repo_purch; pre-2002: RCFD1350 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report.",(ffsold.fillna(0) + repo_purch.fillna(0) + ffrepo_ass_1350.fillna(0)).where(ffsold.notna() | repo_purch.notna() | ffrepo_ass_1350.notna()),,
+ffrepo_ass,CROSS,stock,"Fed funds sold + securities purchased under resale [2002+: RCONB987 ffsold + RCFDB989 repo_purch; pre-2002: RCFD1350 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report. Y-9C: the split codes BHCK0276+0277 carry 1988Q2-2001Q4, the combined BHCK1350 before that (and again in 2001Q4), B987+B989 from 2002.",(ffsold.fillna(0) + repo_purch.fillna(0) + ffrepo_ass_1350.fillna(0) + ffsold_8801.fillna(0) + repo_purch_8801.fillna(0)).where(ffsold.notna() | repo_purch.notna() | ffrepo_ass_1350.notna() | ffsold_8801.notna() | repo_purch_8801.notna()),,
 ac_htm_ombs_1,CROSS,stock,AC HTM other MBS [RSCFDG312 / 1714] htm_ag_cmo_iss,ac_htm_ombs_1_09.fillna(ac_htm_ombs_1_pre09),,
 ac_htm_ombs_2,CROSS,stock,AC HTM other MBS [RSCFDG316 / 1718] htm_ag_cmo_col,ac_htm_ombs_2_09.fillna(ac_htm_ombs_2_pre09),,
 ac_htm_ombs_3,CROSS,stock,AC HTM other MBS [RSCFDG320 / 1733] htm_res_cmo_oth,ac_htm_ombs_3_09.fillna(ac_htm_ombs_3_pre09),,

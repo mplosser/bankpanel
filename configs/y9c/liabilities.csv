@@ -32,10 +32,12 @@ BHCK0279,repo_sold_pre97,HC,stock,all,,,,
 BHCK2910,othbor_2,HC,stock,all,,,,
 BHCK3210,equity,HC,stock,all,,,,
 BHCK3000,minorint,HC,stock,all,,,,
+BHCK0278,ffpurch_8801,HC,stock,all,,,,FEDERAL FUNDS PURCHASED (Y-9C 1988Q2-2001Q4)
+BHCK0279,repo_sold_8801,HC,stock,all,,,,SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE (Y-9C 1988Q2-2001Q4)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
-ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report.",(ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0)).where(ffpurch.notna() | repo_sold.notna() | ffrepo_liab_2800.notna()),thousands_usd,
+ffrepo_liab,CROSS,stock,"Fed funds purchased + securities sold under repurchase [2002+: RCONB993 ffpurch + RCONB995 repo_sold; pre-2002: RCFD2800 combined (the split codes start 2002). Clean switch at 2002, no overlap] A filing that reports none of the inputs stays blank: the per-input zero is right inside an era, where one of the lines is simply not on the form, but an empty filing has no fed funds position to report. Y-9C: BHCK0278+0279 carry 1988Q2-2001Q4, the combined BHCK2800 before that, B993+B995 from 2002.",(ffpurch.fillna(0) + repo_sold.fillna(0) + ffrepo_liab_2800.fillna(0) + ffpurch_8801.fillna(0) + repo_sold_8801.fillna(0)).where(ffpurch.notna() | repo_sold.notna() | ffrepo_liab_2800.notna() | ffpurch_8801.notna() | repo_sold_8801.notna()),thousands_usd,
 othbor_9497,CROSS,stock,Other Borrowed Money (1994-1996) [RCFD2332+RCFD2333+RCFD2910],obm_less1yr+obm_gt1yr_pre97+othbor_2,thousands_usd,
 othbor_97,CROSS,stock,Other Borrowed Money (1997) [RCFD2332+RCFD2333],obm_less1yr+obm_gt1yr_pre97,thousands_usd,
 equity_incl_minorint_pre09,CROSS,stock,Equity Incl. Minority Interest [RCFD3210+RCFD3000],equity+minorint,thousands_usd,

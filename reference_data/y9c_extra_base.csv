@@ -1,0 +1,5 @@
+config,mdrm_code,variable_name,schedule,flow_type,sign,notes
+assets.csv,BHCK0276,ffsold_8801,HC,stock,,FEDERAL FUNDS SOLD (Y-9C 1988Q2-2001Q4; the combined BHCK1350 is filed before and again in 2001Q4)
+assets.csv,BHCK0277,repo_purch_8801,HC,stock,,SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL (Y-9C 1988Q2-2001Q4)
+liabilities.csv,BHCK0278,ffpurch_8801,HC,stock,,FEDERAL FUNDS PURCHASED (Y-9C 1988Q2-2001Q4)
+liabilities.csv,BHCK0279,repo_sold_8801,HC,stock,,SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE (Y-9C 1988Q2-2001Q4)

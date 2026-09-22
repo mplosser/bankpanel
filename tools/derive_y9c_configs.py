@@ -125,11 +125,29 @@ def main() -> int:
             base_keep.append([y, name, schedule_name(r[2]), r[3], "all", "", "", r[7], r[8]])
             kept_names.add(name)
             kept_codes[name] = y
+        # Y-9C-only codes (an item the BHC form carries under a code the Call never used)
+        xp = ROOT / "reference_data" / "y9c_extra_base.csv"
+        if xp.exists():
+            for r in pd.read_csv(xp, dtype=str, keep_default_na=False).itertuples(index=False):
+                if r.config == src.name and present.get(r.mdrm_code):
+                    base_keep.append([r.mdrm_code, r.variable_name, r.schedule, r.flow_type, "all", "", "", r.sign, r.notes])
+                    kept_names.add(r.variable_name)
+                    kept_codes[r.variable_name] = r.mdrm_code
         all_sections[src.name] = {"BASE_VARIABLES": base_keep, **{k: v for k, v in sec.items() if k != "BASE_VARIABLES"}}
 
     # ---- pass 2: derived rows, iterated until stable (a derived may feed another) -------
     derived_keep: dict[str, list[list[str]]] = {n: [] for n in all_sections}
     pending = {n: list(s.get("DERIVED_VARIABLES", [])) for n, s in all_sections.items()}
+    fo = ROOT / "reference_data" / "y9c_formula_overrides.csv"
+    overrides_f = {}
+    if fo.exists():
+        overrides_f = {r.variable_name: (r.formula, r.description_suffix)
+                       for r in pd.read_csv(fo, dtype=str, keep_default_na=False).itertuples(index=False)}
+    for rows_ in pending.values():
+        for r in rows_:
+            if r[0] in overrides_f:
+                r[4] = overrides_f[r[0]][0]
+                r[3] = (r[3] + overrides_f[r[0]][1]) if len(r) > 3 else r[3]
     changed = True
     while changed:
         changed = False
