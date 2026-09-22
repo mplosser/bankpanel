@@ -321,3 +321,11 @@ def test_zero_fill_respects_the_forms_an_item_is_collected_on():
     zero_fill_unless_reported(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
                               era_start=pd.Timestamp("2005-09-30"), forms=frozenset({31, 41}))
     assert df.x.tolist()[:3] == [3.0, 0.0, 8.0] and np.isnan(df.x.iloc[3])
+
+
+def test_fry9c_size_tier():
+    from bankpanel.profiles import resolve_size_tier
+
+    out = resolve_size_tier(pd.DataFrame({"BHCK2170": [4_999_999.0, 5_000_000.0, np.nan]}))
+    assert out.form_type.tolist()[:2] == [1, 2] and pd.isna(out.form_type.iloc[2])
+    assert out.form_type_source.tolist() == ["size_tier_5bn", "size_tier_5bn", "unknown"]

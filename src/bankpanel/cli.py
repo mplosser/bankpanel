@@ -103,6 +103,10 @@ def _load_for_validation(panel_root, columns=None):
     frame = dataset.to_table(
         columns=["RSSD_ID", "REPORTING_PERIOD", "form_type", *cols]
     ).to_pandas()
+    # A report with no form types (the FR Y-9C) is one population: the validators group
+    # by form_type, and a null key would drop every row.
+    if frame["form_type"].isna().all():
+        frame["form_type"] = 0
     return root, frame, cols
 
 

@@ -83,8 +83,28 @@ FRY9C_HEADER = {
     "RSSD9146": "financial_sub_indicator",
 }
 
+#: Size tier that governs reporting frequency on the FR Y-9C. Holding companies below the
+#: threshold file a set of items (the CECL amortized-cost detail, among others) at Q2 and Q4
+#: only. Measured on 2024-2025 off-quarters: 3% of filers under $5bn report those items, 94-96%
+#: of filers at or above it. The tier plays the role form_type plays for the Call Report --
+#: the population key the expectations matrix measures frequency within -- and is published
+#: in the ``form_type`` column with ``form_type_source = "size_tier_5bn"``.
+FRY9C_TIER_THRESHOLD = 5_000_000  # thousands of dollars: $5bn total assets (BHCK2170)
+
+
+def resolve_size_tier(df: pd.DataFrame) -> pd.DataFrame:
+    """1 = total assets under $5bn (semiannual filer of the tiered items), 2 = $5bn and over."""
+    assets = pd.to_numeric(df.get("BHCK2170"), errors="coerce") if "BHCK2170" in df.columns else pd.Series(pd.NA, index=df.index)
+    tier = pd.Series(pd.NA, index=df.index, dtype="Int8")
+    tier[assets < FRY9C_TIER_THRESHOLD] = 1
+    tier[assets >= FRY9C_TIER_THRESHOLD] = 2
+    source = pd.Series(["size_tier_5bn" if pd.notna(t) else "unknown" for t in tier], index=df.index, dtype="string")
+    return pd.DataFrame({"form_type": tier, "form_type_source": source}, index=df.index)
+
+
 #: The FR Y-9C (consolidated bank holding company financial statements), as published by
-#: ``data_fry9``. One form, so no form type. BHCK is the consolidated prefix and BHDM the
+#: ``data_fry9``. One form; the population key is the $5bn size tier (see above). BHCK is the
+#: consolidated prefix and BHDM the
 #: domestic-office one -- the RCFD/RCON pairing; BHCA/BHCW are the standardized and
 #: advanced-approaches capital columns -- the RCFA/RCFW pairing. BHBC carries the
 #: income of predecessor institutions in the quarter of a business combination.
@@ -92,10 +112,10 @@ FRY9C = ReportProfile(
     name="fry9c",
     prefix_aliases=(),
     coalesce_rules=(("BHCK", "BHDM"),),
-    form_type_resolver=None,
+    form_type_resolver=resolve_size_tier,
     header_columns=tuple(FRY9C_HEADER),
     header_renames=dict(FRY9C_HEADER),
-    source_columns=tuple(FRY9C_HEADER),
+    source_columns=tuple(FRY9C_HEADER) + ("BHCK2170",),
 )
 
 PROFILES: dict[str, ReportProfile] = {FFIEC_CALL.name: FFIEC_CALL, FRY9C.name: FRY9C}
