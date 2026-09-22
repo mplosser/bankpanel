@@ -86,7 +86,7 @@ class ConfigSet:
 
     # --- derived products -----------------------------------------------------------
 
-    def mdrm_codes(self) -> list[str]:
+    def mdrm_codes(self, coalesce_rules=None) -> list[str]:
         """Every raw code to read, including auto-synthesized RCON siblings.
 
         For each configured ``RCFD`` code we also read the same-suffix ``RCON`` code so
@@ -99,7 +99,10 @@ class ConfigSet:
         the coalesce is a harmless no-op there. See docs/CAVEATS.md.)
         """
         codes = [v.mdrm_code for v in self.base]
-        pairs = {"RCFD": "RCON", "RCFA": "RCOA"}
+        # The pairing is the report's (RCFD/RCON on the Call Report, BHCK/BHDM on the
+        # FR Y-9C); a caller with a profile passes its coalesce rules. The default is the
+        # Call Report's, for the config-only commands that have no profile in hand.
+        pairs = dict(coalesce_rules) if coalesce_rules is not None else {"RCFD": "RCON", "RCFA": "RCOA"}
         siblings = [pairs[c[:4]] + c[4:] for c in codes if c[:4] in pairs]
         return list(dict.fromkeys(codes + siblings))
 
