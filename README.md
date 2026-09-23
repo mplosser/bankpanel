@@ -79,7 +79,7 @@ bankpanel dictionary --measure --format csv --out variables.csv   # + measured c
 `coverage`, `first_quarter`, `last_quarter`, `pct_zero` (share of *reported* values that
 are exactly zero) and `total`, next to the construction: MDRM code or formula, resolved
 `inputs`, schedule, era bounds, form scope and description. A committed snapshot for the
-current build is [`docs/variables.csv`](docs/variables.csv).
+current build is [`docs/variables_call.csv`](docs/variables_call.csv) and [`docs/variables_y9c.csv`](docs/variables_y9c.csv).
 
 `pct_zero` is there because coverage alone cannot tell a well-reported column from an
 analytically empty one. Several Schedule RC-N itemisations are reported by every 031
