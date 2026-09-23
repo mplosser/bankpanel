@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -194,7 +195,7 @@ if __name__ == "__main__":
     ap.add_argument("--panel-root", required=True)
     ap.add_argument(
         "--legacy-dir",
-        default="c:/Users/Matthew/OneDrive/GitHub/bec_migration/data/call_reports/panels",
+        default=os.environ.get("BANKPANEL_LEGACY_PANELS", "../bec_migration/data/call_reports/panels"),
     )
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--out", default=None)

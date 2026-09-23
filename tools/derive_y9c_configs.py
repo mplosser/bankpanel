@@ -21,6 +21,7 @@ Usage: python tools/derive_y9c_configs.py [--raw-dir <data_fry9/data/processed/y
 from __future__ import annotations
 
 import argparse
+import os
 import csv
 import glob
 import io
@@ -85,8 +86,8 @@ def schedule_name(s: str) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--raw-dir", default="c:/Users/Matthew/OneDrive/GitHub/data_fry9/data/processed/y_9c")
-    ap.add_argument("--mdrm", default="c:/Users/Matthew/OneDrive/GitHub/bec_migration/data_preparation/MDRM.csv")
+    ap.add_argument("--raw-dir", default=os.environ.get("BANKPANEL_Y9C_RAW", "../data_fry9/data/processed/y_9c"))
+    ap.add_argument("--mdrm", default=os.environ.get("BANKPANEL_MDRM", "../data_call_report/data/dictionary/MDRM.csv"))
     args = ap.parse_args()
 
     files = sorted(glob.glob(str(Path(args.raw_dir) / "*.parquet")))

@@ -20,6 +20,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import zipfile
 from pathlib import Path
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--zip-dir",
-        default="c:/Users/Matthew/OneDrive/GitHub/data_call_report/data/raw/ffiec",
+        default=os.environ.get("BANKPANEL_CALL_RAW_FFIEC", "../data_call_report/data/raw/ffiec"),
     )
     ap.add_argument("--out", default="reference_data/mdrm_to_schedule.csv")
     args = ap.parse_args()

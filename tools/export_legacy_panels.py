@@ -33,6 +33,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     ap.add_argument("--out", required=True)
     ap.add_argument(
         "--legacy-dir",
-        default="c:/Users/Matthew/OneDrive/GitHub/bec_migration/data/call_reports/panels",
+        default=os.environ.get("BANKPANEL_LEGACY_PANELS", "../bec_migration/data/call_reports/panels"),
     )
     args = ap.parse_args()
     export(Path(args.panel_root), Path(args.legacy_dir), Path(args.out))

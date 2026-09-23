@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use bankpanel, please cite it as below."
+title: "bankpanel: time-consistent panels from US bank regulatory reports"
+authors:
+  - family-names: Plosser
+    given-names: Matthew
+version: 0.7.0
+date-released: 2026-09-22
+license: MIT
+repository-code: https://github.com/mplosser/bankpanel

@@ -30,6 +30,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import csv
 import io
 import re
@@ -281,7 +282,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--legacy-dir",
-        default="c:/Users/Matthew/OneDrive/GitHub/bec_migration/data_preparation/config",
+        default=os.environ.get("BANKPANEL_LEGACY_CONFIGS", "../bec_migration/data_preparation/config"),
     )
     ap.add_argument("--out-dir", default="configs")
     ap.add_argument("--schedule-map", default="reference_data/mdrm_to_schedule.csv")

@@ -19,6 +19,7 @@ suggests is checked against measured coverage before it reaches a config.
 from __future__ import annotations
 
 import functools
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -28,7 +29,7 @@ CALL_PREFIXES = ("RCON", "RCFD", "RIAD", "RCFN", "RCOA", "RCFA", "RCOW", "RCFW")
 #: Where the MDRM dump usually lives, relative to a checkout of the sibling repos.
 DEFAULT_PATHS = (
     Path("../data_call_report/data/dictionary/MDRM.csv"),
-    Path("c:/Users/Matthew/OneDrive/GitHub/data_call_report/data/dictionary/MDRM.csv"),
+    Path(os.environ.get("BANKPANEL_MDRM", "")) if os.environ.get("BANKPANEL_MDRM") else Path("../data_call_report/data/dictionary/MDRM.csv"),
     Path("reference_data/MDRM.csv"),
 )
 

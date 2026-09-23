@@ -2,16 +2,18 @@
 
 **Time-consistent panels from US bank regulatory reports.**
 
-Turns raw quarterly FFIEC Call Report files into a single analysis-ready panel keyed
-`(RSSD_ID, REPORTING_PERIOD)`, handling the things that make forty years of bank
+Turns raw quarterly FFIEC Call Report and FR Y-9C files into analysis-ready panels keyed
+`(RSSD_ID, REPORTING_PERIOD)`, with the same variable names on both, handling the things that make forty years of bank
 regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v0.1.** The engine is complete and verified: the shipped configs reproduce
-> the panels of the research pipeline this was extracted from — **688 of 688 columns
-> match exactly** across 1,415,045 bank-quarters. The panel now carries **1,071 columns**
-> across fourteen schedules. See [Roadmap](#roadmap).
+> **Status: v0.7.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2025Q3,
+> 1.4 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
+> 188 thousand holding-company-quarters, ~850 columns). Every published base column is
+> verified cell for cell against its raw MDRM code over every quarter, every coverage
+> discontinuity is explained in a signed ledger, and no derived value rests on nothing.
+> See [Roadmap](#roadmap) and [docs/FR-Y-9C.md](docs/FR-Y-9C.md).
 
 ---
 
@@ -54,14 +56,18 @@ pip install -e .
 ```
 
 You supply the raw data. `bankpanel` reads the quarterly parquet files produced by
-[`data_call_report`](https://github.com/mplosser/data_call_report), which downloads and
-parses the Chicago Fed and FFIEC CDR bulk files.
+[`data_call_report`](https://github.com/mplosser/data_call_report) (Call Report: Chicago
+Fed and FFIEC CDR bulk files) and [`data_fry9`](https://github.com/mplosser/data_fry9)
+(FR Y-9C: Chicago Fed and FFIEC files). Both are sibling repositories: the tools default
+to `../data_call_report` and `../data_fry9`, overridable with `BANKPANEL_MDRM`,
+`BANKPANEL_Y9C_RAW`, `BANKPANEL_CALL_RAW_FFIEC` and `BANKPANEL_LEGACY_PANELS`.
 
 ## Use
 
 ```bash
 bankpanel lint                              # validate configs; reads no data
 bankpanel build --raw-dir /path/to/FFIEC_031_041 --out panel_root --jobs 8
+bankpanel build --profile fry9c --raw-dir /path/to/y_9c --out y9c_root --jobs 4   # the FR Y-9C panel
 bankpanel expectations build --panel-root panel_root
 bankpanel validate all --panel-root panel_root --save   # coverage, breaks, quarterize, quality, stitches
 bankpanel info --panel-root panel_root
@@ -164,9 +170,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 0.4 | Schedules [RC-B](docs/schedules/RC-B.md), [RC-D](docs/schedules/RC-D.md), [RC-N](docs/schedules/RC-N.md) — **done** |
 | 0.5 | Schedules [RC-K](docs/schedules/RC-K.md), [RC-R Part I](docs/schedules/RC-R-I.md), [RC-O](docs/schedules/RC-O.md), [RI-A](docs/schedules/RI-A.md), [RI-B](docs/schedules/RI-B.md) — **done** |
 | 0.6 | [Cleaning layer](docs/CLEANING.md) + [data-quality checks](docs/QUALITY.md) — **done** |
-| 1.0 | Docs, examples, DOI, PyPI |
-
-FR Y-9C support is designed for — the engine takes a `ReportProfile` — but not built.
+| 0.7 | Year-to-date items published as `ytd_` + `q_`; the `in_era_unless_reported` zero-fill; raw-identity check; **[FR Y-9C panel](docs/FR-Y-9C.md)** with the size tier and predecessor items — **done** |
+| 1.0 | Examples, DOI, PyPI |
 
 ## License
 
