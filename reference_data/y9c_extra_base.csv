@@ -27,3 +27,5 @@ ri_b_chargeoffs.csv,BHCK4668,ytd_rec_lease_us_pre07,HI-B,ytd,any,RECOVERIES ON L
 ri_b_chargeoffs.csv,BHCK4669,ytd_rec_lease_nonus_pre07,HI-B,ytd,any,RECOVERIES ON LEASE FINANCING RECEIVABLES OF NON-U.S. ADDRESSEES (to 2006Q4)
 ri_b_chargeoffs.csv,BHCKC880,ytd_co_lease_oth_07,HI-B,ytd,nonneg,CHARGE-OFFS OF ALL OTHER LEASE FINANCING RECEIVABLES (2007-)
 ri_b_chargeoffs.csv,BHCKF188,ytd_rec_lease_oth_07,HI-B,ytd,any,RECOVERIES OF ALL OTHER LEASE FINANCING RECEIVABLES (2007-)
+liabilities.csv,BHCK3230,common_stock,HC,stock,,COMMON STOCK (par value)
+liabilities.csv,BHCK3283,pref_stock_perpetual,HC,stock,,PERPETUAL PREFERRED STOCK (INCLUDING RELATED SURPLUS)

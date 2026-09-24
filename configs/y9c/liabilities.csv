@@ -37,6 +37,8 @@ BHCK3210,equity,HC,stock,all,,,,
 BHCK3000,minorint,HC,stock,all,,,,
 BHCK0278,ffpurch_8801,HC,stock,all,,,,FEDERAL FUNDS PURCHASED (Y-9C 1988Q2-2001Q4)
 BHCK0279,repo_sold_8801,HC,stock,all,,,,SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE (Y-9C 1988Q2-2001Q4)
+BHCK3230,common_stock,HC,stock,all,,,,COMMON STOCK (par value)
+BHCK3283,pref_stock_perpetual,HC,stock,all,,,,PERPETUAL PREFERRED STOCK (INCLUDING RELATED SURPLUS)
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
