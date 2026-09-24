@@ -90,25 +90,34 @@ def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
         if absent:
             raise SystemExit(f"{name}: passthrough column(s) not in this build: {absent}")
 
+        # Arrow only, in row chunks: the pandas round trip held three copies of a 391-column
+        # table (~13 GB peak) and tripped the machine's memory safeguard. Here the table is
+        # held once; the sort is an index permutation and rows are written in slices.
+        import pyarrow.compute as pc
+
         table = dataset.to_table(columns=KEYS + [ours_by_legacy[c] for c in have] + extra)
-        df = table.to_pandas().rename(columns={ours_by_legacy[c]: c for c in have})
-        have = have + extra
-        df = df.sort_values(KEYS).reset_index(drop=True)
-
-        # Match the legacy file's own representation, not ours.
-        df["RSSD_ID"] = df["RSSD_ID"].astype("float64")
-        df["REPORTING_PERIOD"] = df["REPORTING_PERIOD"].astype("datetime64[us]")
-        for col in BOOLEAN_TEXT & set(df.columns):
-            df[col] = df[col].map({1.0: "true", 0.0: "false"}).astype("object")
-
+        table = table.rename_columns([{**{ours_by_legacy[c]: c for c in have}}.get(n, n) for n in table.column_names])
+        have = have + extra   # the passthrough columns keep their own names
+        order = pc.sort_indices(table.select(KEYS), sort_keys=[(k, "ascending") for k in KEYS])
         fields = [pa.field("RSSD_ID", pa.float64()), pa.field("REPORTING_PERIOD", pa.timestamp("us"))]
         for c in have:
             fields.append(pa.field(c, pa.large_string() if c in BOOLEAN_TEXT else pa.float64()))
-        pq.write_table(
-            pa.Table.from_pandas(df[KEYS + have], schema=pa.schema(fields), preserve_index=False),
-            out / f"{name}.parquet", compression="snappy",
-        )
-        print(f"{name:<17} {len(df):>10,} rows x {len(have) + 2:>4} cols -> {out / (name + '.parquet')}")
+        schema = pa.schema(fields)
+        with pq.ParquetWriter(out / f"{name}.parquet", schema, compression="snappy") as writer:
+            for start in range(0, len(order), 200_000):
+                chunk = table.take(order.slice(start, 200_000)).select([f.name for f in fields])
+                cols = []
+                for f in fields:
+                    col = chunk[f.name]
+                    if f.name in BOOLEAN_TEXT:
+                        col = pc.if_else(pc.equal(col.cast(pa.float64()), 1.0), "true",
+                                         pc.if_else(pc.equal(col.cast(pa.float64()), 0.0), "false", pa.scalar(None, pa.string()))).cast(pa.large_string())
+                    else:
+                        col = col.cast(f.type)
+                    cols.append(col)
+                writer.write_table(pa.table(cols, schema=schema))
+        n_rows = len(order)
+        print(f"{name:<17} {n_rows:>10,} rows x {len(have) + 2:>4} cols -> {out / (name + '.parquet')}")
         if missing:
             print(f"{'':<17} omitted {len(missing)} legacy column(s) bankpanel withholds: {missing}")
         if extra:
