@@ -108,6 +108,28 @@ option (one quarter earlier than on the Call Report), and the 2019Q4 burden reli
 removed HC-B securities detail and HI-B charge-off detail for holding companies under
 $5bn. A one-page view by event is `review/07_y9c_coverage_ledger_by_event.csv`.
 
+## Cross-check against the subsidiary banks
+
+`tools/bhc_bank_crosscheck.py` sums each holding company's Call-filing subsidiaries (the
+`hh_entity` link from the BEC entity classification) and compares the sum with the Y-9C
+consolidated figure under the same variable name. For **one-bank holding companies**
+(92,775 BHC-quarters, 1997–2025) the bank-sum / BHC ratio is:
+
+| item | median | p10 | p90 | within 5% |
+| --- | --- | --- | --- | --- |
+| `assets` | 0.998 | 0.984 | 1.000 | 95.7% |
+| `ll_net_unearned` (loans) | 1.000 | 0.999 | 1.000 | 97.0% |
+| `dom_deposit_ib` | 1.000 | 1.000 | 1.005 | 97.0% |
+| `ytd_int_inc` | 1.000 | 0.991 | 1.000 | 96.0% |
+| `tier1_capital` | 0.988 | 0.845 | 1.141 | 51.1% |
+
+Balance-sheet and income items sit at 1 with a thin tail below it (the parent's own assets
+and debt, non-bank subsidiaries). Regulatory capital does not, and should not: the
+holding company's capital is its own, and double leverage at the parent puts the bank's
+tier 1 above or below the consolidated figure. Multi-bank holding companies spread
+wider (85% of assets within 5%) as expected. This is the evidence that a name means the
+same thing on both panels.
+
 ## Known limits
 
 * No maturity/repricing schedules, so duration-style analysis cannot be done at the BHC
