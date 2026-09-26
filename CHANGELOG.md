@@ -15,6 +15,10 @@ without a deprecation entry here.
   `BANKPANEL_LEGACY_CONFIGS`). A fresh clone installs with `pip install -e .`, passes
   `bankpanel lint` and the test suite with no data present, and builds both panels from
   the public `data_call_report` and `data_fry9` repositories.
+- **Fixed: the engine's `src/bankpanel/build/` package was never committed.** The
+  `.gitignore` rule `build/` (meant for packaging output) matched it, so every clone of
+  0.1–0.7 failed at `import bankpanel`. Found by the fresh-clone test above; the rule is
+  now anchored to the repository root.
 - `bankpanel.__version__` reads the installed distribution's version.
 - CI keyed to the repository's `master` branch (it was keyed to `main` and never ran).
 - Wheels no longer bundle a stale local `reporting_expectations.parquet`; the matrix is
