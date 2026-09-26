@@ -8,12 +8,14 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v0.7.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2025Q3,
+> **Status: v1.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2025Q3,
 > 1.4 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
 > 188 thousand holding-company-quarters, ~850 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
 > discontinuity is explained in a signed ledger, and no derived value rests on nothing.
-> See [Roadmap](#roadmap) and [docs/FR-Y-9C.md](docs/FR-Y-9C.md).
+> Column names are stable from 1.0: a rename gets a deprecation entry in the
+> [changelog](CHANGELOG.md). See [Reproduce from scratch](#reproduce-from-scratch),
+> [Examples](#examples) and [docs/FR-Y-9C.md](docs/FR-Y-9C.md).
 
 ---
 
@@ -93,14 +95,79 @@ bp.columns_for_schedule("RC-C")
 bp.expected_mask(df, "custody_assets")     # was this cell supposed to be reported?
 
 df = bp.read_panel(
-    columns=["assets_total", "ln_condev", "net_interest_income"],
+    columns=["assets", "ln_condev", "q_int_inc", "q_int_exp"],
     start="2000Q1",
     form_types=(31, 41, 51),
 )
 ```
 
 `columns` is required — the finished panel is far too wide to load whole, and parquet
-column projection means asking for what you need is cheap.
+column projection means asking for what you need is cheap. The reader finds the panel
+through `root=`, else `BANKPANEL_PANEL_ROOT`, else `./panel_root`.
+
+## Examples
+
+[`examples/quickstart.py`](examples/quickstart.py) reads both panels and walks through the
+three things a first-time user has to know: every row carries a form type, year-to-date
+income is published both as filed (`ytd_`) and as a quarterly flow (`q_`), and a NaN is
+only interpretable with `expected_mask`, which separates "not collected on this form this
+quarter" from "left blank". It ends with one figure (aggregate loans-to-assets and net
+interest margin, banks against holding companies).
+
+```bash
+python examples/quickstart.py --call-root panel_root --y9c-root y9c_root
+# or: BANKPANEL_CALL_ROOT=... BANKPANEL_Y9C_ROOT=... python examples/quickstart.py
+```
+
+[`examples/quickstart.ipynb`](examples/quickstart.ipynb) is the same walk as an executed
+notebook, generated from the script by `examples/make_notebook.py` so the two cannot drift.
+[`examples/annotated_config_example.csv`](examples/annotated_config_example.csv) is a
+commented config showing every section and column.
+
+## Reproduce from scratch
+
+Everything below runs on a machine that has never seen this data. Nothing is downloaded by
+`bankpanel` itself; the two data repositories do that, and their READMEs are the reference
+for their own steps (the FFIEC CDR bulk files for 2011 onward are a manual download from
+the FFIEC site, which `05_parse_ffiec.py` then parses). The Call Report build is the one
+long step; the rest take minutes.
+
+```bash
+# 1. raw data (public FFIEC / Chicago Fed / Federal Reserve files -> quarterly parquet)
+git clone https://github.com/mplosser/data_call_report && cd data_call_report
+pip install -r requirements.txt
+python 01_download_data.py && python 02_download_dictionary.py && python 03_parse_dictionary.py
+python 04_parse_chicago.py && python 05_parse_ffiec.py       # 1985-2010 Chicago Fed; 2011+ FFIEC CDR
+cd ..
+git clone https://github.com/mplosser/data_fry9 && cd data_fry9
+pip install -r requirements.txt
+python 01_download_data.py && python 04_parse_data.py
+cd ..
+
+# 2. bankpanel
+git clone https://github.com/mplosser/bankpanel && cd bankpanel
+pip install -e ".[dev]"
+bankpanel lint && pytest -q                       # configs and engine, no data needed
+
+# 3. the Call Report panel (1.4 million rows x ~1,180 columns; ~1.1 GB on disk)
+bankpanel build --raw-dir ../data_call_report/data/processed/FFIEC_031_041 --out panel_root --jobs 8
+bankpanel expectations build --panel-root panel_root
+bankpanel validate all --panel-root panel_root --save
+
+# 4. the FR Y-9C panel (188 thousand rows x ~850 columns; ~150 MB)
+bankpanel build --profile fry9c --raw-dir ../data_fry9/data/processed/y_9c --out y9c_root --jobs 4
+bankpanel expectations build --profile fry9c --panel-root y9c_root
+bankpanel validate all --profile fry9c --panel-root y9c_root --save
+
+# 5. check what you built against what was published
+python tools/raw_identity_check.py --panel-root panel_root --raw-dir ../data_call_report/data/processed/FFIEC_031_041
+python tools/raw_identity_check.py --profile fry9c --panel-root y9c_root --raw-dir ../data_fry9/data/processed/y_9c
+python examples/quickstart.py --call-root panel_root --y9c-root y9c_root
+```
+
+`validate all` compares the panel to the signed coverage ledger in `configs/*/coverage_expected.csv`;
+a build from the same raw vintage reports zero open findings. A newer raw vintage adds
+quarters and may add findings at the new end, which is the intended signal.
 
 ---
 
@@ -171,7 +238,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 0.5 | Schedules [RC-K](docs/schedules/RC-K.md), [RC-R Part I](docs/schedules/RC-R-I.md), [RC-O](docs/schedules/RC-O.md), [RI-A](docs/schedules/RI-A.md), [RI-B](docs/schedules/RI-B.md) — **done** |
 | 0.6 | [Cleaning layer](docs/CLEANING.md) + [data-quality checks](docs/QUALITY.md) — **done** |
 | 0.7 | Year-to-date items published as `ytd_` + `q_`; the `in_era_unless_reported` zero-fill; raw-identity check; **[FR Y-9C panel](docs/FR-Y-9C.md)** with the size tier and predecessor items — **done** |
-| 1.0 | Examples, DOI, PyPI |
+| 1.0 | [Examples](#examples); reproducible from a fresh clone; column names stable — **done** |
+| 1.1 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

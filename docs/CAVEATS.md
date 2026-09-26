@@ -247,3 +247,31 @@ where a zero would be invented: a bank that reports the item in another quarter 
 which no filer of the bank's form reports the item, and forms outside the item's scope
 (the 051 has no credit-card fee lines, though two or three of its filers volunteer one).
 
+---
+
+## 12. Known gaps in 1.0 (deferred to 1.1)
+
+Two things are documented rather than done. Neither affects a column after 1990 on either
+panel, and neither is hidden: the ledger rows are signed and the dictionary shows the eras.
+
+**FR Y-9C items before the 1990Q3 revision.** `configs/y9c` is generated from
+`configs/call` by prefix translation, which is exact where the two forms share item codes.
+Before 1990Q3 a handful of Y-9C items carried codes that the Call Report never used, so the
+translated column starts at 1990Q3 and the 1986Q3–1990Q2 quarters are blank. The coverage
+ledger (`configs/y9c/coverage_expected.csv`) records five columns at the 1990Q3 revision:
+`na_tot_1403` and `pd90_tot_1407` (nonaccrual and 90-day past-due totals), `oreo`,
+`ytd_int_exp_for` (foreign-office interest expense) and `ytd_int_inc_ln_foreign`. (The
+two 1988Q2 rows, `ffrepo_ass_1350` / `ffrepo_liab_2800`, are a retirement of combined
+fed-funds/repo codes that *is* handled by the split codes from 1988Q2.) Recoding the
+1990Q3 five means a per-item era map in `reference_data/y9c_code_map.csv`, a rebuild, and
+a re-signed ledger. Until then, treat 1986Q3–1990Q2 on those columns as not collected,
+which is what `expected_mask` reports.
+
+**Schedule HC / HI notes.** `docs/schedules/` documents the Call Report schedules whose
+construction needed judgment (RC-B, RC-C, RC-D, RC-E, RC-K, RC-N, RC-O, RC-R Part I, RI-A,
+RI-B). The Y-9C schedules HC-B, HC-C, … , HI-B are the same constructions under `BHCK` /
+`BHDM` codes, so those notes apply to the Y-9C by construction; what is missing is a page
+per Y-9C schedule recording the exceptions listed in [FR-Y-9C.md](FR-Y-9C.md) (the size
+tier, the 2019Q4 burden relief, the predecessor memorandum) next to the corresponding
+Call Report note.
+

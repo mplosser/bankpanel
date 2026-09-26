@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.0.0 — 2026-09-26
+
+First stable release. Column names on both panels are now an API: they will not be renamed
+without a deprecation entry here.
+
+- **Examples**: `examples/quickstart.py` and the executed `examples/quickstart.ipynb`
+  (generated from the script by `examples/make_notebook.py`). Reads both panels; shows
+  `form_type`, `ytd_` vs `q_`, `expected_mask`, and one figure.
+- **Third-party reproducibility**: no path in the package or tools refers to a particular
+  machine; every location is an argument or an environment variable
+  (`BANKPANEL_PANEL_ROOT`, `BANKPANEL_CALL_ROOT`, `BANKPANEL_Y9C_ROOT`, `BANKPANEL_MDRM`,
+  `BANKPANEL_Y9C_RAW`, `BANKPANEL_CALL_RAW_FFIEC`, `BANKPANEL_LEGACY_PANELS`,
+  `BANKPANEL_LEGACY_CONFIGS`). A fresh clone installs with `pip install -e .`, passes
+  `bankpanel lint` and the test suite with no data present, and builds both panels from
+  the public `data_call_report` and `data_fry9` repositories.
+- `bankpanel.__version__` reads the installed distribution's version.
+- CI keyed to the repository's `master` branch (it was keyed to `main` and never ran).
+- Wheels no longer bundle a stale local `reporting_expectations.parquet`; the matrix is
+  built per panel with `bankpanel expectations build`.
+- Lint clean under the shipped ruff configuration; `tools/README.md` describes the
+  maintainer tools and which of them need the legacy BEC repository.
+- Known gaps deferred to 1.1 and listed in `docs/CAVEATS.md` §12: FR Y-9C items before
+  1990 whose codes differ from the Call Report's are not yet recoded; Schedule HC/HI notes
+  in `docs/schedules/` are not yet written (the RC/RI notes apply by construction, since
+  `configs/y9c` is generated from `configs/call`).
+
 ## 0.7.0 — 2026-09-22
 
 - **FR Y-9C panel** (`--profile fry9c`, `configs/y9c/`): generated from the Call Report configs

@@ -6,12 +6,18 @@ Quick start::
 
     bp.build(raw_dir=..., out='panel_root', config_dir='configs/call')   # or: bankpanel build
     bp.list_variables(schedule='RC-C')
-    df = bp.read_panel(columns=['assets_total', 'ln_condev'], start='2000Q1')
+    df = bp.read_panel(columns=['assets', 'ln_condev', 'q_int_inc'], start='2000Q1')
 
 See docs/CAVEATS.md before using the data for research.
 """
 
-__version__ = "0.1.0.dev0"
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _dist_version
+
+try:
+    __version__ = _dist_version("bankpanel")
+except PackageNotFoundError:  # running from a source tree without an install
+    __version__ = "0+unknown"
 
 from .build.runner import build
 from .config import ConfigError, ConfigSet
