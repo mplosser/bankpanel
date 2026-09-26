@@ -111,12 +111,11 @@ def _load_for_validation(panel_root, columns=None):
 
 
 def cmd_expectations(args: argparse.Namespace) -> int:
-    from .reference.expectations import build_expectations, read_expectations, write_expectations
-
     import pandas as pd
     import pyarrow.dataset as ds
 
     from .io.reader import _resolve_root
+    from .reference.expectations import build_expectations, read_expectations, write_expectations
 
     root = _resolve_root(args.panel_root)
     # The matrix describes THIS panel, so it lives beside it rather than in a shared
@@ -152,13 +151,11 @@ def cmd_expectations(args: argparse.Namespace) -> int:
 
 def cmd_validate(args: argparse.Namespace) -> int:
     import pandas as pd
-
-    from .config import ConfigSet
-    from .reference.expectations import read_expectations
-
     import pyarrow.dataset as ds
 
+    from .config import ConfigSet
     from .io.reader import _resolve_root
+    from .reference.expectations import read_expectations
 
     # The whole panel is ~11 GiB as a frame, which a 32 GB machine cannot always spare. No
     # validator needs it at once: coverage and breaks look at one column at a time, and the
@@ -253,9 +250,8 @@ def cmd_validate(args: argparse.Namespace) -> int:
         exit_code = max(exit_code, gate(findings))
 
     if args.check in ("quality", "all"):
-        from .validate.quality import format_report, gate, run_checks
-
         from .expr import FormulaError, dependencies
+        from .validate.quality import format_report, gate, run_checks
 
         cs = ConfigSet.load(_config_dir(args))
         check_cols: set[str] = set()

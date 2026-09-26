@@ -299,7 +299,7 @@ def test_blank_is_zero_unless_the_bank_reports_that_year_or_the_form_never_does(
         (4, 51, [np.nan] * 4),                      # 051 collects it at Q4 only ...
         (5, 51, [np.nan, np.nan, np.nan, 9.0]),     # ... so bank 4 is zero at Q4, blank before
     ]:
-        rows += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "form_type": form, "x": v} for d, v in zip(q, vals)]
+        rows += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "form_type": form, "x": v} for d, v in zip(q, vals, strict=True)]
     df = pd.DataFrame(rows)
     n = zero_fill_unless_reported(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
                                   era_start=pd.Timestamp("2010-06-30"))

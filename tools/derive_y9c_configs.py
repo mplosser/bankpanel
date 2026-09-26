@@ -21,10 +21,10 @@ Usage: python tools/derive_y9c_configs.py [--raw-dir <data_fry9/data/processed/y
 from __future__ import annotations
 
 import argparse
-import os
 import csv
 import glob
 import io
+import os
 import re
 import sys
 from pathlib import Path
@@ -165,7 +165,9 @@ def main() -> int:
                 if r[1] == name:
                     piece = f"{name}_{r[0][4:].lower()}"
                     r[1] = piece
-                    kept_names.discard(name); kept_names.add(piece); kept_codes[piece] = kept_codes.pop(name)
+                    kept_names.discard(name)
+                    kept_names.add(piece)
+                    kept_codes[piece] = kept_codes.pop(name)
                     renamed_pieces.setdefault(cfg, []).append(piece)
     for name, (formula, suffix) in overrides_f.items():
         if name not in seen_derived and name in call_base and name not in kept_names:

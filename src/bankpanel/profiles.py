@@ -19,7 +19,12 @@ from pathlib import Path
 
 import pandas as pd
 
-from .reference.formtype import HEADER_RENAMES, header_source_columns, resolve_form_type, resolver_source_columns
+from .reference.formtype import (
+    HEADER_RENAMES,
+    header_source_columns,
+    resolve_form_type,
+    resolver_source_columns,
+)
 
 
 @dataclass(frozen=True)

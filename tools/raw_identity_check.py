@@ -23,9 +23,11 @@ import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+from bankpanel.build.quarter import (
+    to_numeric,  # noqa: E402  (builder's coercion: boolean text -> 1/0)
+)
 from bankpanel.config import ConfigSet  # noqa: E402
 from bankpanel.profiles import get_profile  # noqa: E402
-from bankpanel.build.quarter import to_numeric  # noqa: E402  (the builder's own coercion: boolean text -> 1/0)
 
 CONFIG_DIRS = {"ffiec_call": "configs/call", "fry9c": "configs/y9c"}
 
@@ -44,7 +46,7 @@ def main() -> int:
     zero_filled = {r.column for r in cs.zero_fill}
     withheld = cs.intermediate_columns()
     base = [v for v in cs.base if v.variable_name not in withheld]
-    fallback_of = {p: f for p, f in profile.coalesce_rules}
+    fallback_of = dict(profile.coalesce_rules)
 
     raw_files = sorted(Path(args.raw_dir).glob("*.parquet"))
     if not args.all:

@@ -11,8 +11,8 @@ import pyarrow.parquet as pq
 import pytest
 
 from bankpanel.build.runner import build
-from bankpanel.profiles import get_profile
 from bankpanel.io.reader import read_header, read_panel
+from bankpanel.profiles import get_profile
 
 QUARTERS = ["2020Q1", "2020Q2", "2020Q3", "2020Q4", "2021Q1"]
 
@@ -21,7 +21,6 @@ def _raw(period: str) -> pd.DataFrame:
     """Four holding companies. Bank 3 files the quarterly-average item only under BHDM;
     bank 4 is above $5bn; bank 2 acquires someone in 2020Q2 (predecessor item filed once)."""
     q = pd.Period(period, freq="Q")
-    n = (q.year - 2020) * 4 + q.quarter          # 1..5
     df = pd.DataFrame({
         "RSSD_ID": [1, 2, 3, 4],
         "REPORTING_PERIOD": pd.Timestamp(q.end_time.normalize()),

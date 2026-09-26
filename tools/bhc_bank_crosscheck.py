@@ -39,7 +39,7 @@ def main() -> int:
     bank = bank.rename(columns={"RSSD_ID": "entity", "REPORTING_PERIOD": "date"}).merge(cls, on=["entity", "date"])
     n_banks = bank.groupby(["hh_entity", "date"]).entity.transform("size")
     bank["one_bank"] = n_banks == 1
-    agg = bank.groupby(["hh_entity", "date"]).agg({**{c: "sum" for c in items}, "one_bank": "first", "entity": "size"}).reset_index()
+    agg = bank.groupby(["hh_entity", "date"]).agg({**dict.fromkeys(items, "sum"), "one_bank": "first", "entity": "size"}).reset_index()
 
     y9 = ds.dataset(f"{args.y9c_root}/panel", partitioning="hive")
     items_y = [c for c in items if c in y9.schema.names]

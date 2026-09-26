@@ -37,7 +37,7 @@ bankpanel = "bankpanel.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/mplosser/bankpanel"
-Documentation = "https://github.com/mplosser/bankpanel/tree/main/docs"
+Documentation = "https://github.com/mplosser/bankpanel/tree/master/docs"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bankpanel"]
