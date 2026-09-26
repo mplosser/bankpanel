@@ -1,0 +1,75 @@
+# Core totals from Kashyap and Stein's "Notes on forming consistent time series"
+# (Federal Reserve Bank of Chicago; data appendix to Kashyap and Stein, AER 2000 / NBER WP 6056).
+# Their headline balance-sheet and income totals that bankpanel did not yet publish, built to
+# their definitions and validated against the reported totals over 1985-2010 (measured
+# 2026-09-26 on the data_call_report files):
+#
+#   series                  reported code    after the code stops              identity 1985-2010
+#   liabilities             RCFD2948         (filed throughout)                -
+#   ytd_net_inc             RIAD4340         (filed throughout)                -
+#   ytd_int_inc_ffrepo      RIAD4020         (filed throughout)                -
+#   ytd_int_exp_ffrepo      RIAD4180         (filed throughout)                -
+#   deposits                -- domestic RCON2200 + foreign RCFN2200 --         = RCFD2200, 1.000
+#   liabilities_ex_subdebt  RCFD2950 to 2010 liabilities - subdebt             1.000
+#   ln_gross                RCFD1400 to 2010 ll_tot (2122) + unearned (2123)   1.000
+#   ln_consumer             RCFD1975 to 2010 cards+revolving + other consumer  1.000 from 1990 (0.975 1985)
+#   ytd_int_exp_dep         RIAD4170 to 2010 foreign + transaction + savings   1.000 from 1987 (0.98 1985-86)
+#                                            + time (A517+A518 / HK03+HK04)
+#   ytd_op_inc              RIAD4000 to 2010 interest + noninterest income     1.000
+#   ytd_op_exp              RIAD4130 to 2010 interest + noninterest expense    1.000 (excludes provisions)
+#   securities              RCFD0390 to 1993 HTM (1754) + AFS (1773)           1994 break = a normal quarter
+#                                            (+ equity securities JA22, 2018-)  (per-bank median 1.017 vs 1.009)
+#   trad_ass_pre94          RCFD2146 to 1993 NOT stitched to trad_ass (3545): the 1994 definition
+#                                            adds derivative revaluation gains; aggregate x1.81
+#                                            at the break, 91% at the ten largest dealer banks
+#
+# Where a reported total exists (through 2010, the Chicago Fed files) it is used as filed and
+# the component sum takes over after; the identity column shows the two agree.
+#
+# Why deposits is NOT read from RCFD2200: the FFIEC CDR files (2011-) carry no consolidated
+# deposit line for banks with foreign offices, and the upstream RCFD/RCON cross-fill copies
+# the DOMESTIC figure into RCFD2200 (docs/CAVEATS.md section 1). For the 37 such banks in 2020Q4
+# RCFD2200 == RCON2200 and the foreign deposits (RCFN2200) would be lost -- State Street's
+# $89bn among them. Domestic + foreign equals the reported RCFD2200 exactly before 2011.
+
+[META]
+key,value
+panel_name,core_series
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCFD2948,liabilities,RC,stock,all,,,,TOTAL LIABILITIES
+RIAD4340,ytd_net_inc,RI,ytd,all,,,any,NET INCOME (LOSS)
+RIAD4020,ytd_int_inc_ffrepo,RI,ytd,all,,,nonneg,INCOME ON FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+RIAD4180,ytd_int_exp_ffrepo,RI,ytd,all,,,nonneg,EXPENSE OF FEDERAL FUNDS PURCHASED AND SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE
+RCFD2950,liab_ex_subdebt_2950,RC,stock,all,,2010-12-31,,TOTAL LIABILITIES NET OF SUBORDINATED DEBT (Chicago Fed files only)
+RCFD1400,ln_gross_1400,RC-C,stock,all,,2010-12-31,,TOTAL LOANS AND LEASES GROSS (Chicago Fed files only)
+RCFD1975,ln_consumer_1975,RC-C,stock,all,,2010-12-31,,LOANS TO INDIVIDUALS FOR HOUSEHOLD FAMILY AND OTHER PERSONAL EXPENDITURES (Chicago Fed files only)
+RIAD4170,ytd_int_exp_dep_4170,RI,ytd,all,,2010-12-31,nonneg,TOTAL INTEREST ON DEPOSITS (Chicago Fed files only)
+RIAD4000,ytd_op_inc_4000,RI,ytd,all,,2010-12-31,any,TOTAL OPERATING INCOME (Chicago Fed files only)
+RIAD4130,ytd_op_exp_4130,RI,ytd,all,,2010-12-31,any,TOTAL OPERATING EXPENSE (Chicago Fed files only)
+RCFD0390,securities_pre94,RC-B,stock,all,,1993-12-31,,TOTAL INVESTMENT SECURITIES (before the 1994 HTM/AFS split)
+RCFD2146,trad_ass_pre94,RC,stock,all,,1993-12-31,,ASSETS HELD IN TRADING ACCOUNTS (before 1994; excludes derivative revaluation gains -- not comparable with trad_ass)
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+deposits,RC,stock,"Total deposits, consolidated: domestic offices (RCON2200) plus foreign offices (RCFN2200). Equals the reported RCFD2200 exactly before 2011; after 2011 RCFD2200 is not consolidated in the source files (see the header of core_series.csv).",(dep_tot_dom + foreign_dep.fillna(0)).where(dep_tot_dom.notna()),thousands_usd,nonneg
+liabilities_ex_subdebt,RC,stock,Total liabilities net of subordinated notes and debentures: RCFD2950 as filed to 2010; liabilities - subdebt after (identical 1985-2010).,liab_ex_subdebt_2950.fillna((liabilities - subdebt.fillna(0)).where(liabilities.notna())),thousands_usd,nonneg
+ln_gross,RC-C,stock,Total loans and leases gross of unearned income: RCFD1400 as filed to 2010; ll_tot (RCFD2122) + unearned income (RCFD2123) after (identical 1985-2010).,ln_gross_1400.fillna((ll_tot + unearned_income_ln.fillna(0)).where(ll_tot.notna())),thousands_usd,nonneg
+ln_consumer,RC-C,stock,"Loans to individuals for household, family and other personal expenditures (consumer loans): RCFD1975 as filed to 2010; credit cards and revolving plans plus other consumer loans after (identical from 1990).",ln_consumer_1975.fillna((ln_cc_incl_revolving.fillna(0) + ln_consumer_oth.fillna(0)).where(ln_cc_incl_revolving.notna() | ln_consumer_oth.notna())),thousands_usd,nonneg
+ytd_int_exp_dep,RI,ytd,"Total interest expense on deposits: RIAD4170 as filed to 2010; after, foreign-office interest (RIAD4172) + domestic transaction (4508) + savings (0093) + time deposits (A517+A518 to 2016, HK03+HK04 from 2017), identical to the reported total 1987-2010.","ytd_int_exp_dep_4170.fillna((ytd_int_exp_for.fillna(0) + ytd_int_exp_trans_accts_dom.fillna(0) + ytd_int_exp_savings_dep_dom.fillna(0) + (ytd_int_exp_time_lt250k_dom.fillna(0) + ytd_int_exp_time_gt250k_dom.fillna(0)).where(ytd_int_exp_time_lt250k_dom.notna() | ytd_int_exp_time_gt250k_dom.notna(), ytd_int_exp_time_lt100k_dom.fillna(0) + ytd_int_exp_time_gt100k_dom.fillna(0))).where(ytd_int_exp_trans_accts_dom.notna() | ytd_int_exp_savings_dep_dom.notna()))",thousands_usd,nonneg
+ytd_op_inc,RI,ytd,Total operating income: RIAD4000 as filed to 2010; total interest income + total noninterest income after (identical 1985-2010).,ytd_op_inc_4000.fillna((ytd_int_inc + ytd_nonint_inc.fillna(0)).where(ytd_int_inc.notna())),thousands_usd,any
+ytd_op_exp,RI,ytd,Total operating expense (excludes the loan-loss provision from 1985): RIAD4130 as filed to 2010; total interest expense + total noninterest expense after (identical 1985-2010).,ytd_op_exp_4130.fillna((ytd_int_exp + ytd_nonint_exp.fillna(0)).where(ytd_int_exp.notna())),thousands_usd,any
+securities,RC-B,stock,"Investment securities, excluding trading: total investment securities (RCFD0390) to 1993; held-to-maturity at amortized cost (1754) + available-for-sale at fair value (1773) from 1994, plus equity securities with readily determinable fair value (JA22) from 2018 when they left AFS. The 1994 break is indistinguishable from an ordinary quarter.","securities_pre94.fillna((fv.fillna(0) + afssec.fillna(0) + equitysec_20.fillna(0)).where(fv.notna() | afssec.notna()))",thousands_usd,nonneg
+
+[INTERMEDIATE]
+column,reason
+liab_ex_subdebt_2950,Reported piece of liabilities_ex_subdebt (Chicago Fed files only).
+ln_gross_1400,Reported piece of ln_gross (Chicago Fed files only).
+ln_consumer_1975,Reported piece of ln_consumer (Chicago Fed files only).
+ytd_int_exp_dep_4170,Reported piece of ytd_int_exp_dep (Chicago Fed files only).
+ytd_op_inc_4000,Reported piece of ytd_op_inc (Chicago Fed files only).
+ytd_op_exp_4130,Reported piece of ytd_op_exp (Chicago Fed files only).
+securities_pre94,Pre-1994 piece of securities.

@@ -261,7 +261,7 @@ arrives they revert to blank. Measured when 2025Q4 was added: 3,176 cells in 202
 
 ---
 
-## 12. Known gaps (deferred to 1.3)
+## 12. Known gaps (deferred to 1.4)
 
 Two things are documented rather than done. Neither affects a column after 1990 on either
 panel, and neither is hidden: the ledger rows are signed and the dictionary shows the eras.

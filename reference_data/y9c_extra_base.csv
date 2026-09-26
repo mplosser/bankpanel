@@ -29,3 +29,4 @@ ri_b_chargeoffs.csv,BHCKC880,ytd_co_lease_oth_07,HI-B,ytd,nonneg,CHARGE-OFFS OF 
 ri_b_chargeoffs.csv,BHCKF188,ytd_rec_lease_oth_07,HI-B,ytd,any,RECOVERIES OF ALL OTHER LEASE FINANCING RECEIVABLES (2007-)
 liabilities.csv,BHCK3230,common_stock,HC,stock,,COMMON STOCK (par value)
 liabilities.csv,BHCK3283,pref_stock_perpetual,HC,stock,,PERPETUAL PREFERRED STOCK (INCLUDING RELATED SURPLUS)
+core_series.csv,BHCK6761,ytd_int_exp_oth_dep_y9c,HI,ytd,nonneg,"INTEREST ON OTHER DEPOSITS IN DOMESTIC OFFICES (FR Y-9C; every domestic deposit other than time deposits of $100k+ to 1996, other than all time deposits from 1997)"

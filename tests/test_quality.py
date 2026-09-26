@@ -240,3 +240,19 @@ def test_dead_branch_zerofill_is_not_counted(write_config):
     df["total"] = [9.0, 9.0, 9.0, 2.0]
     # The only blank sits on a row that took the reported branch, so nothing is assumed.
     assert find_within_era_zerofill(df, cs).empty
+
+
+def test_checks_can_read_the_quarter_builtin():
+    """A check may use yyyyq, as a formula can: the balance-sheet identity changes in 2001."""
+    import pandas as pd
+
+    from bankpanel.config.model import Check
+    from bankpanel.validate.quality import run_check
+
+    df = pd.DataFrame({
+        "REPORTING_PERIOD": pd.to_datetime(["2000-12-31", "2001-03-31"]),
+        "assets": [110.0, 110.0], "liabilities": [100.0, 95.0], "equity": [10.0, 10.0], "minorint": [5.0, 5.0],
+    })
+    expr = "(assets - liabilities - equity - minorint.where(yyyyq >= 20011, 0)).abs() <= 0.01"
+    row = run_check(df, Check(name="foots", expression=expr, severity="warning", description="", origin="test"))
+    assert row["status"] == "pass" and row["n_applicable"] == 2

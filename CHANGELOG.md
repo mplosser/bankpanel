@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.3.0 — 2026-09-26
+
+- **Core totals from Kashyap and Stein's consistent-time-series notes** (cited in the README;
+  `configs/call/core_series.csv`), on both panels, each validated against the reported totals:
+  `liabilities`, `deposits` (consolidated), `liabilities_ex_subdebt`, `ln_gross`,
+  `ln_consumer`, `securities` (investment securities 1985-, stitched across 1994),
+  `trad_ass_pre94` (not stitched: the 1994 definition adds derivative revaluation gains),
+  `ytd_net_inc`, `ytd_int_exp_dep`, `ytd_op_inc`, `ytd_op_exp`, `ytd_int_inc_ffrepo`,
+  `ytd_int_exp_ffrepo` (each `ytd_` with its `q_` flow). Where a reported total exists
+  (the Chicago Fed files, to 2010) it is used as filed and the component sum takes over,
+  identical over 1985-2010.
+- **`deposits` is not read from `RCFD2200`**: after 2011 that code carries the domestic figure
+  for banks with foreign offices (the upstream cross-fill), which would drop their foreign
+  deposits. Domestic + foreign equals the reported consolidated total exactly before 2011.
+- **Quality checks**: `balance_sheet_foots` (assets = liabilities + equity, + minority
+  interest from 2001), `deposits_le_liabilities`, `ln_gross_ge_net` (info). Checks can now
+  read the `yyyyq` builtin. **`deposits_le_assets` corrected**: as `dep_tot_dom <= assets` it
+  failed on 1,066 bank-quarters in every build, all insolvent banks with negative equity; it
+  is now `(deposits <= assets) | (equity < 0)` and passes. 27 checks in total.
+- **Published names are kept**: the Y-9C generator reuses an existing predecessor-item name
+  (`pred_net_income_loss`) rather than re-deriving one when the Call configs gain a stem for
+  the same code.
+
 ## 1.2.0 — 2026-09-26
 
 - **`tools/quarterly_refresh.py`**: one command for each new quarter -- fetch (Call Report

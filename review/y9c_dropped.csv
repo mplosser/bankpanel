@@ -78,6 +78,11 @@ assets.csv,base,custody_accounts,RCFDB899,BHCKB899,translated code absent from e
 assets.csv,base,qavg_loans_tot,RCFD3360,BHCK3360,translated code absent from every Y-9C quarter
 assets.csv,base,qavg_loans_re_agg_pre08,RCFD3385,BHCK3385,translated code absent from every Y-9C quarter
 assets.csv,base,qavg_leases,RCFD3484,BHCK3484,translated code absent from every Y-9C quarter
+core_series.csv,base,liab_ex_subdebt_2950,RCFD2950,BHCK2950,translated code absent from every Y-9C quarter
+core_series.csv,base,ln_gross_1400,RCFD1400,BHCK1400,translated code absent from every Y-9C quarter
+core_series.csv,base,ytd_int_exp_dep_4170,RIAD4170,BHCK4170,translated code absent from every Y-9C quarter
+core_series.csv,base,ytd_op_inc_4000,RIAD4000,BHCK4000,translated code absent from every Y-9C quarter
+core_series.csv,base,ytd_op_exp_4130,RIAD4130,BHCK4130,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_lndom_re_agg_031032,RIAD4011,BHCK4011,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_ln_cc_pre01_031032,RIAD4054,BHCK4054,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_ln_cons_pre01,RIAD4055,BHCK4055,translated code absent from every Y-9C quarter
@@ -464,7 +469,7 @@ quality_checks.csv,check,pastdue30_ci_le_total,,,input(s) not kept
 quality_checks.csv,check,npl_le_loans,,,input(s) not kept
 quality_checks.csv,check,smallbiz_le_loans,,,input(s) not kept
 quality_checks.csv,check,sweep_le_deposits,,,input(s) not kept
-quality_checks.csv,check,deposits_le_assets,,,input(s) not kept
+quality_checks.csv,check,balance_sheet_foots,,,input(s) not kept
 rc_c_loans.csv,zero_fill,credit_card_fees_finance_charges_outstanding,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv
 rc_c_loans.csv,intermediate,ln_oth_consol,,,withheld on the Call Report but its consumer was dropped here; published instead
 rc_d_trading.csv,zero_fill,trad_liab_short_positions,,,Call Report zero-fill rule (measured on the Call files); not copied -- measure on the Y-9C before adding to reference_data/y9c_zero_fill.csv

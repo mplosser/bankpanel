@@ -1,0 +1,36 @@
+# Derived from configs/call/core_series.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,core_series
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHCK2948,liabilities,HC,stock,all,,,,TOTAL LIABILITIES
+BHCK4340,ytd_net_inc,HI,ytd,all,,,any,NET INCOME (LOSS)
+BHCK4020,ytd_int_inc_ffrepo,HI,ytd,all,,,nonneg,INCOME ON FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+BHCK4180,ytd_int_exp_ffrepo,HI,ytd,all,,,nonneg,EXPENSE OF FEDERAL FUNDS PURCHASED AND SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE
+BHCK1975,ln_consumer_1975,HC-C,stock,all,,,,LOANS TO INDIVIDUALS FOR HOUSEHOLD FAMILY AND OTHER PERSONAL EXPENDITURES (Chicago Fed files only)
+BHCK0390,securities_pre94,HC-B,stock,all,,,,TOTAL INVESTMENT SECURITIES (before the 1994 HTM/AFS split)
+BHCK2146,trad_ass_pre94,HC,stock,all,,,,ASSETS HELD IN TRADING ACCOUNTS (before 1994; excludes derivative revaluation gains -- not comparable with trad_ass)
+BHCK6761,ytd_int_exp_oth_dep_y9c,HI,ytd,all,,,nonneg,"INTEREST ON OTHER DEPOSITS IN DOMESTIC OFFICES (FR Y-9C; every domestic deposit other than time deposits of $100k+ to 1996, other than all time deposits from 1997)"
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+liabilities_ex_subdebt,HC,stock,"Total liabilities net of subordinated notes and debentures: RCFD2950 as filed to 2010; liabilities - subdebt after (identical 1985-2010). Y-9C: total liabilities (BHCK2948) less subordinated notes and debentures (BHCK4062, which on the Y-9C includes limited-life preferred).",(liabilities - subdebt.fillna(0)).where(liabilities.notna()),thousands_usd,nonneg
+ln_gross,HC-C,stock,Total loans and leases gross of unearned income: RCFD1400 as filed to 2010; ll_tot (RCFD2122) + unearned income (RCFD2123) after (identical 1985-2010). Y-9C: loans net of unearned income (BHCK2122) + unearned income (BHCK2123); no gross line is filed.,(ll_tot + unearned_income_ln.fillna(0)).where(ll_tot.notna()),thousands_usd,nonneg
+ln_consumer,HC-C,stock,"Loans to individuals for household, family and other personal expenditures (consumer loans): RCFD1975 as filed to 2010; credit cards and revolving plans plus other consumer loans after (identical from 1990).",ln_consumer_1975.fillna((ln_cc_incl_revolving.fillna(0) + ln_consumer_oth.fillna(0)).where(ln_cc_incl_revolving.notna() | ln_consumer_oth.notna())),thousands_usd,nonneg
+ytd_op_inc,HI,ytd,Total operating income: RIAD4000 as filed to 2010; total interest income + total noninterest income after (identical 1985-2010). Y-9C: total interest income (BHCK4107) + total noninterest income (BHCK4079).,(ytd_int_inc + ytd_nonint_inc.fillna(0)).where(ytd_int_inc.notna()),thousands_usd,any
+ytd_op_exp,HI,ytd,Total operating expense (excludes the loan-loss provision from 1985): RIAD4130 as filed to 2010; total interest expense + total noninterest expense after (identical 1985-2010). Y-9C: total interest expense (BHCK4073) + total noninterest expense (BHCK4093).,(ytd_int_exp + ytd_nonint_exp.fillna(0)).where(ytd_int_exp.notna()),thousands_usd,any
+securities,HC-B,stock,"Investment securities, excluding trading: total investment securities (RCFD0390) to 1993; held-to-maturity at amortized cost (1754) + available-for-sale at fair value (1773) from 1994, plus equity securities with readily determinable fair value (JA22) from 2018 when they left AFS. The 1994 break is indistinguishable from an ordinary quarter.",securities_pre94.fillna((fv.fillna(0) + afssec.fillna(0) + equitysec_20.fillna(0)).where(fv.notna() | afssec.notna())),thousands_usd,nonneg
+deposits,HC,stock,"Total deposits, consolidated: domestic offices (RCON2200) plus foreign offices (RCFN2200). Equals the reported RCFD2200 exactly before 2011; after 2011 RCFD2200 is not consolidated in the source files (see the header of core_series.csv). Y-9C: no total-deposits line; domestic noninterest-bearing (BHDM6631) + interest-bearing (BHDM6636) + foreign offices (foreign_dep).",(dom_deposit_nib + dom_deposit_ib + foreign_dep.fillna(0)).where(dom_deposit_nib.notna() | dom_deposit_ib.notna()),thousands_usd,nonneg
+ytd_int_exp_dep,HI,ytd,"Total interest expense on deposits: RIAD4170 as filed to 2010; after, foreign-office interest (RIAD4172) + domestic transaction (4508) + savings (0093) + time deposits (A517+A518 to 2016, HK03+HK04 from 2017), identical to the reported total 1987-2010. Y-9C: foreign offices (BHCK4172) + other domestic deposits (BHCK6761; BHCK4176 in 1986-89) + domestic time deposits (BHCK4174 to 1996, A517+A518 1997-2016, HK03+HK04 from 2017). No reported total exists on the Y-9C; checked by the continuity of the implied deposit rate across the 1997 and 2017 changes.","(ytd_int_exp_for.fillna(0) + ytd_int_exp_oth_dep_y9c.fillna(ytd_int_exp_oth_dep).fillna(0) + (ytd_int_exp_time_lt250k_dom.fillna(0) + ytd_int_exp_time_gt250k_dom.fillna(0)).where(ytd_int_exp_time_lt250k_dom.notna() | ytd_int_exp_time_gt250k_dom.notna(), ytd_int_exp_time_lt100k_dom.fillna(0) + ytd_int_exp_time_gt100k_dom.fillna(0))).where(ytd_int_exp_oth_dep_y9c.notna() | ytd_int_exp_oth_dep.notna())",thousands_usd,nonneg
+
+[INTERMEDIATE]
+column,reason
+ln_consumer_1975,Reported piece of ln_consumer (Chicago Fed files only).
+securities_pre94,Pre-1994 piece of securities.
+

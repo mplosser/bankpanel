@@ -27,8 +27,18 @@ from ..config.model import BUILTIN_COLUMNS
 from ..expr import FormulaError, dependencies, evaluate
 
 
+def _with_builtins(df: pd.DataFrame, date_col: str = "REPORTING_PERIOD") -> pd.DataFrame:
+    """Supply the formula builtins a check may read, as the builder does for formulas:
+    ``yyyyq`` (the reporting quarter as YYYYQ). ``form_type`` is a panel column already."""
+    if "yyyyq" in df.columns or date_col not in df.columns:
+        return df
+    d = pd.to_datetime(df[date_col])
+    return df.assign(yyyyq=(d.dt.year * 10 + d.dt.quarter).astype("int64"))
+
+
 def run_check(df: pd.DataFrame, check: Check) -> dict:
     """Evaluate one check. Returns a summary row."""
+    df = _with_builtins(df)
     where = str(check.origin)
     try:
         deps = sorted(dependencies(check.expression, where=where))
@@ -89,6 +99,7 @@ def failing_rows(
     date_col: str = "REPORTING_PERIOD", limit: int | None = 500,
 ) -> pd.DataFrame:
     """The individual rows a check fails on, for diagnosis."""
+    df = _with_builtins(df, date_col)
     deps = sorted(dependencies(check.expression, where=str(check.origin)))
     if any(d not in df.columns for d in deps):
         return pd.DataFrame()

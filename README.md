@@ -8,7 +8,7 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.2.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> **Status: v1.3.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
 > 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~870 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
@@ -49,6 +49,17 @@ ln_condev,RC-C,stock,Consistent basis 1985-present,ln_condev_post07.fillna(ln_co
 That yields one `ln_condev` column at 100% coverage from 1985 to today.
 
 ---
+
+## Prior work
+
+Kashyap and Stein's notes on forming consistent Call Report time series
+([Federal Reserve Bank of Chicago](https://www.chicagofed.org/-/media/others/banking/financial-institution-reports/notes-on-forming-consistent-time-series-pdf.pdf)),
+the data appendix to Kashyap, A. K., and J. C. Stein (2000), "What Do a Million Observations
+on Banks Say About the Transmission of Monetary Policy?", *American Economic Review* 90(3),
+407–428 (NBER Working Paper 6056, 1997), document splices for about 35 core series across the
+1976–1984 form revisions. bankpanel is consistent with their choices where the two overlap
+(1985 onward), publishes their core totals (`configs/call/core_series.csv`), and extends the
+approach to the full Call Report and FR Y-9C through the present.
 
 ## Install
 
@@ -275,7 +286,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 1.0 | [Examples](#examples); reproducible from a fresh clone; column names stable — **done** |
 | 1.1 | Reported capital ratios: unit harmonization across eras, filer unit-error correction with a flag, value checks with failing-row output — **done** |
 | 1.2 | [Quarterly refresh](#each-new-quarter-refresh-and-revalidate): one command to fetch, rebuild and revalidate — **done** |
-| 1.3 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.3 | Core totals from the Kashyap–Stein notes (liabilities, deposits, net income, gross and consumer loans, securities, interest on deposits, operating income and expense) — **done** |
+| 1.4 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

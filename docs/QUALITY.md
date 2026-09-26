@@ -87,7 +87,7 @@ It is a `warning` for that reason: a failure here is worth a look, not a repair.
 
 ## Current checks
 
-23 checks ship in `configs/call/quality_checks.csv` (and, by generation, the FR Y-9C set),
+27 checks ship in `configs/call/quality_checks.csv` (and, by generation, the FR Y-9C set),
 covering component-vs-total orderings (loans, deposits, nonaccrual, charge-offs, past due,
 small business lending), sign constraints (reserves, assets, capital ratios),
 capital-structure orderings (CET1 ≤ tier 1 ≤ total capital), and from 1.1.0 the agreement
