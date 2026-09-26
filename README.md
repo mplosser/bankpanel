@@ -8,7 +8,7 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.1.1.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> **Status: v1.2.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
 > 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~870 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
@@ -174,6 +174,34 @@ python examples/quickstart.py --call-root panel_root --y9c-root y9c_root
 a build from the same raw vintage reports zero open findings. A newer raw vintage adds
 quarters and may add findings at the new end, which is the intended signal.
 
+## Each new quarter: refresh and revalidate
+
+A new quarter needs no code change -- nothing caps the date -- but the forms change every
+year or so (codes retired, split or added, usually effective in Q1 or Q2), and only
+revalidation shows it. One command runs the whole cycle against the two data
+repositories:
+
+```bash
+python tools/quarterly_refresh.py --out-dir ../panels
+```
+
+It fetches (the Call Report by script; for the FR Y-9C from 2021Q2 it stops and lists the
+NIC files to download by hand), refreshes the MDRM dictionary, parses the new files,
+regenerates the FR Y-9C configs (new Y-9C codes the Call configs already map only appear
+after this), rebuilds and validates both panels one at a time, keeps the previous build as
+`<panel>.prev`, and checks the newest quarters against the raw files. It writes
+`<out-dir>/refresh_report.md` and exits **0** for a clean, data-only refresh, **1** when
+something needs a decision (a new coverage finding, a stale ledger row, an unacknowledged
+critical break, a new error-severity quality failure in the new quarters, a raw-identity
+difference, or changed generated configs) and **2** when blocked. An explained break --
+typically a code retirement, which the year-over-year gate reports for four quarters --
+is signed off with an expiry date in `reference_data/breaks_acknowledged.csv`.
+
+Two things change in the data when a quarter lands even without a form change: the newest
+year's zero-fills are provisional until its Q4 arrives ([CAVEATS §11](docs/CAVEATS.md)),
+and the raw repositories do not re-download earlier quarters, so filer resubmissions are
+picked up only by a forced re-download.
+
 ---
 
 ## What it does
@@ -245,7 +273,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 0.7 | Year-to-date items published as `ytd_` + `q_`; the `in_era_unless_reported` zero-fill; raw-identity check; **[FR Y-9C panel](docs/FR-Y-9C.md)** with the size tier and predecessor items — **done** |
 | 1.0 | [Examples](#examples); reproducible from a fresh clone; column names stable — **done** |
 | 1.1 | Reported capital ratios: unit harmonization across eras, filer unit-error correction with a flag, value checks with failing-row output — **done** |
-| 1.2 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.2 | [Quarterly refresh](#each-new-quarter-refresh-and-revalidate): one command to fetch, rebuild and revalidate — **done** |
+| 1.3 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

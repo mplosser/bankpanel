@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.0 — 2026-09-26
+
+- **`tools/quarterly_refresh.py`**: one command for each new quarter -- fetch (Call Report
+  scripted; FR Y-9C stops at the manual NIC download with the exact files), MDRM
+  dictionary, parse, regenerate the Y-9C configs, rebuild and validate both panels,
+  raw-identity check on the newest quarters, and a one-page `refresh_report.md` with an
+  exit code (0 clean, 1 decision needed, 2 blocked).
+- **`reference_data/breaks_acknowledged.csv`**: explained latest-quarter breaks signed off
+  with an expiry date (first entry: the FR Y-9C `J458` retirement, until 2027Q1).
+- The data repositories' READMEs now point to bankpanel for building panels.
+
 ## 1.1.1 — 2026-09-26
 
 - **FR Y-9C through 2026Q2** (2025Q4, 2026Q1, 2026Q2 added from the NIC files).

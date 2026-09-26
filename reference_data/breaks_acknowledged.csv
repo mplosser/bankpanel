@@ -1,0 +1,3 @@
+profile,column,test,until,reason
+fry9c,uc_other_2_src,coverage_collapse,2027-03-31,"BHCKJ458 retired at 2026Q1 (split into BHCKPV10 + PV11); the published uc_other_2 is stitched and continuous ($1,030bn 2025Q4 -> $1,069bn 2026Q1). The gate compares with a year earlier, so this era piece is flagged until 2027Q1. Signed MCP 2026-09-26."
+fry9c,uc_other_2_src,zero_flip,2027-03-31,"Same retirement as the coverage_collapse row."

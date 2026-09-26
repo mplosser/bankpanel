@@ -4,6 +4,12 @@ Scripts that are not part of the installed package. Each has a docstring with it
 usage; `python tools/<name>.py --help` prints the arguments. Paths are arguments or
 environment variables, never hard-coded.
 
+## Every quarter
+
+| tool | what it does |
+| --- | --- |
+| `quarterly_refresh.py` | Fetch, parse, regenerate the Y-9C configs, rebuild, validate and raw-identity-check both panels against the sibling data repositories; writes `refresh_report.md`; exit 0 clean / 1 decision needed / 2 blocked. Known breaks are acknowledged, with an expiry, in `reference_data/breaks_acknowledged.csv`. |
+
 ## Need only a built panel and the raw files
 
 | tool | what it does |
