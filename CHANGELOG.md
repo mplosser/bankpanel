@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.1 — 2026-09-26
+
+- **FR Y-9C through 2026Q2** (2025Q4, 2026Q1, 2026Q2 added from the NIC files).
+- **FR Y-9C 2026Q1 form change handled.** The Y-9C retired `BHCKJ458` (unused commitments
+  to financial institutions) in 2026Q1 for `BHCKPV10 + PV11`, a year after the Call Report
+  (2024Q4). With the new codes now in the Y-9C files, the regenerated configs publish the
+  stitched `uc_other_2` and, for the first time on this panel, `uc_other` (total other
+  unused commitments), plus the new nondepository-financial past-due and nonaccrual lines
+  (`pd30_nondep_fin`, `pd90_nondep_fin`, `na_nondep_fin`). 9 items added, none removed.
+- Docs: the Call Report `J458` retirement is 2024Q4 (was given as 2025Q3); why the
+  latest-quarter gate keeps flagging a retired era piece for four quarters.
+
 ## 1.1.0 — 2026-09-26
 
 - **Filer unit errors in the reported capital ratios are corrected** (RC-R-I §2). A filed

@@ -18,7 +18,7 @@ column a Y-9C filer carries (its 2026-09 version does), not only `BHCK`.
 
 ## Coverage and shape
 
-1986Q3–2025Q3, 157 quarters, 187,763 holding-company-quarters, ~850 columns. Filers per
+1986Q3–2026Q2, 160 quarters, 188,913 holding-company-quarters, ~870 columns. Filers per
 year track the reporting thresholds: ~1,300–1,700 through 2005, ~2,400 in 2006 (the $150m
 floor), ~1,100 after the $500m floor, ~660 in 2018 and ~380 from 2019 (the $3bn floor).
 

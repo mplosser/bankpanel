@@ -8,9 +8,9 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.1.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
-> 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
-> 188 thousand holding-company-quarters, ~850 columns). Every published base column is
+> **Status: v1.1.1.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
+> 189 thousand holding-company-quarters, ~870 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
 > discontinuity is explained in a signed ledger, and no derived value rests on nothing.
 > Column names are stable from 1.0: a rename gets a deprecation entry in the
@@ -202,7 +202,7 @@ including the pre-2011 era where it must be derived. This is what lets you tell
 latest-quarter break gate, and impossible negative flows — all driven by a measured
 **reporting-expectations matrix** so that FFIEC 051 semiannual items are not mistaken for
 breaks. On the full panel that suppresses 73% of findings while still catching genuine
-ones, including a code retirement in 2025Q3. See [`docs/VALIDATION.md`](docs/VALIDATION.md).
+ones, including a code retirement in 2024Q4. See [`docs/VALIDATION.md`](docs/VALIDATION.md).
 
 **Data-quality checks.** Declarative boolean assertions about *values* — component ≤
 total, ratios non-negative, accounting identities — declared in config and validated by

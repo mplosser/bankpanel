@@ -56,8 +56,6 @@ assets.csv,base,pdl_ci_non_1,RCON1224,BHDM1224,translated code absent from every
 assets.csv,base,na_ci_1253,RCFD1253,BHCK1253,translated code absent from every Y-9C quarter
 assets.csv,base,na_ci_1256,RCFD1256,BHCK1256,translated code absent from every Y-9C quarter
 assets.csv,base,na_cc_1220,RCON1220,BHDM1220,translated code absent from every Y-9C quarter
-assets.csv,base,uc_ln_dep_fi,RCFDPV10,BHCKPV10,translated code absent from every Y-9C quarter
-assets.csv,base,uc_ln_non_dep_fi,RCFDPV11,BHCKPV11,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_1,RCFD1676,BHCK1676,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_2,RCFD1681,BHCK1681,translated code absent from every Y-9C quarter
 assets.csv,base,ac_htm_states_3,RCFD1694,BHCK1694,translated code absent from every Y-9C quarter
@@ -290,9 +288,6 @@ rc_e_deposits.csv,base,sweep_dep_nonaffiliate_uninsured,RCONMT93,BHDMMT93,transl
 rc_e_deposits.csv,base,sweep_dep_not_brokered_tot,RCONMT95,BHDMMT95,translated code absent from every Y-9C quarter
 rc_e_deposits.csv,base,offers_consumer_dep_products,RCONP752,BHDMP752,translated code absent from every Y-9C quarter
 rc_k_quarterly_avg.csv,base,qavg_ibb,RCFD3381,BHCK3381,translated code absent from every Y-9C quarter
-rc_n_past_due.csv,base,pd30_nondep_fin,RCFDPV23,BHCKPV23,translated code absent from every Y-9C quarter
-rc_n_past_due.csv,base,pd90_nondep_fin,RCFDPV24,BHCKPV24,translated code absent from every Y-9C quarter
-rc_n_past_due.csv,base,na_nondep_fin,RCFDPV25,BHCKPV25,translated code absent from every Y-9C quarter
 rc_n_past_due.csv,base,pd30_lease_1226,RCON1226,BHDM1226,translated code absent from every Y-9C quarter
 rc_n_past_due.csv,base,pd90_lease_1227,RCON1227,BHDM1227,translated code absent from every Y-9C quarter
 rc_n_past_due.csv,base,na_lease_1228,RCON1228,BHDM1228,translated code absent from every Y-9C quarter
@@ -372,10 +367,6 @@ assets.csv,derived,ln_other_re,,,input(s) not on the Y-9C: ln_other_re_08
 assets.csv,derived,ln_re_dom,,,"input(s) not on the Y-9C: ln_condev, ln_famres, ln_other_re"
 assets.csv,derived,ln_re,,,input(s) not on the Y-9C: ln_re_dom
 assets.csv,derived,na_ci,,,"input(s) not on the Y-9C: na_ci_1253, na_ci_1256"
-assets.csv,derived,uc_other_2_24,,,"input(s) not on the Y-9C: uc_ln_dep_fi, uc_ln_non_dep_fi"
-assets.csv,derived,uc_other_2,,,input(s) not on the Y-9C: uc_other_2_24
-assets.csv,derived,uc_other_10,,,input(s) not on the Y-9C: uc_other_2
-assets.csv,derived,uc_other,,,input(s) not on the Y-9C: uc_other_10
 assets.csv,derived,ln_resconst,,,input(s) not on the Y-9C: ln_condev_1
 assets.csv,derived,ln_crelandconst,,,input(s) not on the Y-9C: ln_condev_2
 assets.csv,derived,ln_ownoccnfnr,,,input(s) not on the Y-9C: ln_other_re_1

@@ -87,9 +87,14 @@ The level test uses the **median**, not the mean: a unit or definition change re
 every bank and moves the median, while one large bank's one-off does not. It needs ≥ 30
 non-zero reporters on both sides.
 
-This is not hypothetical — on the current panel it flags `uc_other_2_src` (`RCFDJ458`)
-collapsing 100% → 0% in **2025Q3**, a genuine code retirement that the config's stitch
-handles but which nothing else would have surfaced.
+This is not hypothetical. It flagged `uc_other_2_src` (`RCFDJ458`, unused commitments to
+financial institutions) collapsing 100% → 0%, a genuine code retirement at **2024Q4** that
+the config's stitch (`J458` → `PV10 + PV11`) handles but which nothing else would have
+surfaced. Because the gate compares with the same quarter a year earlier, a retirement is
+reported for four quarters and then ages out; the FR Y-9C retired the same code in 2026Q1,
+so on that panel `uc_other_2_src` is reported until 2027Q1 while the published
+`uc_other_2` stays continuous. A flag on an era piece whose stitched series is continuous
+is expected, not a defect.
 
 **Which representation each validator sees.** Coverage, breaks, expectations and
 stitches ask whether an item was *reported*, so they run on the as-filed `ytd_` columns
