@@ -247,6 +247,15 @@ where a zero would be invented: a bank that reports the item in another quarter 
 which no filer of the bank's form reports the item, and forms outside the item's scope
 (the 051 has no credit-card fee lines, though two or three of its filers volunteer one).
 
+
+**The newest partial year is provisional.** "Reports the item in another quarter of the
+year" can only be judged on the quarters present. Until a year's Q4 is in the panel, a bank
+that files an item only at Q4 (Schedule RC-T for smaller trust banks, some 051 items) looks
+like a quarterly filer that left Q1-Q3 blank, and those cells are zero-filled. When Q4
+arrives they revert to blank. Measured when 2025Q4 was added: 3,176 cells in 2025Q1-Q3
+(fiduciary and custody items 3,155, the rest agricultural and credit-card lines), all
+0 -> blank, 88% on 051 filers. No reported value changes.
+
 ---
 
 ## 12. Known gaps in 1.0 (deferred to 1.1)

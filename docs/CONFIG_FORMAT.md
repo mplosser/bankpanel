@@ -62,6 +62,14 @@ lines are reported separately on the FFIEC 031 and folded into a broader line on
 041/051: agricultural nonaccrual (`RCFD1583`) sits inside all other loans on the 041, so a
 total that counts each category once must write `na_agprod.where(form_type == 31)`.
 
+**`yyyyq` is readable in any formula.** Also supplied by the builder: the reporting quarter as
+an integer `YYYYQ` (2008Q4 is `20084`). It is for rules that depend on the period, such as a
+unit change at a source boundary: the reported capital ratios are filed in percent for
+2008Q4-2010Q4 and in fractions on either side, so `configs/call/rc_r_capital.csv` writes
+`x.where(~((yyyyq >= 20084) & (yyyyq <= 20104)), x / 100)`. Note that `era_start` / `era_end`
+on a base row feed the expectations matrix, ledger and zero-fill; they do **not** blank
+values outside the era, so an era rule that must change values belongs in a formula.
+
 **Guard every `fillna(0)` chain.** Tolerating one missing component inside an era is
 right; doing it across an era boundary, where every component is absent, fabricates a
 confident zero — and *raises* coverage while doing it, so no reporting-side validator can

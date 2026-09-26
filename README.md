@@ -8,8 +8,8 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2025Q3,
-> 1.4 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
+> **Status: v1.0.1.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
 > 188 thousand holding-company-quarters, ~850 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
 > discontinuity is explained in a signed ledger, and no derived value rests on nothing.

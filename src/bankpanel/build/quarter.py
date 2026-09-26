@@ -32,16 +32,24 @@ _BOOLEAN_TEXT = {
 
 
 def to_numeric(series: pd.Series) -> pd.Series:
-    """Coerce a raw column to float, mapping boolean text before giving up on it."""
+    """Coerce a raw column to float, mapping boolean text and percent strings first.
+
+    Boolean text (``true``/``false``) becomes 1/0. A percent string such as ``"9.1154%"``
+    -- how the FFIEC CDR bulk files write the reported capital ratios from 2015Q1 --
+    becomes the number written, ``9.1154``, in PERCENT units; any rescaling to a fraction
+    is a config decision (see configs/call/rc_r_capital.csv). Everything else that does
+    not parse (``CONF``, names, codes) becomes NaN.
+    """
     if series.dtype == object or pd.api.types.is_string_dtype(series):
-        lowered = series.astype("string").str.strip().str.lower()
+        stripped = series.astype("string").str.strip()
+        lowered = stripped.str.lower()
         mapped = lowered.map(_BOOLEAN_TEXT)
-        if mapped.notna().any():
+        is_pct = stripped.str.endswith("%").fillna(False)
+        if mapped.notna().any() or is_pct.any():
+            plain = pd.to_numeric(stripped.where(~is_pct, stripped.str.rstrip("%")), errors="coerce")
             # Fall back to numeric parsing for any cell that was not boolean text, so a
             # mixed column does not lose its numeric values.
-            return mapped.astype("float64").fillna(
-                pd.to_numeric(series, errors="coerce")
-            ).astype("float64")
+            return mapped.astype("float64").fillna(plain.astype("float64")).astype("float64")
     return pd.to_numeric(series, errors="coerce").astype("float64")
 
 
@@ -113,6 +121,10 @@ def build_quarter(
         )
     else:
         builtins["form_type"] = pd.Series(np.nan, index=index, dtype="float64")
+    # the quarter as an integer YYYYQ (2008Q4 -> 20084), for formulas whose rule depends
+    # on the reporting period (e.g. a unit change at a source boundary)
+    p = pd.Timestamp(qf.period)
+    builtins["yyyyq"] = pd.Series(p.year * 10 + (p.month - 1) // 3 + 1, index=index, dtype="int64")
 
     # --- derived variables, in dependency order ------------------------------------
     # Values are accumulated in a plain dict and assembled into a DataFrame once.

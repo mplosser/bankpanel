@@ -65,7 +65,11 @@ SEVERITIES = frozenset({"error", "warning", "info"})
 #: folded into a broader line on the 041/051, so a total that counts each category once has
 #: to know which form the row came from. Never part of a formula's dependency set -- they
 #: are not variables, they are context -- and injected into every evaluation namespace.
-BUILTIN_COLUMNS = frozenset({"form_type"})
+#: Names a formula may read that are not config columns: the row's form type, and the
+#: quarter as an integer YYYYQ (2008Q4 -> 20084) for rules that depend on the reporting
+#: period, such as a unit change at a source boundary. Era bounds on a base row are
+#: documentation for the expectations matrix and ledger; they do NOT blank values.
+BUILTIN_COLUMNS = frozenset({"form_type", "yyyyq"})
 
 #: Names the builder owns. A config may not bind any of these.
 RESERVED_NAMES = frozenset({

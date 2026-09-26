@@ -18,7 +18,7 @@ def panel(synth_panel):
         columns=[
             "assets_total", "loans_3mo", "avg_assets", "late_item", "semiannual_item",
             "ytd_int_inc_total", "q_int_inc_total", "ytd_event_flag", "deposit_accounts", "assets_less_loans",
-            "late_or_assets", "assets_031_only",
+            "late_or_assets", "assets_031_only", "assets_rescaled_2010",
         ],
         root=synth_panel,
         verify=False,
@@ -253,6 +253,17 @@ def test_non_boolean_text_still_becomes_nan():
     assert to_numeric(pd.Series(["CONF", "CONF"])).isna().all()
 
 
+def test_percent_strings_become_numbers_in_percent_units():
+    """The CDR bulk files write the reported capital ratios as "9.1154%" from 2015Q1. The
+    number written is kept (percent units); rescaling to a fraction is the config's job."""
+    from bankpanel.build.quarter import to_numeric
+
+    out = to_numeric(pd.Series(["9.1154%", " 12.5% ", "CONF", None, "0.0948"]))
+    assert out.tolist()[:2] == [9.1154, 12.5]
+    assert pd.isna(out.iloc[2]) and pd.isna(out.iloc[3])
+    assert out.iloc[4] == 0.0948
+
+
 # --- form type is readable inside a formula ------------------------------------------------
 
 
@@ -265,6 +276,17 @@ def test_formula_can_read_form_type(panel):
     off = panel.loc[~is_031, "assets_031_only"]
     assert on.notna().all() and (on == panel.loc[is_031, "assets_total"]).all()
     assert off.isna().all()
+
+
+def test_formula_can_read_the_quarter(panel):
+    """yyyyq (the reporting quarter as YYYYQ) lets a formula apply a rule to a span of
+    quarters, e.g. a unit change at a source boundary."""
+    q = panel["REPORTING_PERIOD"].dt.year * 10 + panel["REPORTING_PERIOD"].dt.quarter
+    inside = (q >= 20102) & (q <= 20103)
+    assert inside.any() and (~inside).any(), "fixture must span the rule's quarters"
+    a, r = panel["assets_total"], panel["assets_rescaled_2010"]
+    assert (r[inside] == a[inside] / 100).all()
+    assert (r[~inside] == a[~inside]).all()
 
 
 # --- form type before 2011 ----------------------------------------------------------
