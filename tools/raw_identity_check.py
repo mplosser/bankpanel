@@ -23,9 +23,7 @@ import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from bankpanel.build.quarter import (
-    to_numeric,  # noqa: E402  (builder's coercion: boolean text -> 1/0)
-)
+from bankpanel.build.quarter import to_numeric  # noqa: E402
 from bankpanel.config import ConfigSet  # noqa: E402
 from bankpanel.profiles import get_profile  # noqa: E402
 
