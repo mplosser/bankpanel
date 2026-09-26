@@ -12,7 +12,8 @@ file which omits some items entirely and collects others only twice a year.
 > 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~870 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
-> discontinuity is explained in a signed ledger, and no derived value rests on nothing.
+> discontinuity is explained in a signed ledger, and derived columns are constructed to
+> properly manage blank/missing components.
 > Column names are stable from 1.0: a rename gets a deprecation entry in the
 > [changelog](CHANGELOG.md). See [Reproduce from scratch](#reproduce-from-scratch),
 > [Examples](#examples) and [docs/FR-Y-9C.md](docs/FR-Y-9C.md).
