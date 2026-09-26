@@ -1,0 +1,3 @@
+profile,code,start,end,reason
+ffiec_call,RCONF072,2006-09-30,2018-03-31,"Schedule RC-P covers 1-4 family mortgage banking in DOMESTIC offices. MDRM lists F072 on the FFIEC 031 only under RCFD, but the FFIEC CDR files (2011-2018) show 82-85% of 031 filers filing RCONF072, and MDRM itself lists the sibling RC-P lines F676/F677 under RCON. Chicago Fed files (2006-2010) carry the same value under both codes. Evidence 2026-09-26, MCP."
+ffiec_call,RCONF073,2006-09-30,2018-03-31,"As RCONF072 (junior-lien 1-4 family loans held for sale, Schedule RC-P, domestic offices)."

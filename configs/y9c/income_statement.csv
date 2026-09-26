@@ -34,10 +34,10 @@ BHCKHK04,ytd_int_exp_time_gt250k_dom,HI,ytd,all,,,nonneg,
 BHCK4172,ytd_int_exp_for,HI,ytd,all,,,nonneg,
 BHCKA518,ytd_int_exp_time_lt100k_dom,HI,ytd,all,,,nonneg,
 BHCK4185,ytd_int_exp_trad_othbor,HI,ytd,all,,,nonneg,
-BHCK4397,ytd_int_exp_subdebt,HI,ytd,all,,,nonneg,
+BHCK4397,ytd_int_exp_subdebt,HI,ytd,all,,,nonneg,Interest on subordinated notes and debentures (Y-9C: and on mandatory convertible securities).
 BHCK4176,ytd_int_exp_oth_dep,HI,ytd,all,,,nonneg,
 BHCK4070,ytd_fiduc_inc,HC-T,ytd,all,,,nonneg,
-BHCK4483,ytd_nonint_inc_srv_chrg_dep,HI,ytd,all,,,,
+BHCK4483,ytd_nonint_inc_srv_chrg_dep,HI,ytd,all,,,,Service charges on deposit accounts (the Y-9C does not say 'in domestic offices').
 BHCKA220,ytd_tradrev_inc,HI,ytd,all,,,,
 BHCKC886,ytd_nonint_inc_sb,HI,ytd,all,,,,
 BHCKC888,ytd_nonint_inc_fees_adv,HI,ytd,all,,,,
@@ -50,8 +50,8 @@ BHCK4079,ytd_nonint_inc,HI,ytd,all,,,,
 BHCKB494,ytd_nonint_inc_ins_fee,HI,ytd,all,,,,
 BHCKB490,ytd_nonint_inc_ib_adv_fee,HI,ytd,all,,,,
 BHCK4078,ytd_nonint_inc_oth_pre2001,HI,ytd,all,,,,
-BHCK8560,ytd_nonint_inc_net_gain_ll,HI,ytd,all,,,,
-BHCK8561,ytd_nonint_inc_oreo,HI,ytd,all,,,,
+BHCK8560,ytd_nonint_inc_net_gain_ll,HI,ytd,all,,,,Net gains (losses) on sales of loans.
+BHCK8561,ytd_nonint_inc_oreo,HI,ytd,all,,,,Net gains (losses) on other real estate owned.
 BHCKB496,ytd_nonint_inc_net_gain_oth_ass,HI,ytd,all,,,,
 BHCK4135,ytd_nonint_exp_comp,HI,ytd,all,,,nonneg,
 BHCK4217,ytd_nonint_exp_fass,HI,ytd,all,,,nonneg,

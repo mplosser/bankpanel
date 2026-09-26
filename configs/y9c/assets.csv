@@ -113,14 +113,14 @@ BHCK2160,oth_assets_2160,HC,stock,all,,,,
 BHCK2155,accept_cust,HC,stock,all,,,,
 BHCK2170,assets,HC,stock,all,,,,
 BHCK3164,srv_ass_mrt,HC-M,stock,all,,,,
-BHCK6438,srv_ass_mrt_fv,HC-M,stock,all,,,,
+BHCK6438,srv_ass_mrt_fv,HC-M,stock,all,,,,Fair (market) value of mortgage servicing assets.
 BHCK1752,eq_inv_wo_fv,HC-F,stock,all,,,,
 BHCAP838,aoci_opt_out,HC-R,stock,all,,,,
 BHCK3507,dsec_oth_ass_non,HC-N,stock,all,,,,
 BHCK1403,na_tot_1403,HC-N,stock,all,,,,
-BHCK3495,na_farmland,HC,stock,all,,,,
-BHCK5400,na_heloc,HC,stock,all,,,,
-BHCK3501,na_multifam,HC,stock,all,,,,
+BHCK3495,na_farmland,HC,stock,all,,,,"Nonaccrual loans secured by farmland. The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
+BHCK5400,na_heloc,HC,stock,all,,,,"Nonaccrual loans secured by revolving 1-4 family (HELOC). The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
+BHCK3501,na_multifam,HC,stock,all,,,,"Nonaccrual loans secured by multifamily. The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
 BHCK5379,na_dep_5379,HC-N,stock,all,,,,
 BHCK5382,na_dep_5382,HC-N,stock,all,,,,
 BHCK1583,na_agprod,HC-N,stock,all,,,,
@@ -184,7 +184,7 @@ BHCKJ458,uc_other_2_src,HC-L,stock,all,,,,
 BHCKJ459,uc_other_3,HC-L,stock,all,,,,
 BHCKPV10,uc_ln_dep_fi,HC-L,stock,all,,,,
 BHCKPV11,uc_ln_non_dep_fi,HC-L,stock,all,,,,
-BHCK5397,accrued_int_loans_pre01,HC,stock,all,,,,INCOME EARNED NOT COLLECTED ON LOANS (through 2000Q4). Narrower than accrued_int: loans only. Not stitched to it.
+BHCK5397,accrued_int_loans_pre01,HC,stock,all,,,,"Income earned but not collected (Y-9C 1992Q1-2000Q4; the Call's RCFD2164 is 'on loans'). Same era, same balance-sheet slot; the Y-9C item does not restrict to loans."
 BHCKA519,io_strip_1_9718,HC-F,stock,all,,,,
 BHCKA520,io_strip_2_9718,HC-F,stock,all,,,,
 BHCK1289,ac_htm_agency_1,HC-B,stock,all,,,,
@@ -239,10 +239,11 @@ BHDMF676,hfs_famres_loc_1,HC-P,stock,all,,,,
 BHDMF677,hfs_famres_loc_2,HC-P,stock,all,,,,
 BHCK4070,fidu_income,HC-T,stock,all,,,,
 BHCK3368,qavg_assets,HC-K,stock,all,,,,
-BHCK3387,qavg_loans_ci,HC,stock,all,,,,
-BHCK3386,qavg_loans_ag,HC,stock,all,,,,
-BHCK3465,qavg_loans_famres,HC,stock,all,,,,
-BHCK3466,qavg_loans_othre,HC,stock,all,,,,
+BHFN3360,qavg_loans_tot_fgn,HC,stock,all,,,,Quarterly average total loans in foreign offices (FFIEC 031 only)
+BHDM3387,qavg_loans_ci,HC,stock,all,,,,"Quarterly average C&I loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3387 on the 031); for a bank without foreign offices it is the whole bank."
+BHDM3386,qavg_loans_ag,HC,stock,all,,,,"Quarterly average agricultural loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3386 on the 031); for a bank without foreign offices it is the whole bank."
+BHDM3465,qavg_loans_famres,HC,stock,all,,,,"Quarterly average 1-4 family real-estate loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3465 on the 031); for a bank without foreign offices it is the whole bank."
+BHDM3466,qavg_loans_othre,HC,stock,all,,,,"Quarterly average other real-estate loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3466 on the 031); for a bank without foreign offices it is the whole bank."
 BHCK0276,ffsold_8801,HC,stock,all,,,,FEDERAL FUNDS SOLD (Y-9C 1988Q2-2001Q4; the combined BHCK1350 is filed before and again in 2001Q4)
 BHCK0277,repo_purch_8801,HC,stock,all,,,,SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL (Y-9C 1988Q2-2001Q4)
 BHCK0395,ibb_us,HC,stock,all,,,,INTEREST-BEARING BALANCES IN U.S. OFFICES

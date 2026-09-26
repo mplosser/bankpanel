@@ -102,6 +102,14 @@ def build_quarter_frame(period: pd.Period) -> pd.DataFrame:
         df["RCFDA570"] = alnum
         df["RCONA570"] = np.nan
 
+    # An item the FFIEC 031 collects only for DOMESTIC offices (like RC-K average C&I loans):
+    # every bank files RCON6666; nobody files a consolidated RCFD6666. Before 2011 the source
+    # carries a copy of the domestic figure under RCFD6666 for every bank (as the Chicago Fed
+    # files do), so the copy must be recognised and dropped for the international bank.
+    dom_only = 700.0 + 3.0 * np.array(banks) + seq
+    df["RCON6666"] = dom_only
+    df["RCFD6666"] = np.nan if modern else dom_only
+
     # Reachable only via the RCFA -> RCOA prefix alias.
     df["RCOA1234"] = assets * 0.98
 
@@ -174,6 +182,7 @@ RCON8888,semiannual_item,RC,stock,041+051,2011-03-31,,,Short-form filers report 
 RIAD4107,ytd_int_inc_total,RI,ytd,all,,,nonneg,Year-to-date interest income
 RIAD9001,ytd_event_flag,RI-A,ytd,all,,,,Collected only from 2011; zero-filled in era
 RCON7777,deposit_accounts,RC-E,count,all,,,,Carries a 1000x unit error for one bank
+RCFD6666,consol_item,RC-K,stock,all,,,,"Consolidated code the 031 never files; RCON6666 is the domestic figure"
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign

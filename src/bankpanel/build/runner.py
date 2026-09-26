@@ -110,6 +110,14 @@ def build(
     descriptions = collect_descriptions(quarters, set(cs.mdrm_codes(profile.coalesce_rules)))
     write_dictionary(build_dictionary(cs, descriptions), out_root)
 
+    # The official consolidated-vs-domestic evaluation (profiles.ReportProfile.domestic_pairs):
+    # per quarter and column, international banks left blank rather than given a domestic
+    # figure, and how often a FILED consolidated value equals the domestic one exactly at a
+    # bank with material foreign business. Read by `bankpanel validate scope`.
+    scope = [r.scope for r in results if not r.scope.empty]
+    if scope:
+        pd.concat(scope, ignore_index=True).to_parquet(out_root / "consolidated_scope.parquet", index=False)
+
     gaps = [r.gaps for r in results if not r.gaps.empty]
     if gaps:
         pd.concat(gaps, ignore_index=True).to_parquet(

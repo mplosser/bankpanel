@@ -172,10 +172,10 @@ RCON5403,na_famres_closed,RC,stock,all,,,,
 RCFD1403,na_tot_1403,RC-N,stock,all,,,,
 RCONF176,na_re_f176,RC-N,stock,all,,,,
 RCONF177,na_re_f177,RC-N,stock,all,,,,
-RCFD3495,na_farmland,RC,stock,all,,,,
-RCFD5400,na_heloc,RC,stock,all,,,,
+RCON3495,na_farmland,RC,stock,all,,,,"Nonaccrual loans secured by farmland, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3495 on the 031); for a bank without foreign offices it is the whole bank."
+RCON5400,na_heloc,RC,stock,all,,,,"Nonaccrual revolving open-end 1-4 family (HELOC), DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD5400 on the 031); for a bank without foreign offices it is the whole bank."
 RCONC230,na_famres_junior,RC-N,stock,all,,,,
-RCFD3501,na_multifam,RC,stock,all,,,,
+RCON3501,na_multifam,RC,stock,all,,,,"Nonaccrual multifamily residential, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3501 on the 031); for a bank without foreign offices it is the whole bank."
 RCONF182,na_re_f182,RC-N,stock,all,,,,
 RCONF183,na_re_f183,RC-N,stock,all,,,,
 RCFD5379,na_dep_5379,RC-N,stock,all,,,,
@@ -318,8 +318,8 @@ RCFDG343,fv_afs_sfp_2,RC-B,stock,all,,,,
 RCFDG347,fv_afs_sfp_3,RC-B,stock,all,,,,
 RCFDHT61,fv_afs_sfp_18,RC-B,stock,all,,,,
 RCONHT84,hfs_famres_ln_18_alt,RC-P,stock,all,,,,
-RCONF072,hfs_famres_first_lien,RC-P,stock,all,,,,
-RCONF073,hfs_famres_jr_lien,RC-P,stock,all,,,,
+RCONF072,hfs_famres_first_lien,RC-P,stock,all,,,,"1-4 family first-lien loans held for sale, DOMESTIC OFFICES: Schedule RC-P covers mortgage banking in domestic offices, and FFIEC 031 filers file the RCON code (2011-2018 CDR files; MDRM lists no RCONF072 on the 031, which the data contradict)."
+RCONF073,hfs_famres_jr_lien,RC-P,stock,all,,,,"1-4 family junior-lien loans held for sale, DOMESTIC OFFICES: Schedule RC-P covers mortgage banking in domestic offices, and FFIEC 031 filers file the RCON code (2011-2018 CDR files; MDRM lists no RCONF073 on the 031, which the data contradict)."
 RCONF676,hfs_famres_loc_1,RC-P,stock,all,,,,
 RCONF677,hfs_famres_loc_2,RC-P,stock,all,,,,
 RCFDK659,custody_bank,RC-O,flag,all,,,,
@@ -331,16 +331,18 @@ RCFDB898,custody_assets,RC-T,stock,all,,,,
 RCFDB899,custody_accounts,RC-T,stock,all,,,,
 RIAD4070,fidu_income,RC-T,stock,all,,,,
 RCFD3368,qavg_assets,RC-K,stock,all,,,,
-RCFD3360,qavg_loans_tot,RC,stock,all,,,,
-RCFD3387,qavg_loans_ci,RC,stock,all,,,,
-RCFD3386,qavg_loans_ag,RC,stock,all,,,,
-RCFD3465,qavg_loans_famres,RC,stock,all,,,,
-RCFD3466,qavg_loans_othre,RC,stock,all,,,,
-RCFD3385,qavg_loans_re_agg_pre08,RC,stock,all,,,,
+RCON3360,qavg_loans_tot_dom,RC,stock,all,,,,"Quarterly average total loans, DOMESTIC OFFICES (RCON3360). For a bank without foreign offices it is the whole bank."
+RCFN3360,qavg_loans_tot_fgn,RC,stock,all,,,,Quarterly average total loans in foreign offices (FFIEC 031 only)
+RCON3387,qavg_loans_ci,RC,stock,all,,,,"Quarterly average C&I loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3387 on the 031); for a bank without foreign offices it is the whole bank."
+RCON3386,qavg_loans_ag,RC,stock,all,,,,"Quarterly average agricultural loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3386 on the 031); for a bank without foreign offices it is the whole bank."
+RCON3465,qavg_loans_famres,RC,stock,all,,,,"Quarterly average 1-4 family real-estate loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3465 on the 031); for a bank without foreign offices it is the whole bank."
+RCON3466,qavg_loans_othre,RC,stock,all,,,,"Quarterly average other real-estate loans, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3466 on the 031); for a bank without foreign offices it is the whole bank."
+RCON3385,qavg_loans_re_agg_pre08,RC,stock,all,,,,"Quarterly average real-estate loans (before 2008), DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD3385 on the 031); for a bank without foreign offices it is the whole bank."
 RCFD3484,qavg_leases,RC-K,stock,all,,,,
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+qavg_loans_tot,RC,stock,"Quarterly average total loans, CONSOLIDATED: domestic offices (RCON3360) + foreign offices (RCFN3360). Equals the reported consolidated average RCFD3360 exactly wherever that is filed (1985-2010); the FFIEC CDR files (2011-) carry only the two pieces for FFIEC 031 filers.",(qavg_loans_tot_dom + qavg_loans_tot_fgn.fillna(0)).where(qavg_loans_tot_dom.notna()),thousands_usd,
 ln_cc_incl_revolving,CROSS,stock,"Credit cards AND other revolving credit plans -- the pre-2001 definition of the credit-card line, carried forward as B538 + B539 after the 2001Q1 split. Consistent across 2001 (-3.4% over the same banks at the boundary, inside the +/-5-9% seasonal swing on either side). ln_cc alone is not.",ln_cc_incl_revolving_pre01.fillna(ln_cc + ln_revolving_oth),thousands_usd,
 na_cc_incl_revolving_pre01,RC-N,stock,"Nonaccrual credit cards AND related plans through 2000Q4 (RCFD5385 on the 031, RCON1220 elsewhere). The post-2001 code B577 is credit cards alone, and the revolving-plan nonaccruals have no separate code after 2001, so no consistent series exists; the two are published apart.",na_cc_5385.fillna(na_cc_1220),thousands_usd,
 ln_closedlien,CROSS,stock,[RCON5367 + RCON5368],ln_famres_first + ln_famres_jr,,
@@ -470,6 +472,7 @@ reven_inv,always,"RCFD3656 (revaluation/equity investments) introduced ~2005Q1, 
 
 [INTERMEDIATE]
 column,reason
+qavg_loans_tot_fgn,Foreign-office piece of qavg_loans_tot (FFIEC 031 filers only).
 ln_dep_01,"Reported total; published inside ln_dep. On the 041/051 its coverage follows whether a zero is written (eroding 2017Q1-2023Q3, back to 100pct at 2023Q4), which ln_dep resolves."
 ln_dep_us_branches_fgn,031 component of loans to depository institutions; published inside ln_dep.
 ln_dep_oth_us_combanks,031 component of loans to depository institutions; published inside ln_dep.

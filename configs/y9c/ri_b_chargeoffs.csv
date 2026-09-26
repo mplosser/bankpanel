@@ -13,8 +13,8 @@ BHCK3584,ytd_co_farmland,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY F
 BHCK3585,ytd_rec_farmland,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY FARMLAND
 BHCK3588,ytd_co_multifam,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
 BHCK3589,ytd_rec_multifam,HI-B,ytd,all,,,any,RECOVERIES ON LOANS SECURED BY MULTIFAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
-BHCK4654,ytd_co_depinst,HI-B,ytd,all,,,nonneg,CHARGE-OFFS ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
-BHCK4664,ytd_rec_depinst,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO DEPOSITORY INSTITUTIONS AND ACCEPTANCES OF OTHER BANKS
+BHCK4654,ytd_co_depinst,HI-B,ytd,all,,,nonneg,Charge-offs on loans to depository institutions and acceptances of other banks.
+BHCK4664,ytd_rec_depinst,HI-B,ytd,all,,,any,Recoveries on loans to depository institutions and acceptances of other banks.
 BHCK4605,ytd_rec_tot,HI-B,ytd,all,,,any,RECOVERIES ON ALLOWANCE FOR LOAN AND LEASE LOSSES
 BHCK4627,ytd_rec_forgovt,HI-B,ytd,all,,,any,RECOVERIES ON LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
 BHCK4628,ytd_rec_othln,HI-B,ytd,all,,,any,RECOVERIES ON ALL OTHER LOANS

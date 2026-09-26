@@ -19,6 +19,7 @@ import pandas as pd
 from ..config import ConfigSet
 from ..expr import evaluate
 from ..profiles import ReportProfile
+from ..reference import scope as scope_ref
 from .source import QuarterFile, read_quarter
 
 #: Boolean-valued items arrive as text. The Call Report has genuine yes/no items --
@@ -78,28 +79,84 @@ def build_quarter(
     profile: ReportProfile,
     *,
     era_starts: dict[str, pd.Timestamp] | None = None,
+    scope_sink: list | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Return ``(panel_slice, header_slice)`` for one quarter."""
+    """Return ``(panel_slice, header_slice)`` for one quarter. If ``scope_sink`` is a list,
+    the quarter's consolidated-vs-domestic statistics are appended to it as a DataFrame."""
     era_starts = era_starts or {}
+    wanted = list(cs.mdrm_codes(profile.coalesce_rules))
+    # also read each consolidated/domestic code's twin, so a copy of it can be recognised
+    pair_twin = dict(profile.domestic_pairs) | {b: a for a, b in profile.domestic_pairs}
+    wanted += [pair_twin[c[:4]] + c[4:] for c in wanted if c[:4] in pair_twin]
     raw, resolved = read_quarter(
-        qf, cs.mdrm_codes(profile.coalesce_rules), profile, extra_columns=profile.source_columns
+        qf, list(dict.fromkeys(wanted)), profile, extra_columns=profile.source_columns
     )
     index = raw.index
     n = len(raw)
 
+    # --- form type, resolved before the base variables: the consolidated/domestic rule
+    # below needs to know which banks have foreign offices ------------------------------
+    form = (
+        profile.form_type_resolver(raw)
+        if profile.form_type_resolver is not None
+        else pd.DataFrame(index=index)
+    )
+    if profile.foreign_offices is not None:
+        intl, material = profile.foreign_offices(raw, form)
+    else:
+        intl = material = pd.Series(False, index=index)
+    domestic_pairs = set(profile.domestic_pairs)
+
     # --- base variables ------------------------------------------------------------
     sources = _coalesce_sources(cs, profile)
     columns: dict[str, pd.Series] = {}
+    scope_rows: list[dict] = []
+    period = pd.Timestamp(qf.period)
+    twin_of = dict(profile.domestic_pairs) | {b: a for a, b in profile.domestic_pairs}
     for name, (primary_code, fallback_code) in sources.items():
         primary_col = resolved.get(primary_code)
         fallback_col = resolved.get(fallback_code) if fallback_code else None
+        # OFFICIAL RULE (profiles.ReportProfile.domestic_pairs):
+        # 1. a domestic figure fills a consolidated item only where the bank has no foreign
+        #    offices;
+        # 2. for a bank WITH foreign offices, a consolidated (or domestic) value the form does
+        #    not collect in this quarter according to MDRM, and that is identical to its twin,
+        #    is an upstream copy of the twin and is discarded. A value outside the MDRM window
+        #    that DIFFERS from its twin cannot be a copy; it is kept and counted.
+        is_domestic_pair = bool(fallback_code) and (primary_code[:4], fallback_code[:4]) in domestic_pairs
+        twin_code = (twin_of[primary_code[:4]] + primary_code[4:]) if primary_code[:4] in twin_of else None
+        twin_col = resolved.get(twin_code) if twin_code else None
+        primary = raw[primary_col] if primary_col is not None else None
+        stats = None
+        if twin_code and intl.any() and (primary_col is not None or fallback_col is not None):
+            p = to_numeric(primary) if primary is not None else pd.Series(np.nan, index=index)
+            t = to_numeric(raw[twin_col]) if twin_col is not None else pd.Series(np.nan, index=index)
+            outside = not scope_ref.collected(profile.name, primary_code, period)
+            same = p.notna() & t.notna() & p.eq(t)
+            copies = intl & outside & same
+            kept = intl & outside & p.notna() & ~same   # filed although MDRM says not collected
+            both = p.notna() & t.notna() & intl & material & p.ne(0) & ~copies
+            stats = {
+                "column": name, "code": primary_code, "n_international": int(intl.sum()),
+                "blocked": int((p.isna() & t.notna() & intl).sum()) if is_domestic_pair else 0,
+                "copies_discarded": int(copies.sum()), "kept_outside_window": int(kept.sum()),
+                "material_both": int(both.sum()), "material_equal": int((both & same).sum()),
+            }
+            if copies.any() and primary is not None:
+                primary = primary.mask(copies)
+        if stats is not None and (stats["blocked"] or stats["copies_discarded"] or stats["kept_outside_window"]
+                                  or stats["material_both"]):
+            scope_rows.append(stats)
+        fallback = None
+        if fallback_col is not None:
+            fallback = raw[fallback_col].where(~intl) if is_domestic_pair else raw[fallback_col]
 
-        if primary_col is not None and fallback_col is not None:
-            series = raw[primary_col].combine_first(raw[fallback_col])
-        elif primary_col is not None:
-            series = raw[primary_col]
-        elif fallback_col is not None:
-            series = raw[fallback_col]
+        if primary is not None and fallback is not None:
+            series = primary.combine_first(fallback)
+        elif primary is not None:
+            series = primary
+        elif fallback is not None:
+            series = fallback
         else:
             # The code does not exist in this quarter at all. Materialize it as all-NaN
             # rather than omitting it: every partition must share one Arrow schema, era
@@ -108,12 +165,7 @@ def build_quarter(
             series = pd.Series(np.nan, index=index, dtype="float64")
         columns[name] = to_numeric(series)
 
-    # --- form type, resolved before derivation so formulas can read it ---------------
-    form = (
-        profile.form_type_resolver(raw)
-        if profile.form_type_resolver is not None
-        else pd.DataFrame(index=index)
-    )
+    # --- form type (resolved above) is readable in formulas ----------------------------
     builtins: dict[str, pd.Series] = {}
     if "form_type" in form.columns:
         builtins["form_type"] = pd.Series(
@@ -191,4 +243,6 @@ def build_quarter(
     panel = panel.sort_values([profile.id_col]).reset_index(drop=True)
     header = header.sort_values([profile.id_col]).reset_index(drop=True)
     assert n == len(panel), "row count changed while building a quarter"
+    if scope_sink is not None and scope_rows:
+        scope_sink.append(pd.DataFrame(scope_rows).assign(**{profile.date_col: qf.period}))
     return panel, header

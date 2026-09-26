@@ -29,6 +29,7 @@ class YearResult:
     n_rows: int
     n_quarters: int
     gaps: pd.DataFrame
+    scope: pd.DataFrame = field(default_factory=pd.DataFrame)
     failures: list[str] = field(default_factory=list)
 
 
@@ -47,11 +48,12 @@ def build_year(
     out_root = Path(out_root)
     panel_parts: list[pd.DataFrame] = []
     header_parts: list[pd.DataFrame] = []
+    scope_parts: list[pd.DataFrame] = []
     failures: list[str] = []
 
     for qf in sorted(quarter_files, key=lambda q: q.quarter):
         try:
-            panel, header = build_quarter(qf, cs, profile, era_starts=era_starts)
+            panel, header = build_quarter(qf, cs, profile, era_starts=era_starts, scope_sink=scope_parts)
         except Exception as exc:
             if not keep_going:
                 raise
@@ -102,5 +104,6 @@ def build_year(
         n_rows=len(panel),
         n_quarters=len(panel_parts),
         gaps=gaps,
+        scope=pd.concat(scope_parts, ignore_index=True) if scope_parts else pd.DataFrame(),
         failures=failures,
     )

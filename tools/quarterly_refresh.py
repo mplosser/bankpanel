@@ -15,6 +15,8 @@ Steps (each logged to <out-dir>/logs/):
                the check prints the exact files needed)
   2. dictionary  MDRM dictionary refresh in both repos (descriptions for new codes)
   3. parse     05_parse_ffiec.py / 04_parse_data.py (new files only)
+     scope     tools/build_scope_validity.py -- when each consolidated / domestic code is
+               collected, from the refreshed MDRM; a change is reported, never committed
   4. configs   tools/derive_y9c_configs.py -- new Y-9C codes the Call configs already map
                only appear after this; a change is reported for review, never committed
   5. build     bankpanel build + expectations + validate all --save, one panel at a time
@@ -23,7 +25,8 @@ Steps (each logged to <out-dir>/logs/):
 
 Exit code: 0 clean (a data-only refresh), 1 something needs a decision (new coverage
 finding, stale ledger row, unacknowledged critical break, new error-severity quality
-failure, raw-identity difference, generated Y-9C configs changed), 2 blocked (raw files
+failure, raw-identity difference, generated Y-9C configs changed, consolidated-vs-domestic
+substitution, MDRM validity table changed), 2 blocked (raw files
 missing or a step failed). The report is <out-dir>/refresh_report.md.
 
 Known breaks can be acknowledged in reference_data/breaks_acknowledged.csv
@@ -142,6 +145,8 @@ def assess(key: str, new_root: Path, prev_root: Path | None, today: dt.date) -> 
         fails = fails.merge(q[["name", "severity"]], left_on="check", right_on="name", how="left").drop(columns="name")
     out["quality"] = q
     out["new_quarter_failures"] = fails
+    out["scope_substitution"] = _read(new_root, "consolidated_scope_substitution")
+    out["scope_mdrm"] = _read(new_root, "consolidated_scope_mdrm")
 
     # capital-ratio unit corrections applied in the new quarters
     corrected = None
@@ -168,6 +173,8 @@ def needs_decision(a: dict) -> list[str]:
         crit = b[(b.severity == "CRITICAL") & ~b.acknowledged]
         if len(crit):
             why.append(f"{len(crit)} unacknowledged critical break(s): {', '.join(sorted(set(crit.column)))}")
+    if len(a.get("scope_substitution", [])):
+        why.append(f"{len(a['scope_substitution'])} consolidated-vs-domestic substitution(s): an upstream copy")
     f = a["new_quarter_failures"]
     if not f.empty and "severity" in f:
         err = f[f.severity == "error"]
@@ -198,6 +205,10 @@ def report(path: Path, steps: Step, assessments: list[dict], extra: dict, status
     if extra.get("y9c_config_diff"):
         lines += ["## Generated FR Y-9C configs changed (review, then commit)", "", "```",
                   extra["y9c_config_diff"][:4000], "```", ""]
+    if extra.get("scope_validity_diff"):
+        lines += ["## MDRM validity table changed (review, then commit)", "",
+                  "A code's collection window moved: the consolidated-vs-domestic rule now treats it differently.", "",
+                  "```", extra["scope_validity_diff"][:4000], "```", ""]
     for a in assessments:
         lines += [f"## Panel: {a['panel']}", "",
                   f"- coverage {a['date_min']} .. {a['date_max']} ({a['rows']} rows x {a['columns']} columns); "
@@ -208,6 +219,10 @@ def report(path: Path, steps: Step, assessments: list[dict], extra: dict, status
                   "### New coverage findings", "", _md_table(a["coverage_findings"], ["column", "from_date", "to_date", "before", "after", "delta"]),
                   "### Stale ledger rows", "", _md_table(a["stale_ledger"], ["column", "from_date", "to_date", "reason"]),
                   "### Latest-quarter breaks", "", _md_table(a["breaks"], ["column", "test", "severity", "acknowledged", "detail"]),
+                  "### Consolidated vs domestic (RCFD vs RCON)", "",
+                  _md_table(a["scope_substitution"], ["REPORTING_PERIOD", "column", "code", "material_equal", "material_both", "usual_share"]),
+                  "MDRM windows: copies discarded / values kept outside the window", "",
+                  _md_table(a["scope_mdrm"], ["column", "code", "copies_discarded", "kept_outside_window"]),
                   "### Quality failures in the new quarters", "", _md_table(a["new_quarter_failures"], ["check", "severity", "RSSD_ID", "REPORTING_PERIOD", "inputs"]),
                   ""]
     text = "\n".join(lines)
@@ -263,6 +278,16 @@ def main() -> int:
     if blocked:
         return _finish(out_dir, steps, [], extra, 2, blocked)
 
+    # 3b. the MDRM validity table behind the consolidated-vs-domestic rule
+    if not args.skip_dictionary:
+        if steps.run("scope_validity", [py, "tools/build_scope_validity.py"], ROOT) != 0:
+            blocked.append("tools/build_scope_validity.py failed")
+            return _finish(out_dir, steps, [], extra, 2, blocked)
+        diff = subprocess.run(["git", "diff", "--unified=0", "--", "reference_data/scope_validity.csv"],
+                              cwd=ROOT, capture_output=True, text=True).stdout
+        if diff.strip():
+            extra["scope_validity_diff"] = diff
+
     # 4. regenerate the Y-9C configs from the Call configs and the codes now in the files
     if "y9c" in keys:
         steps.run("derive_y9c_configs", [py, "tools/derive_y9c_configs.py"], ROOT)
@@ -313,6 +338,8 @@ def main() -> int:
             reasons.append(f"{a['panel']}: raw-identity differences")
     if extra.get("y9c_config_diff"):
         reasons.append("generated FR Y-9C configs changed (review the diff, then commit)")
+    if extra.get("scope_validity_diff"):
+        reasons.append("MDRM validity table changed (review the diff, then commit reference_data/scope_validity.csv)")
     status = 2 if blocked else (1 if reasons else 0)
     return _finish(out_dir, steps, assessments, extra, status, reasons)
 

@@ -17,6 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from .reference.formtype import (
@@ -52,6 +53,20 @@ class ReportProfile:
     #: the regulatory-capital items under RCFA (consolidated), the 041/051 under RCOA.
     coalesce_rules: tuple[tuple[str, str], ...] = (("RCFD", "RCON"), ("RCFA", "RCOA"))
 
+    #: The coalesce pairs whose fallback is the DOMESTIC-offices figure of a CONSOLIDATED item
+    #: (RCON for RCFD). OFFICIAL RULE (1.4): the domestic figure is used in place of the
+    #: consolidated one only for a bank WITHOUT foreign offices, where the two are the same
+    #: number by definition. For an international bank a consolidated item it does not report
+    #: stays blank -- a domestic figure is never published under a consolidated name.
+    #: RCFA/RCOA is not such a pair (both consolidated; one per form) and is unaffected.
+    domestic_pairs: tuple[tuple[str, str], ...] = ()
+
+    #: ``(raw slice, resolved form frame) -> (international, material_foreign)`` boolean
+    #: Series. ``international``: the bank has foreign offices, so consolidated != domestic.
+    #: ``material_foreign``: foreign offices hold more than 5% of its deposits -- where an
+    #: exact consolidated == domestic match is evidence of an upstream substitution.
+    foreign_offices: Callable[[pd.DataFrame, pd.DataFrame], tuple[pd.Series, pd.Series]] | None = None
+
     #: When year-to-date accumulation resets. Drives the quarterization grouping, and is
     #: the reason the panel is partitioned by year.
     ytd_reset: str = "calendar_year"
@@ -69,10 +84,42 @@ class ReportProfile:
     source_columns: tuple[str, ...] = resolver_source_columns()
 
 
+def _foreign_share(raw: pd.DataFrame, domestic: tuple[str, ...], foreign: tuple[str, ...]) -> pd.Series:
+    def total(cols):
+        present = [c for c in cols if c in raw.columns]
+        if not present:
+            return pd.Series(np.nan, index=raw.index)
+        vals = raw[present].apply(pd.to_numeric, errors="coerce")
+        return vals.sum(axis=1, min_count=1)
+    f, d = total(foreign), total(domestic)
+    return (f / (f.fillna(0) + d)).where(f.notna() | d.notna())
+
+
+def call_foreign_offices(raw: pd.DataFrame, form: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
+    """Call Report: a bank has foreign offices when it files the FFIEC 031 (form_type 31;
+    before 2011 the form is resolved from the foreign-office schedule). Material when foreign
+    offices hold more than 5% of its deposits (RCFN2200 against RCON2200)."""
+    ft = pd.to_numeric(form["form_type"], errors="coerce") if "form_type" in form.columns else pd.Series(np.nan, index=raw.index)
+    intl = ft.eq(31).fillna(False).astype(bool)
+    material = intl & _foreign_share(raw, ("RCON2200",), ("RCFN2200",)).gt(0.05).fillna(False)
+    return intl, material
+
+
+def fry9c_foreign_offices(raw: pd.DataFrame, form: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
+    """FR Y-9C: one form for all holding companies, so foreign offices are read from the
+    balance sheet: any deposits in foreign offices (BHFN6631 + BHFN6636) above zero."""
+    share = _foreign_share(raw, ("BHDM6631", "BHDM6636"), ("BHFN6631", "BHFN6636"))
+    intl = share.gt(0).fillna(False).astype(bool)
+    return intl, intl & share.gt(0.05).fillna(False)
+
+
 #: The FFIEC Call Report (forms 031 / 041 / 051), as published by ``data_call_report``.
 FFIEC_CALL = ReportProfile(
     name="ffiec_call",
     form_type_resolver=resolve_form_type,
+    domestic_pairs=(("RCFD", "RCON"),),
+    foreign_offices=call_foreign_offices,
+    source_columns=resolver_source_columns() + ("RCON2200",),
 )
 
 #: Raw identity fields on the FR Y-9 files (Chicago Fed and FFIEC eras share them).
@@ -118,9 +165,11 @@ FRY9C = ReportProfile(
     prefix_aliases=(),
     coalesce_rules=(("BHCK", "BHDM"),),
     form_type_resolver=resolve_size_tier,
+    domestic_pairs=(("BHCK", "BHDM"),),
+    foreign_offices=fry9c_foreign_offices,
     header_columns=tuple(FRY9C_HEADER),
     header_renames=dict(FRY9C_HEADER),
-    source_columns=tuple(FRY9C_HEADER) + ("BHCK2170",),
+    source_columns=tuple(FRY9C_HEADER) + ("BHCK2170", "BHDM6631", "BHDM6636", "BHFN6631", "BHFN6636"),
 )
 
 PROFILES: dict[str, ReportProfile] = {FFIEC_CALL.name: FFIEC_CALL, FRY9C.name: FRY9C}

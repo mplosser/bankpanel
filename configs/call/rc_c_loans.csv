@@ -33,6 +33,7 @@ RCON2165,lease_fin_recv_net,RC-C,stock,all,,,,LEASE FINANCING RECEIVABLES (NET O
 RCFD1563,ln_oth_consol,RC-C,stock,031+041,,2024-09-30,,OTHER LOANS (consolidated bank; = 1545 loans for purchasing or carrying securities + 1564 all other loans)
 RCONJ464,ln_oth_dom,RC-C,stock,all,2010-03-31,,,OTHER LOANS (domestic offices; = RCON1545 + RCONJ451). Replaces 1563 as the reported total from 2010Q1
 RCFDJ454,ln_nondep_fin_inst,RC-C,stock,all,2010-03-31,,,LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS AND OTHER LOANS: LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS
+RCONJ454,ln_nondep_fin_inst_dom,RC-C,stock,all,2010-03-31,,,"Loans to nondepository financial institutions, DOMESTIC OFFICES (RCONJ454). The FFIEC 031 collects the consolidated figure only from 2024Q4; ln_nondep_fin_inst is consolidated."
 RCFD2746,ln_finance_cre_constr,RC-C,stock,all,1991-03-31,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS 1766;
 RCON5370,ln_famres_first_adjrate,RC-C,stock,all,1991-03-31,,,ADJUSTABLE RATE CLOSED-END LOANS SECURED BY FIRST LIENS ON 1-4 FAMILY RESIDENTIAL PROPERTIES
 RCONF577,ln_famres_in_foreclosure,RC-C,stock,all,2008-03-31,,,LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES IN DOMESTIC OFFICES IN PROCESS OF FORECLOSURE (INCLUDED IN 

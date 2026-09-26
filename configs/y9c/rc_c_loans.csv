@@ -14,6 +14,7 @@ BHCK2123,unearned_income_ln,HC-C,stock,all,,,,UNEARNED INCOME ON LOANS
 BHDM2165,lease_fin_recv_net,HC-C,stock,all,,,,LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME)
 BHCK1563,ln_oth_consol,HC-C,stock,all,,,,OTHER LOANS (consolidated bank; = 1545 loans for purchasing or carrying securities + 1564 all other loans)
 BHCKJ454,ln_nondep_fin_inst,HC-C,stock,all,,,,LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS AND OTHER LOANS: LOANS TO NONDEPOSITORY FINANCIAL INSTITUTIONS
+BHDMJ454,ln_nondep_fin_inst_dom,HC-C,stock,all,,,,"Loans to nondepository financial institutions, DOMESTIC OFFICES (RCONJ454). The FFIEC 031 collects the consolidated figure only from 2024Q4; ln_nondep_fin_inst is consolidated."
 BHCK2746,ln_finance_cre_constr,HC-C,stock,all,,,,LOANS TO FINANCE COMMERCIAL REAL ESTATE; CONSTRUCTION; AND LAND DEVELOPMENT ACTIVITIES INCLUDED IN ITEMS 1766;
 BHDMF577,ln_famres_in_foreclosure,HC-C,stock,all,,,,LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES IN DOMESTIC OFFICES IN PROCESS OF FORECLOSURE (INCLUDED IN 
 BHCKC391,credit_card_fees_finance_charges_outstanding,HC-C,stock,all,,,,OUTSTANDING CREDIT CARD FEES & FINANCE CHARGES

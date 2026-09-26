@@ -14,7 +14,7 @@ BHCK3217,equity_prev_yearend,HI-A,stock,all,,,,EQUITY CAPITAL; MOST RECENTLY REP
 BHCKB508,equity_prev_yearend_restated,HI-A,stock,all,,,,BALANCE END OF PREVIOUS CALENDAR YEAR AS RESTATED
 BHCKB511,ytd_oth_comprehensive_income,HI-A,ytd,all,,,,OTHER COMPREHENSIVE INCOME
 BHCK4460,ytd_div_common,HI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON COMMON STOCK
-BHCK4598,ytd_div_preferred,HI-A,ytd,all,,,,CASH DIVIDENDS DECLARED ON PREFERRED STOCK
+BHCK4598,ytd_div_preferred,HI-A,ytd,all,,,,Cash dividends declared on preferred stock (Y-9C: perpetual preferred).
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign

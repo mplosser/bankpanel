@@ -1,6 +1,6 @@
 # Validation
 
-Three checks, each answering a different question. All are report-first; only `breaks` is
+Each check answers a different question. All are report-first; `breaks` and `scope` are
 intended to fail a build.
 
 ```bash
@@ -219,6 +219,58 @@ label cannot see transitions between them**, and the collapsed bucket is exactly
 messy constructions live.
 
 `--strict` exits non-zero on a `critical` handoff.
+
+## 5. `scope` — consolidated vs domestic (RCFD vs RCON)
+
+A consolidated column (RCFD on the Call Report, BHCK on the FR Y-9C) must hold a
+consolidated number. For a bank without foreign offices the domestic figure (RCON / BHDM) is
+the same number and fills in where the consolidated code is blank. For a bank **with**
+foreign offices it is a different number, and from 1.4 the builder never publishes it under
+a consolidated name. The rule, applied in the builder to every consolidated/domestic pair:
+
+1. The domestic fallback applies only to banks without foreign offices (Call Report: form
+   type 031 is excluded; FR Y-9C: foreign-office deposits BHFN6631 + BHFN6636 > 0).
+2. For a bank with foreign offices, a value the form does **not** collect in that quarter
+   according to the Fed's MDRM dictionary, and identical to its twin code, is an upstream copy
+   and is discarded. The Chicago Fed files (to 2010) fill each code from its twin in both
+   directions, including codes the 031 never collects: `RCFD3387`, consolidated average C&I
+   loans, has no MDRM entry yet appears in every Chicago file.
+3. A value outside its MDRM window that **differs** from its twin cannot be a copy. It is
+   kept and counted, as evidence that the MDRM window is incomplete.
+
+The windows are a committed table, `reference_data/scope_validity.csv`, generated from MDRM
+by `tools/build_scope_validity.py`. Where filed data contradict MDRM, the correction and its
+evidence go in `reference_data/scope_validity_overrides.csv`. The one current override is
+`RCONF072`/`F073` (RC-P, a domestic-offices schedule, filed on the 031 2006-2018 although
+MDRM lists no 031 window).
+
+Items that are domestic by nature (demand notes to the Treasury, the RC-P mortgage-banking
+items, the RC-K domestic averages) are published under RCON codes with "domestic offices" in
+the description, so the rule does not blank them. Where both matter, the domestic series is
+published under its own `_dom` name (`trad_ust_dom`, `qavg_loans_tot_dom`, ...).
+Consolidated average total loans is `qavg_loans_tot_dom + qavg_loans_tot_fgn` (RCON3360 +
+RCFN3360), which equals the reported RCFD3360 exactly wherever both exist before 2011.
+
+The build writes `consolidated_scope.parquet`, and `bankpanel validate scope` reports three
+things:
+
+- **Substitution (the gate).** Among banks whose foreign offices hold more than 5% of
+  deposits and that filed both codes, the share filing exactly the same consolidated and
+  domestic number. Identical figures alone are not evidence: agricultural loans or state
+  securities are legitimately all domestic. A copy shows as a jump. A column-quarter is
+  CRITICAL when its share rises at least 50 points above the column's median in all other
+  quarters (leave one out), with at least 5 such banks and a share of at least 95%. The
+  95% floor was added after a small-sample false positive: 5 of 7 holding companies at
+  2010Q4 for `BHCKF601`, the same five identical in every quarter 2010-2011. An upstream copy
+  makes every bank identical. Run on a build from the unfixed parser, the gate flags exactly
+  total assets, total liabilities and average total loans at 2025Q3, 14/14 identical each.
+- **MDRM copies discarded, and values kept outside their window** (a warning to review the
+  table).
+- **Blocked cells**: consolidated columns left blank for banks with foreign offices because
+  only the domestic figure was filed. It shows where the panel is thinner for large banks.
+
+`tools/raw_identity_check.py` re-derives the rule independently, so a published base column
+still equals its raw code cell for cell under the rule. There are 0 differences on both panels.
 
 ## What parity does and does not prove
 

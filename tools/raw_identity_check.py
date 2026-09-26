@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from bankpanel.build.quarter import to_numeric  # noqa: E402
 from bankpanel.config import ConfigSet  # noqa: E402
 from bankpanel.profiles import get_profile  # noqa: E402
+from bankpanel.reference import scope as scope_ref  # noqa: E402
 
 CONFIG_DIRS = {"ffiec_call": "configs/call", "fry9c": "configs/y9c"}
 
@@ -61,8 +62,19 @@ def main() -> int:
             c = v.mdrm_code
             fb = fallback_of.get(c[:4])
             codes[v.variable_name] = (c if c in names else None, (fb + c[4:]) if fb and (fb + c[4:]) in names else None)
-        need = sorted({c for pair in codes.values() for c in pair if c} | {profile.id_col})
+        twin_of = dict(profile.domestic_pairs) | {b: a for a, b in profile.domestic_pairs}
+        twins = {n: (twin_of[v.mdrm_code[:4]] + v.mdrm_code[4:]) for v in base
+                 if v.mdrm_code[:4] in twin_of and (twin_of[v.mdrm_code[:4]] + v.mdrm_code[4:]) in names
+                 for n in [v.variable_name]}
+        extra = [c for c in profile.source_columns if c in names]
+        need = sorted({c for pair in codes.values() for c in pair if c} | set(twins.values()) | set(extra) | {profile.id_col})
         raw = pq.read_table(f, columns=need).to_pandas()
+        # the official consolidated-vs-domestic rule, re-derived here from the raw file so the check
+        # stays independent of the builder: international banks get no domestic fill, and a code
+        # outside its MDRM window that equals its twin is an upstream copy (blank)
+        form = profile.form_type_resolver(raw) if profile.form_type_resolver else pd.DataFrame(index=raw.index)
+        intl = profile.foreign_offices(raw, form)[0] if profile.foreign_offices else pd.Series(False, index=raw.index)
+        raw["_intl"] = intl.to_numpy()
         raw[profile.id_col] = pd.to_numeric(raw[profile.id_col]).astype("int64")
         panel = dataset.to_table(columns=[profile.id_col] + [v.variable_name for v in base if v.variable_name in dataset.schema.names],
                                  filter=ds.field(profile.date_col) == period).to_pandas()
@@ -73,10 +85,18 @@ def main() -> int:
                 continue
             primary, fb = codes[n]
             expected = pd.Series(np.nan, index=m.index)
+            intl_m = m["_intl"].fillna(False).astype(bool)
             if primary:
                 expected = to_numeric(m[primary])
+                tw = twins.get(n)
+                if tw and not scope_ref.collected(profile.name, v.mdrm_code, period):
+                    t = to_numeric(m[tw])
+                    expected = expected.mask(intl_m & expected.notna() & t.notna() & expected.eq(t))
             if fb:
-                expected = expected.fillna(to_numeric(m[fb]))
+                fill = to_numeric(m[fb])
+                if (v.mdrm_code[:4], fb[:4]) in set(profile.domestic_pairs):
+                    fill = fill.where(~intl_m)
+                expected = expected.fillna(fill)
             got = m[n]
             same = (got == expected) | (got.isna() & expected.isna())
             if n in zero_filled:

@@ -351,3 +351,33 @@ def test_fry9c_size_tier():
     out = resolve_size_tier(pd.DataFrame({"BHCK2170": [4_999_999.0, 5_000_000.0, np.nan]}))
     assert out.form_type.tolist()[:2] == [1, 2] and pd.isna(out.form_type.iloc[2])
     assert out.form_type_source.tolist() == ["size_tier_5bn", "size_tier_5bn", "unknown"]
+
+
+# --- the official consolidated-vs-domestic rule ------------------------------------------
+
+
+def test_international_bank_gets_no_domestic_figure_under_a_consolidated_name(panel_scope):
+    """After 2011 the 031 filer files only RCON6666: its consolidated column stays blank, while
+    banks without foreign offices (where consolidated == domestic) get the domestic figure."""
+    df = panel_scope
+    modern = df["REPORTING_PERIOD"] >= "2011-03-31"
+    intl = df["form_type"] == 31
+    assert df.loc[modern & intl, "consol_item"].isna().all()
+    assert df.loc[modern & ~intl, "consol_item"].notna().all()
+
+
+def test_upstream_copy_outside_the_mdrm_window_is_discarded(panel_scope):
+    """Before 2011 RCFD6666 is present for every bank but is a copy of RCON6666. The test
+    MDRM table says the 031 never collects RCFD6666, so for the 031 filer it is discarded;
+    for the other banks it is the same number as the domestic one and is kept."""
+    df = panel_scope
+    early = df["REPORTING_PERIOD"] < "2011-03-31"
+    intl = df["form_type"] == 31
+    assert df.loc[early & intl, "consol_item"].isna().all()
+    assert df.loc[early & ~intl, "consol_item"].notna().all()
+
+
+def test_scope_artifact_records_blocked_and_discarded(synth_scope_root):
+    s = pd.read_parquet(synth_scope_root / "consolidated_scope.parquet")
+    s = s[s.column == "consol_item"]
+    assert s.blocked.sum() > 0 and s.copies_discarded.sum() > 0

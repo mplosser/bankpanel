@@ -259,6 +259,26 @@ arrives they revert to blank. Measured when 2025Q4 was added: 3,176 cells in 202
 (fiduciary and custody items 3,155, the rest agricultural and credit-card lines), all
 0 -> blank, 88% on 051 filers. No reported value changes.
 
+
+---
+
+## 13. Consolidated means consolidated (from 1.4)
+
+Until 1.4 a consolidated column fell back to the domestic figure whenever the consolidated
+code was blank, for every bank. For the ~80-110 banks with foreign offices (the FFIEC 031
+filers, which hold most of the system's assets) that put a DOMESTIC number under a
+consolidated name wherever the form collects only the domestic item -- quarterly average
+loans by category, nonaccrual by real-estate type, the real-estate loan pieces before 2013Q2.
+The upstream parser did the same from 2011, and the Chicago Fed files did it before 2011
+under the consolidated code itself. Citi's "average total loans" read 0.62 of its loan book:
+that was its domestic share.
+
+The official rule now leaves such cells blank (docs/CONFIG_FORMAT.md). Items that are
+domestic by construction carry their domestic code and say so. Average total loans is the
+exact sum of the domestic and foreign pieces (`RCON3360 + RCFN3360`), identical to the
+reported consolidated average wherever that is filed. Every build's `validate scope` shows
+where international banks are left blank.
+
 ---
 
 ## 12. Known gaps (deferred to 1.4)

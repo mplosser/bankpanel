@@ -8,13 +8,14 @@ environment variables, never hard-coded.
 
 | tool | what it does |
 | --- | --- |
-| `quarterly_refresh.py` | Fetch, parse, regenerate the Y-9C configs, rebuild, validate and raw-identity-check both panels against the sibling data repositories; writes `refresh_report.md`; exit 0 clean / 1 decision needed / 2 blocked. Known breaks are acknowledged, with an expiry, in `reference_data/breaks_acknowledged.csv`. |
+| `quarterly_refresh.py` | Fetch, parse, regenerate the MDRM validity table and the Y-9C configs, rebuild, validate and raw-identity-check both panels against the sibling data repositories; writes `refresh_report.md`; exit 0 clean / 1 decision needed / 2 blocked. Known breaks are acknowledged, with an expiry, in `reference_data/breaks_acknowledged.csv`. |
 
 ## Need only a built panel and the raw files
 
 | tool | what it does |
 | --- | --- |
 | `raw_identity_check.py` | Regression guard: every published **base** column equals its raw MDRM code, cell for cell, on a sample of quarters (`--all` for every quarter). Uses the builder's own numeric coercion. `--profile fry9c` for the Y-9C. |
+| `build_scope_validity.py` | Regenerates `reference_data/scope_validity.csv` from the MDRM dictionary: the quarters in which each consolidated / domestic code is collected on the form of a bank with foreign offices. The consolidated-vs-domestic rule reads it (see docs/VALIDATION.md §5). Corrections where filed data contradict MDRM go in `reference_data/scope_validity_overrides.csv` with their evidence. The quarterly refresh runs it after the dictionary refresh. |
 | `derive_y9c_configs.py` | Regenerates `configs/y9c/` from `configs/call/` by prefix translation plus the exception maps in `reference_data/y9c_*.csv`. Run after any change to the Call configs; writes `review/y9c_dropped.csv`. |
 | `build_schedule_map.py` | Builds `reference_data/mdrm_to_schedule.csv` (MDRM code → Call Report schedule) from the FFIEC CDR bulk ZIPs, which are the only source that says which schedule an item belongs to. |
 | `make_review_packet.py` | Writes `review/01_names.csv`, `02_derived.csv` and `03_domain_calls.csv`: the decisions that need a human, with the evidence attached and a blank `verdict` column. |

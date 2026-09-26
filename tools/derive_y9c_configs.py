@@ -95,14 +95,35 @@ def main() -> int:
     for f in files:
         for c in pq.ParquetFile(f).schema_arrow.names:
             present[c] = present.get(c, 0) + 1
-    override = {}
+    override, override_note = {}, {}
     p = ROOT / "reference_data" / "y9c_code_map.csv"
     if p.exists():
         t = pd.read_csv(p, dtype=str, keep_default_na=False)
         override = dict(zip(t.call_code, t.y9c_code, strict=True))
+        override_note = dict(zip(t.call_code, t.note, strict=True))
 
     out_dir = ROOT / "configs" / "y9c"
     out_dir.mkdir(exist_ok=True)
+    # Names are an API from 1.0: a column already published on the Y-9C stays published even if
+    # a later change gives it a consumer (which would otherwise withhold it as an intermediate).
+    already_public: set[str] = set()
+    for f in out_dir.glob("*.csv"):
+        sec = None
+        withheld = set()
+        for line in f.read_text(encoding="utf-8").splitlines():
+            if line.startswith("["):
+                sec = line.strip()
+                continue
+            if not line or line.startswith("#"):
+                continue
+            first = next(csv.reader([line]))
+            if sec == "[BASE_VARIABLES]" and len(first) > 1 and first[0] != "mdrm_code":
+                already_public.add(first[1])
+            elif sec == "[DERIVED_VARIABLES]" and first[0] != "variable_name":
+                already_public.add(first[0])
+            elif sec == "[INTERMEDIATE]" and first[0] != "column":
+                withheld.add(first[0])
+        already_public -= withheld
     dropped: list[dict] = []
     kept_names: set[str] = set()
     kept_codes: dict[str, str] = {}   # variable_name -> y9c code
@@ -123,7 +144,8 @@ def main() -> int:
                 dropped.append({"config": src.name, "kind": "base", "name": name, "call_code": code, "y9c_code": y,
                                 "reason": "translated code absent from every Y-9C quarter"})
                 continue
-            base_keep.append([y, name, schedule_name(r[2]), r[3], "all", "", "", r[7], r[8]])
+            # a remapped code carries its own note: the Call row's may describe a different scope
+            base_keep.append([y, name, schedule_name(r[2]), r[3], "all", "", "", r[7], override_note.get(code) or r[8]])
             kept_names.add(name)
             kept_codes[name] = y
         # Y-9C-only codes (an item the BHC form carries under a code the Call never used)
@@ -236,7 +258,7 @@ def main() -> int:
         consumers = {d for rows_ in derived_keep.values() for r in rows_ for d in dependencies(r[4])}
         im = [[piece, "Era piece of the Call-named column rebuilt on the Y-9C."] for piece in renamed_pieces.get(cfg, []) if piece in consumers]
         for r in sec.get("INTERMEDIATE", []):
-            if r[0] in kept_names and r[0] in consumers:
+            if r[0] in kept_names and r[0] in consumers and r[0] not in already_public:
                 im.append(r)
             elif r[0] in kept_names:
                 dropped.append({"config": cfg, "kind": "intermediate", "name": r[0], "call_code": "", "y9c_code": "",

@@ -304,6 +304,17 @@ def cmd_validate(args: argparse.Namespace) -> int:
         # gate unusable rather than useful.
         exit_code = max(exit_code, gate(results))
 
+    if args.check in ("scope", "all"):
+        from .validate import scope as _scope
+
+        sc = _scope.load(root)
+        print()
+        print(_scope.format_report(sc))
+        saved["consolidated_scope_blocked"] = _scope.blocked_summary(sc)
+        saved["consolidated_scope_substitution"] = _scope.substitution_findings(sc)
+        saved["consolidated_scope_mdrm"] = _scope.mdrm_summary(sc)
+        exit_code = max(exit_code, _scope.gate(sc))
+
     if args.check in ("stitches", "all"):
         from .validate.stitches import find_stitch_steps
         from .validate.stitches import format_report as format_stitches
@@ -560,7 +571,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_val = sub.add_parser("validate", help="run a validator against a built panel")
     p_val.add_argument(
-        "check", choices=("coverage", "breaks", "quarterize", "quality", "stitches", "all")
+        "check", choices=("coverage", "breaks", "quarterize", "quality", "stitches", "scope", "all")
     )
     p_val.add_argument("--panel-root", default=None)
     _add_common(p_val)

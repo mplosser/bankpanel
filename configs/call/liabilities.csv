@@ -102,7 +102,7 @@ RCFD2651,fhlba_rem_mat_dt_lt1yr,RC-M,stock,all,,,,
 RCFDB565,fhlba_rem_mat_gt1yr_lte3yr,RC,stock,all,,,,
 RCFDB566,fhlba_rem_mat_gt3yr,RC,stock,all,,,,
 RCFD2332,obm_less1yr,RC,stock,all,,,,
-RCFD2840,demand_notes_treas,RC,stock,all,,,,
+RCON2840,demand_notes_treas,RC,stock,all,,,,"Demand notes issued to the U.S. Treasury, DOMESTIC OFFICES. The FFIEC 031 collects this item only for domestic offices (MDRM: no consolidated RCFD2840 on the 031); for a bank without foreign offices it is the whole bank. (A Treasury tax-and-loan note cannot sit in a foreign office.)"
 RCFD2333,obm_gt1yr_pre97,RC,stock,all,,,,
 RCFDA547,obm_gt1yr_lt3yr,RC,stock,all,,,,
 RCFDA548,obm_gt3yr,RC,stock,all,,,,

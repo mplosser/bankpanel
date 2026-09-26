@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.4.0 — 2026-09-26
+
+- **Consolidated means consolidated: the official RCFD-vs-RCON rule** (both panels; the
+  Y-9C pair is BHCK/BHDM). A domestic figure fills a consolidated column only for banks
+  without foreign offices. For a bank with foreign offices, a value its form does not collect
+  that quarter according to MDRM, and identical to its twin code, is an upstream copy and is
+  discarded. A value outside the MDRM window that differs from its twin is kept and counted.
+  See docs/VALIDATION.md §5 and docs/CAVEATS.md §13.
+- **`reference_data/scope_validity.csv`**, generated from MDRM by
+  `tools/build_scope_validity.py`, with evidenced corrections in
+  `reference_data/scope_validity_overrides.csv` (`RCONF072`/`F073`, RC-P on the 031
+  2006-2018). The quarterly refresh regenerates it and reports any change.
+- **`bankpanel validate scope`** (also part of `validate all`). The build writes
+  `consolidated_scope.parquet`. The gate flags a jump in the share of banks with material
+  foreign offices filing identical consolidated and domestic figures. It is CRITICAL when
+  the share rises 50 points above the column's usual level, with at least 5 banks and a
+  share of at least 95%. On a build from the unfixed parser it flags exactly total assets,
+  total liabilities and average total loans. `raw_identity_check.py` re-derives the rule:
+  0 differences on both panels.
+- **Average total loans is consolidated for 031 filers**: `qavg_loans_tot` =
+  `qavg_loans_tot_dom` (RCON3360) + the foreign-offices average (RCFN3360). It equals the
+  reported RCFD3360 exactly before 2011. From 2011 the old column carried the domestic
+  average for 60 banks with foreign offices (median 4% low), because of the upstream
+  cross-fill.
+- **Domestic-only items are named as such**: `na_farmland`, `na_heloc`, `na_multifam`, the
+  RC-K category averages (`qavg_loans_ci`, `_ag`, `_famres`, `_othre`,
+  `qavg_loans_re_agg_pre08`) and `demand_notes_treas` now read their RCON codes and say
+  "domestic offices". The 031 never files a consolidated version of these. The lease past-due
+  and nonaccrual totals read RCFD1226-1228.
+- **New domestic twins**: `trad_ust_dom`, `trad_usagency_dom`, `trad_states_dom`,
+  `trad_oth_dom` (RCON3531-3533, 3541) and `ln_nondep_fin_inst_dom` (RCONJ454). The
+  consolidated columns are blank for 031 filers where only the domestic figure was filed.
+- **FR Y-9C**: the lease totals (`pd30_lease`, `pd90_lease`, `na_lease`) are published. Loans
+  to depository institutions is blank 1991-1995 for holding companies with foreign offices,
+  because only the domestic BHDM1489 is filed then. Coverage ledger rows are signed for both,
+  and the mis-copied reasons on the lease component rows are corrected.
+
 ## 1.3.0 — 2026-09-26
 
 - **Core totals from Kashyap and Stein's consistent-time-series notes** (cited in the README;

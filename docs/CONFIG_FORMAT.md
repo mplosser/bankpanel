@@ -62,6 +62,27 @@ lines are reported separately on the FFIEC 031 and folded into a broader line on
 041/051: agricultural nonaccrual (`RCFD1583`) sits inside all other loans on the 041, so a
 total that counts each category once must write `na_agprod.where(form_type == 31)`.
 
+**Consolidated vs domestic (RCFD vs RCON): the official rule.** A base row names the
+consolidated code (`RCFD` on the Call Report, `BHCK` on the FR Y-9C); the builder fills it
+from the domestic twin (`RCON`, `BHDM`) where the consolidated code is blank. That fill is
+correct only for a bank WITHOUT foreign offices, where the two are the same number, so:
+
+1. a bank with foreign offices (FFIEC 031 filer; on the Y-9C, any foreign-office deposits)
+   never gets a domestic figure under a consolidated name -- the column stays blank;
+2. for such a bank, a consolidated (or domestic) value in a quarter the form does not collect
+   that code, according to MDRM (`reference_data/scope_validity.csv`, built by
+   `tools/build_scope_validity.py`), and identical to its twin, is an upstream copy and is
+   discarded. The Chicago Fed files (to 2010) copy in both directions, including codes the
+   031 never collects at all (`RCFD3387`, consolidated average C&I loans).
+
+An item the 031 collects only for domestic offices is therefore configured under its `RCON`
+code and described as domestic (`qavg_loans_ci`, `na_heloc`, ...). `bankpanel validate scope`
+reports, from every build's `consolidated_scope.parquet`: columns left blank for international
+banks, copies discarded, values kept although MDRM says the code is not collected (they
+differ from their twin, so MDRM may be incomplete), and -- as a gate -- a sudden jump in the
+share of identical consolidated and domestic figures at banks with material foreign
+business, the signature of an upstream copy.
+
 **`yyyyq` is readable in any formula.** Also supplied by the builder: the reporting quarter as
 an integer `YYYYQ` (2008Q4 is `20084`). It is for rules that depend on the period, such as a
 unit change at a source boundary: the reported capital ratios are filed in percent for

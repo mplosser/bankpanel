@@ -12,3 +12,6 @@ RIAD4482,BHCK4664,"Recoveries on loans to depository institutions and acceptance
 RCFD3355,BHCK2635,"Quarterly average of other borrowed money."
 RCFD2850,BHCK3190,"Other borrowed money (pre-1994 combined line)."
 RCFD2164,BHCK5397,"Income earned but not collected (Y-9C 1992Q1-2000Q4; the Call's RCFD2164 is 'on loans'). Same era, same balance-sheet slot; the Y-9C item does not restrict to loans."
+RCON3495,BHCK3495,"Nonaccrual loans secured by farmland. The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
+RCON5400,BHCK5400,"Nonaccrual loans secured by revolving 1-4 family (HELOC). The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
+RCON3501,BHCK3501,"Nonaccrual loans secured by multifamily. The Call Report collects this only for domestic offices (RCON); the FR Y-9C collects it CONSOLIDATED (BHCK, MDRM 1990-91 on), so on the holding-company panel this column is consolidated."
