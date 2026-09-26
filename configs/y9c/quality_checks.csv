@@ -25,4 +25,11 @@ cet1_le_tier1,cet1 <= tier1_capital,error,Common equity tier 1 is a component of
 rwa_le_assets_x2,rwa <= 2 * assets,warning,Risk-weighted assets far above total assets suggests a units or era-stitch error
 chargeoff_ci_le_total,ytd_co_ci <= ytd_co_tot,warning,Category charge-offs cannot exceed total charge-offs
 recovery_ci_le_total,ytd_rec_ci <= ytd_rec_tot,warning,Category recoveries cannot exceed total recoveries
+leverage_reported_units_agree,(leverage_ratio_reported.abs() * assets <= 30 * tier1_capital.abs()) & (leverage_ratio_reported.abs() * assets * 30 >= tier1_capital.abs()),warning,The reported leverage ratio (after the automatic x100 / 1/100 unit correction) is within a factor of 30 of tier 1 capital over assets. A failure is a residual filer error the correction could not resolve -- for example tier 1 capital filed as zero next to a normal ratio.
+tier1_reported_units_agree,(tier1_rbc_ratio_reported.abs() <= 30 * tier1_rbc_ratio.abs()) & (tier1_rbc_ratio_reported.abs() * 30 >= tier1_rbc_ratio.abs()),warning,The reported tier 1 ratio (after unit correction) is within a factor of 30 of tier1_capital / rwa.
+total_reported_units_agree,(total_rbc_ratio_reported.abs() <= 30 * total_rbc_ratio.abs()) & (total_rbc_ratio_reported.abs() * 30 >= total_rbc_ratio.abs()),warning,The reported total capital ratio (after unit correction) is within a factor of 30 of total_capital / rwa.
+cet1_reported_units_agree,(cet1_ratio_reported.abs() <= 30 * cet1_ratio.abs()) & (cet1_ratio_reported.abs() * 30 >= cet1_ratio.abs()),warning,The reported CET1 ratio (after unit correction) is within a factor of 30 of cet1 / rwa.
+tier1_reported_matches_computed,(tier1_rbc_ratio_reported - tier1_rbc_ratio).abs() <= 0.1 * tier1_rbc_ratio.abs(),info,"The reported tier 1 ratio is within 10% of tier1_capital / rwa. Both come from the same schedule, so a failure is a filing inconsistency worth a look (99.9% agree within 1%)."
+cet1_reported_matches_computed,(cet1_ratio_reported - cet1_ratio).abs() <= 0.1 * cet1_ratio.abs(),info,The reported CET1 ratio is within 10% of cet1 / rwa.
+tier1_capital_filed_with_ratio,~((tier1_capital == 0) & (leverage_ratio_reported > 0.01)),warning,Tier 1 capital filed as exactly zero next to a positive leverage ratio: one of the two is a filing error (seen on the FR Y-9C).
 

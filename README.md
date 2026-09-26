@@ -8,7 +8,7 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.0.1.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> **Status: v1.1.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
 > 1.43 million bank-quarters, ~1,180 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2025Q3,
 > 188 thousand holding-company-quarters, ~850 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
@@ -128,20 +128,25 @@ commented config showing every section and column.
 
 Everything below runs on a machine that has never seen this data. Nothing is downloaded by
 `bankpanel` itself; the two data repositories do that, and their READMEs are the reference
-for their own steps (the FFIEC CDR bulk files for 2011 onward are a manual download from
-the FFIEC site, which `05_parse_ffiec.py` then parses). The Call Report build is the one
-long step; the rest take minutes.
+for their own steps. Every Call Report file is fetched by script, the FFIEC CDR bulk files
+for 2011 onward by `data_call_report/01b_download_ffiec_cdr.py`. The one manual step is
+the FR Y-9C from 2021Q2, which the FFIEC NIC site serves only to a browser. The Call
+Report build is the one long step; the rest take minutes.
 
 ```bash
 # 1. raw data (public FFIEC / Chicago Fed / Federal Reserve files -> quarterly parquet)
 git clone https://github.com/mplosser/data_call_report && cd data_call_report
 pip install -r requirements.txt
-python 01_download_data.py && python 02_download_dictionary.py && python 03_parse_dictionary.py
-python 04_parse_chicago.py && python 05_parse_ffiec.py       # 1985-2010 Chicago Fed; 2011+ FFIEC CDR
+python 01_download_data.py && python 01b_download_ffiec_cdr.py   # Chicago Fed to 2010; FFIEC CDR 2011Q1-present
+python 02_download_dictionary.py && python 03_parse_dictionary.py
+python 04_parse_chicago.py && python 05_parse_ffiec.py
 cd ..
 git clone https://github.com/mplosser/data_fry9 && cd data_fry9
 pip install -r requirements.txt
-python 01_download_data.py && python 04_parse_data.py
+python 01_download_data.py                  # Chicago Fed, 1986Q3-2021Q1
+# 2021Q2 onward: download the BHCF*.ZIP files by hand from the FFIEC NIC site into data/raw/
+# (the site blocks scripts); python 01b_check_ffiec_nic.py lists any that are missing
+python 04_parse_data.py
 cd ..
 
 # 2. bankpanel
@@ -239,7 +244,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 0.6 | [Cleaning layer](docs/CLEANING.md) + [data-quality checks](docs/QUALITY.md) — **done** |
 | 0.7 | Year-to-date items published as `ytd_` + `q_`; the `in_era_unless_reported` zero-fill; raw-identity check; **[FR Y-9C panel](docs/FR-Y-9C.md)** with the size tier and predecessor items — **done** |
 | 1.0 | [Examples](#examples); reproducible from a fresh clone; column names stable — **done** |
-| 1.1 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.1 | Reported capital ratios: unit harmonization across eras, filer unit-error correction with a flag, value checks with failing-row output — **done** |
+| 1.2 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

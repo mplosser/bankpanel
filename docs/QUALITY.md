@@ -87,10 +87,17 @@ It is a `warning` for that reason: a failure here is worth a look, not a repair.
 
 ## Current checks
 
-16 checks ship in `configs/quality_checks.csv`, covering component-vs-total orderings
-(loans, deposits, nonaccrual, charge-offs, past due, small business lending), sign
-constraints (reserves, assets, capital ratios), and capital-structure orderings (CET1 ≤
-tier 1 ≤ total capital). All pass or fail at rates below 0.6%, most below 0.1%.
+23 checks ship in `configs/call/quality_checks.csv` (and, by generation, the FR Y-9C set),
+covering component-vs-total orderings (loans, deposits, nonaccrual, charge-offs, past due,
+small business lending), sign constraints (reserves, assets, capital ratios),
+capital-structure orderings (CET1 ≤ tier 1 ≤ total capital), and from 1.1.0 the agreement
+of the *reported* capital ratios with the ratios the bank's own amounts imply (see
+[schedules/RC-R-I.md](schedules/RC-R-I.md): unit errors are corrected in the panel, what
+remains is reported here). All pass or fail at rates below 0.6%, most below 0.1%.
+
+`bankpanel validate quality --save` writes `validation/quality_checks.csv` (one row per
+check) and `validation/quality_failures.csv` (one row per failing bank-quarter, with the
+check's inputs), so a failure can be looked up rather than only counted.
 
 Add your own: they cost one config line and are checked by `bankpanel lint` immediately.
 

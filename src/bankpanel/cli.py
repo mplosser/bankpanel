@@ -262,6 +262,20 @@ def cmd_validate(args: argparse.Namespace) -> int:
                 pass
         _, df, _ = _load_for_validation(args.panel_root, columns=sorted(check_cols & set(in_panel)))
         results = run_checks(df, cs.checks)
+        # The rows behind every failure, so a flagged filing can be looked up by bank and
+        # quarter rather than only counted. Long format: one row per (check, bank-quarter),
+        # the check's inputs as "name=value" text so different checks share one table.
+        from .validate.quality import failing_rows
+        parts = []
+        for check in cs.checks:
+            rows = failing_rows(df, check, limit=None)
+            if rows.empty:
+                continue
+            inputs = [c for c in rows.columns if c not in ("check", "RSSD_ID", "REPORTING_PERIOD")]
+            rows["inputs"] = rows[inputs].apply(
+                lambda r: "; ".join(f"{k}={v:g}" if isinstance(v, float) else f"{k}={v}" for k, v in r.items()), axis=1)
+            parts.append(rows[["check", "RSSD_ID", "REPORTING_PERIOD", "inputs"]])
+        saved["quality_failures"] = concat(parts) if parts else None
         del df
         print()
         print(format_report(results))

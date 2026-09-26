@@ -77,13 +77,46 @@ On the FR Y-9C the same items (`BHCK7204` to 2014Q4, `BHCA7204` after) are filed
 percent in every era, so the Y-9C formulas rescale every piece; see
 `reference_data/y9c_formula_overrides.csv`.
 
-**Filer entry errors, left as filed.** On the FR Y-9C, 30 of ~96,000 holding-company
-quarters carry a reported leverage ratio above 100% after rescaling (entity 3485541 files
-`998` across 2012Q4-2014Q4 where tier 1 over assets is 9.4%; a handful of others in 2002,
-2007 and 2014, and four small filers in 2017-2025). They are a hundred times the true ratio,
-i.e. the filer typed basis points. The panel publishes what was filed; the computed ratios
-do not use these fields and are unaffected. Screen with `leverage_ratio_reported <= 1` or
-compare against `tier1_capital / assets` if you use the reported series.
+**The 2014 Basel III early adopters.** About 30 banks a quarter in 2014 (the advanced-
+approaches institutions) stop filing `RCFD7204` and file the Basel III code `RCFA7204`
+instead, a year before everyone else, and on the Call Report they file it as a *fraction*.
+The `RCFA`/`RCOA` codes are therefore fractions before 2015Q1 and percent after, and the
+formula rescales by quarter. (1.0.1 assumed percent throughout and published these banks'
+2014 ratios at 1/100 of their value; fixed in 1.1.0.) On the FR Y-9C the early adopters'
+`BHCA` filings are percent, like every other Y-9C quarter.
+
+**Filer unit errors are corrected.** A reported ratio is checked against the ratio the
+bank's own amounts imply: tier 1, total and CET1 against `tier1_rbc_ratio`,
+`total_rbc_ratio` and `cet1_ratio`; leverage against `tier1_capital / assets`. Across the
+panel the two agree within 1% for 99.8-100% of cells, and the disagreements split into
+clusters with empty space between them: a genuine definitional spread up to ~30x (the
+leverage denominator is average assets net of deductions, not quarter-end assets), and a
+cluster at ~100x or ~1/100 -- a filer who typed the ratio in the wrong unit (e.g. RSSD
+3485541 on the Y-9C files `998` for 9.98% across 2012Q4-2014Q4). A filed value 30-300x the
+implied ratio is divided by 100; 1/300-1/30 of it is multiplied by 100. Nothing else is
+changed.
+
+| | bank-quarters corrected | ratio cells | filers |
+| --- | --- | --- | --- |
+| Call Report | 17 | 18 | 17 |
+| FR Y-9C | 40 | 83 | 31 |
+
+Every correction is visible: `capital_ratio_unit_corrected` counts the corrected ratios in
+the row (0 where none), and the value as filed, in consistent units but before the
+correction, is published alongside as `*_reported_uncorrected`. Where the implied ratio is
+missing (for example CBLR banks with no RWA) nothing can be checked and the filed value
+stands. What the correction cannot resolve is reported by the quality checks below.
+
+**What remains is reported, not corrected.** `bankpanel validate quality` runs
+`leverage_reported_units_agree`, `tier1_reported_units_agree`,
+`total_reported_units_agree`, `cet1_reported_units_agree` (a factor of 30, warning),
+`tier1_reported_matches_computed` and `cet1_reported_matches_computed` (10%, info) and
+`tier1_capital_filed_with_ratio` (tier 1 capital filed as zero next to a positive ratio,
+warning). After the correction they fail on 0-14 Call Report cells and 1-37 Y-9C cells;
+`--save` writes each failing bank-quarter with its inputs to
+`validation/quality_failures.csv`. Roughly 1,100 Call Report leverage ratios above 100%
+remain and are genuine: tiny banks (median assets $15M) whose tier 1 is ~93% of assets,
+where the leverage denominator nets out deductions.
 
 The computed ratios remain the primary series: `tier1_rbc_ratio = tier1_capital / rwa`,
 and likewise for total capital and CET1. The reported ratios exist to validate them and

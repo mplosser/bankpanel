@@ -176,10 +176,13 @@ rule for. Structural events are listed in `quarterize_gaps.parquet`.
 
 These originate in `data_call_report`, not in `bankpanel`, and are passed through:
 
-- **`FINANCIAL INSTITUTION STATE` is unusable.** In the CDR-era files it is typed as
-  `float64` and is **99.98% null** (2-letter state codes fail numeric coercion). Other
-  identity fields — name, city, FDIC certificate number — are intact. Do not use the
-  header dataset's `state` column until this is fixed upstream.
+- *(Fixed upstream 2026-09-24.)* Until then the CDR-era `FINANCIAL INSTITUTION STATE`
+  and 41 other text fields (names, ZIP+4, `TEXT*` labels) were nulled by a numeric-coercion
+  bug in `05_parse_ffiec.py`. The re-parsed files carry them; the header's `state` column
+  is filled for every CDR-era bank. A build from raw files parsed before that date still
+  has the gap.
+- Confidential items (the literal `CONF` in the CDR files; mostly Schedule RC-O
+  assessment lines) are dropped at parse time since 2026-09-26. No panel column used them.
 
 ## 9. Three definition changes at 2001Q1, published as separate series
 
@@ -258,7 +261,7 @@ arrives they revert to blank. Measured when 2025Q4 was added: 3,176 cells in 202
 
 ---
 
-## 12. Known gaps in 1.0 (deferred to 1.1)
+## 12. Known gaps (deferred to 1.2)
 
 Two things are documented rather than done. Neither affects a column after 1990 on either
 panel, and neither is hidden: the ledger rows are signed and the dictionary shows the eras.

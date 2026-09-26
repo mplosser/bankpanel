@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.0 — 2026-09-26
+
+- **Filer unit errors in the reported capital ratios are corrected** (RC-R-I §2). A filed
+  ratio 30-300x (or 1/300-1/30 of) the ratio implied by the bank's own amounts is rescaled
+  by 100: 18 cells on the Call Report, 83 on the FR Y-9C. New columns:
+  `capital_ratio_unit_corrected` (count of corrections in the row) and
+  `leverage_ratio_reported_uncorrected`, `tier1_rbc_ratio_reported_uncorrected`,
+  `total_rbc_ratio_reported_uncorrected`, `cet1_ratio_reported_uncorrected` (as filed, in
+  consistent units, before correction).
+- **Fixed (1.0.1 bug): the 2014 Basel III early adopters.** ~30 banks a quarter file
+  `RCFA7204`/`7205`/`7206` in 2014 as fractions; 1.0.1 treated them as percent and
+  published their 2014 reported ratios at 1/100. `*_reported_baselI` is now blank for these
+  banks in 2014 (they filed the Basel III code).
+- **Seven new quality checks** on the reported ratios (unit agreement, identity with the
+  computed ratio, tier 1 filed as zero next to a ratio). `validate quality --save` now also
+  writes `quality_failures.csv`, the failing bank-quarters with their inputs.
+
 ## 1.0.1 — 2026-09-26
 
 - **Reported capital ratios corrected and extended to 2025** (Schedule RC-R Part I,
