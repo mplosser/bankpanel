@@ -31,6 +31,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4", "ruff>=0.5", "hypothesis>=6.90"]
+examples = ["matplotlib>=3.7", "nbformat>=5.9", "nbconvert>=7.0", "ipykernel>=6.0"]
 
 [project.scripts]
 bankpanel = "bankpanel.cli:main"

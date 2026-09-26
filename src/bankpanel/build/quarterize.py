@@ -104,7 +104,6 @@ def quarterize(
     diffs = grouped[present].diff()
 
     is_q1_start = quarter.eq(1) & prev_quarter.isna()
-    is_clean = step.eq(1)
     is_gap = step.gt(1)
     is_orphan = prev_quarter.isna() & quarter.ne(1)
 

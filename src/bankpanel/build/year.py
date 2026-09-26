@@ -17,10 +17,10 @@ from ..config import ConfigSet
 from ..profiles import ReportProfile
 from .quarter import build_quarter
 from .quarterize import quarterize
-from .zerofill import zero_fill_unless_reported
 from .schema import header_schema, panel_schema
 from .source import QuarterFile
 from .writer import write_partition
+from .zerofill import zero_fill_unless_reported
 
 
 @dataclass

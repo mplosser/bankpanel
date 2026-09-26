@@ -17,7 +17,6 @@ import pyarrow as pa
 
 from ..config import ConfigSet
 from ..profiles import ReportProfile
-from ..reference.formtype import HEADER_RENAMES
 
 
 def panel_schema(cs: ConfigSet, profile: ReportProfile) -> pa.Schema:

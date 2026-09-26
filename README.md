@@ -54,7 +54,7 @@ That yields one `ln_condev` column at 100% coverage from 1985 to today.
 ```bash
 git clone https://github.com/mplosser/bankpanel
 cd bankpanel
-pip install -e .
+pip install -e .                 # add ".[examples]" for examples/ (matplotlib, notebook tooling)
 ```
 
 You supply the raw data. `bankpanel` reads the quarterly parquet files produced by
@@ -146,7 +146,7 @@ cd ..
 
 # 2. bankpanel
 git clone https://github.com/mplosser/bankpanel && cd bankpanel
-pip install -e ".[dev]"
+pip install -e ".[dev,examples]"
 bankpanel lint && pytest -q                       # configs and engine, no data needed
 
 # 3. the Call Report panel (1.4 million rows x ~1,180 columns; ~1.1 GB on disk)

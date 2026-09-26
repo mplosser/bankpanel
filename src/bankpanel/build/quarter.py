@@ -21,7 +21,6 @@ from ..expr import evaluate
 from ..profiles import ReportProfile
 from .source import QuarterFile, read_quarter
 
-
 #: Boolean-valued items arrive as text. The Call Report has genuine yes/no items --
 #: ``RCFDK659`` (is this a custody bank) and ``RCONP752`` (does this bank offer consumer
 #: deposit products) -- published as the strings "true"/"false", with inconsistent case.
