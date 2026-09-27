@@ -236,6 +236,8 @@ absorbed. Both representations are published: `ytd_<stem>` as filed and `q_<stem
 flow, so a bank that files an item only at Q4 keeps its annual total in `ytd_` and shows
 no invented quarters in `q_`. On a full 1985–2025 build the uncomputable flows are about
 1 in 100 bank-quarters for the core income items, almost all partial first or last years.
+The flows that are computed are not cleaned: mergers and accounting restatements can make
+them extreme (see [Read this before using the data](#read-this-before-using-the-data)).
 
 **Form awareness.** Every row carries `form_type` (31/41/51) across the whole panel,
 including the pre-2011 era where it must be derived. This is what lets you tell
@@ -270,6 +272,28 @@ cleaning decision is reproducible and reviewable rather than baked in. See
   Q2 and Q4. A quarterly average over 2017+ that ignores this is a 041-only sample.
 - The upstream source changes provider at 2010Q4→2011Q1, and some legacy items disappear
   there for reasons that are about the source, not about the form.
+- **Quarterly flows (`q_`) can be extreme, and bankpanel cleans them only minimally.** A
+  `q_` value is the within-year difference of what the bank filed, so anything that moves
+  year-to-date income between quarters lands whole in one quarter:
+  - **Mergers and acquisitions.** An acquirer's year-to-date income picks up the target's
+    income from the merger date, or (pooling of interests, until mid-2001) restates the earlier
+    quarters of the year, so the merger quarter's difference can be far too large or
+    negative. Flows over that quarter are also out of step with end-of-quarter balances.
+  - **Accounting and reporting rules.** Restatements, amended reports, reclassifications
+    between income lines and corrections folded into the next year-to-date figure. These are
+    roughly sum-preserving, so they arrive in pairs: a negative or collapsed quarter beside
+    an inflated one.
+  - **Scale.** On the 1976–2026 build, 132,440 cells in 60 flow columns are impossible
+    negatives, affecting 4.2% of bank-quarters. Only 5.4% of those carry the bank's own
+    merger flag and 3.1% its restatement flag. The inflated quarter paired with each negative is not
+    counted and not flagged.
+  - **What bankpanel does.** It publishes flows as filed: no winsorizing, smoothing or
+    repair. A flow is blank only where no clean one-quarter difference exists.
+    `bankpanel validate quarterize` reports the impossible negatives, and the opt-in
+    cleaning module ([`docs/CLEANING.md`](docs/CLEANING.md)) fills impossible negatives from
+    the bank's own history and, for rates built on flows, repairs both legs of a pair.
+    Screen `q_` values before using them in ratios or regressions: use `ytd_` year totals
+    where the question allows, winsorize, or apply the cleaning functions.
 - **1976–1984 is a different reporting regime** ([docs/CAVEATS.md §14](docs/CAVEATS.md)):
   - **Income is semiannual through 1982.** Most banks report income only in June and
     December; the March and September reports cover 1–3% of banks. So `ytd_` values are as

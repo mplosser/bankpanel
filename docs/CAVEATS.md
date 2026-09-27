@@ -152,6 +152,32 @@ quarter (annual filers), 191K row-missing (partial first/last years, five true g
 and 1,818 where an earlier in-year anchor would allow an average — too rare to build a
 rule for. Structural events are listed in `quarterize_gaps.parquet`.
 
+**The flows that are computed can be extreme.** A difference is only as good as the two
+year-to-date figures behind it, and several events move income between quarters:
+
+- **Mergers and acquisitions.** Under purchase accounting the acquirer's year-to-date income
+  includes the target only from the merger date; under pooling of interests (until mid-2001) the
+  earlier quarters of the year are restated. Either way the merger quarter's difference can be
+  far too large or negative, and flows over that quarter no longer match end-of-quarter
+  balances.
+- **Accounting and reporting.** Restatements, amended reports, reclassifications between
+  income lines, and corrections folded into the next year-to-date figure. These roughly
+  preserve the year's total, so they arrive in pairs: a negative or collapsed quarter beside
+  an inflated one. Repairing only the negative leg leaves the inflated one standing.
+
+Measured on the 1976-2026 build, `validate quarterize` finds 132,440 impossible-negative cells
+in 60 flow columns, affecting 82,584 bank-quarters (4.2%). Only 5.4% of those bank-quarters
+carry the bank's own business-combination flag and 3.1% its restatement flag; the rest are
+unexplained by any filed indicator. The inflated twins are not counted.
+
+bankpanel applies no cleaning to these flows on disk -- no winsorizing, smoothing or repair --
+beyond leaving a flow blank where no clean difference exists. The negatives are reported, not
+fixed. The opt-in `bankpanel.clean` functions help: `interpolate_negative` blanks an impossible
+negative in a raw flow and fills it from the bank's own history (the negative leg only), and
+`interpolate_broken_ratio` repairs a rate built on flows with both legs of a pair replaced
+together; every changed cell is recorded (docs/CLEANING.md). For analysis,
+prefer `ytd_` year totals where the question allows, or screen `q_` values before using them.
+
 ---
 
 ## 6. Identity, mergers, and restatements
