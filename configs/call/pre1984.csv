@@ -29,8 +29,11 @@
 #   othbor_incl_demand_notes   RCFD2835  1978Q4-2000Q4    other borrowed money + demand notes issued
 #                                                         to the U.S. Treasury; volatile quarter to
 #                                                         quarter, no break at 1984
-#   deferred_inc_taxes_pre84   RCFD2935  1976Q1-1983Q4    deferred income taxes, total (gross; the
-#                                                         1984 items are net)
+#   deferred_inc_taxes_pre84   RCFD2935  1976Q1-1983Q4    deferred income taxes, total: an of-which
+#                                                         item of other liabilities before 1984 as
+#                                                         after (the 1984 of-which items are NET:
+#                                                         3049 in other liabilities, 2148 in other
+#                                                         assets), so not linked
 #   sec_oth_bonds_stocks_pre84 RCFD0380  1976Q1-1983Q4    all other bonds, stocks and securities
 #                                                         (other securities 0950 + trading 1000)
 #   trad_acct_sec_pre84        RCFD1000  1976Q1-1983Q4    trading account securities at book value
@@ -50,7 +53,7 @@ mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,not
 RCON2350,time_savings_dep_2350,RC-E,stock,all,1976-03-31,2010-12-31,,"TOTAL TIME AND SAVINGS DEPOSITS in domestic offices, as filed (1976-2010)."
 RCFD1600,ln_ci_incl_accept,RC-C,stock,all,1976-03-31,2000-12-31,,"COMMERCIAL AND INDUSTRIAL LOANS including bankers' acceptances (the pre-1984 concept; from 1984 the source derives it as acceptances of other banks + C&I other)."
 RCFD2835,othbor_incl_demand_notes,RC,stock,all,1978-12-31,2000-12-31,,OTHER BORROWED MONEY AND DEMAND NOTES ISSUED TO THE U.S. TREASURY.
-RCFD2935,deferred_inc_taxes_pre84,RC,stock,all,1976-03-31,1983-12-31,,"DEFERRED INCOME TAXES - TOTAL (gross, pre-1984 forms)."
+RCFD2935,deferred_inc_taxes_pre84,RC,stock,all,1976-03-31,1983-12-31,,"DEFERRED INCOME TAXES - TOTAL (pre-1984 forms). An of-which item of other liabilities (liab_oth, RCFD2930) for the banks that file it: it is at most other liabilities for 97-98% of them, and total liabilities foots without adding it (89-95%, against ~30% if it is added). From 1984 the corresponding of-which items are NET: net deferred tax liabilities (RCFD3049, within other liabilities) and net deferred tax assets (RCFD2148, within other assets); per bank 3049 in 1984Q1 is within 10% of this item in 1983Q4 for only 58% of banks, so the two are not linked."
 RCFD0380,sec_oth_bonds_stocks_pre84,RC,stock,all,1976-03-31,1983-12-31,,"ALL OTHER BONDS, STOCKS AND SECURITIES (other securities + trading account securities, pre-1984 forms)."
 RCFD1000,trad_acct_sec_pre84,RC,stock,all,1976-03-31,1983-12-31,,"TRADING ACCOUNT SECURITIES; TOTAL, at book value (pre-1984 forms)."
 

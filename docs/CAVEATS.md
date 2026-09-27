@@ -424,6 +424,12 @@ measured and signed in the coverage ledger (`configs/call/coverage_expected.csv`
   `ln_ci_incl_accept` (1976-2000), `othbor_incl_demand_notes` (1978-2000), and, to 1983,
   `deferred_inc_taxes_pre84`, `sec_oth_bonds_stocks_pre84`, `trad_acct_sec_pre84`. Each was
   checked for continuity across 1984 against its own quarter-to-quarter movement.
+  Deferred income taxes was an of-which item of other liabilities before 1984 as it is after
+  (for the banks filing other liabilities, total liabilities foots without adding it), so
+  other liabilities has no 1984 break for them; the 1984 jump in aggregate other liabilities
+  is the smaller banks starting to file the line. The 1984 of-which items are net (net
+  deferred tax liabilities in other liabilities, net deferred tax assets in other assets), so
+  the pre-1984 total is not linked to them.
 - **Banks with foreign offices, as a class.** Their pre-1984 report (the FFIEC 014) collected
   consolidated figures for about 22 of bankpanel's 501 consolidated items in 1976-78 and 39 by
   1983 (56 on the 031 in 1985): the core totals throughout, most loan detail only from 1978Q4,
