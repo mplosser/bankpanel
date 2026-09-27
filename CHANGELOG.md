@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.1 — 2026-09-27
+
+- **Zero-fill in the unfinished newest year.** The in-era zero-fill leaves a blank alone when
+  the bank reports the item in another quarter of the same year (annual RC-T filers file at
+  Q4 only). In the newest year, before its Q4 exists, that could not be seen, so annual
+  filers' Q1-Q3 blanks became zeros: 488 trust banks with real fiduciary balances in
+  2026Q1-Q2, and the same in 2025Q1-Q3 in any build made before 2025Q4 was published. The
+  unfinished year is now built last and reads the finished prior year: a bank whose reports
+  last year all fell in quarters not yet arrived keeps its blanks. Without the prior year in
+  the build, the unfinished year gets no such zero-fill. Finished years are unchanged.
+
 ## 1.4.0 — 2026-09-26
 
 - **Consolidated means consolidated: the official RCFD-vs-RCON rule** (both panels; the

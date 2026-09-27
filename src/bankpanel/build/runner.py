@@ -74,6 +74,13 @@ def build(
             f"gap-policy={gap_policy}; jobs={jobs}"
         )
 
+    # An UNFINISHED newest year (no Q4 yet) is built last, after the year before it is on
+    # disk: the zero-fill reads that finished year's pattern (build/zerofill.py).
+    last_year = max(by_year) if by_year else None
+    tail: dict[int, list[QuarterFile]] = {}
+    if last_year is not None and max(q.quarter for q in by_year[last_year]) < 4:
+        tail = {last_year: by_year.pop(last_year)}
+
     results: list[YearResult] = []
     if jobs <= 1:
         for year, files in by_year.items():
@@ -99,6 +106,17 @@ def build(
                 results.append(result)
                 if progress:
                     print(f"  {result.year}: {result.n_rows:,} rows")
+
+    for year, files in tail.items():
+        if progress and not (out_root / "panel" / f"year={year - 1}").exists():
+            print(f"  [zero-fill] {year} is unfinished and {year - 1} is not in this build: "
+                  "its in-era zero-fill is skipped (no prior-year pattern to read)")
+        results.append(build_year(
+            year, files, cs, profile, out_root, era_starts=era_starts, gap_policy=gap_policy,
+            keep_going=keep_going, prior_year_root=out_root,
+        ))
+        if progress:
+            print(f"  {year}: {results[-1].n_rows:,} rows (unfinished year, built last)")
 
     results.sort(key=lambda r: r.year)
 

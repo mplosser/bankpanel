@@ -334,6 +334,38 @@ def test_blank_is_zero_unless_the_bank_reports_that_year_or_the_form_never_does(
     assert n == 4
 
 
+def test_unfinished_year_keeps_blanks_of_last_years_late_reporters(tmp_path):
+    """The newest year ends at Q2: an annual (Q4-only) filer last year keeps its blanks, a
+    bank with none last year is zero-filled, a quarterly filer that went quiet is zero."""
+    from bankpanel.build.year import _prior_year_late_reporters
+    from bankpanel.build.zerofill import zero_fill_unless_reported
+    from bankpanel.profiles import FFIEC_CALL
+
+    prior_q = [pd.Timestamp(d) for d in ("2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31")]
+    prior = []
+    for bank, vals in [(1, [np.nan, np.nan, np.nan, 2000.0]),   # annual filer
+                       (2, [0.0, 0.0, 0.0, 0.0]),               # has none
+                       (3, [4.0, 4.0, 4.0, 4.0])]:              # quarterly filer
+        prior += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "x": v} for d, v in zip(prior_q, vals, strict=True)]
+    part = tmp_path / "panel" / "year=2025"
+    part.mkdir(parents=True)
+    pd.DataFrame(prior).to_parquet(part / "part-0.parquet")
+
+    keep = _prior_year_late_reporters(tmp_path, 2025, ["x", "y"], FFIEC_CALL, last_month=6)
+    assert keep == {"x": {1}, "y": set()}
+    assert _prior_year_late_reporters(tmp_path, 2024, ["x"], FFIEC_CALL, last_month=6) == {}
+
+    cur_q = [pd.Timestamp("2026-03-31"), pd.Timestamp("2026-06-30")]
+    df = pd.DataFrame([{"RSSD_ID": b, "REPORTING_PERIOD": d, "form_type": 41, "x": v}
+                       for b in (1, 2, 3, 4) for d, v in zip(cur_q, [3.0, 5.0] if b == 4 else [np.nan, np.nan], strict=True)])
+    zero_fill_unless_reported(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
+                              era_start=pd.Timestamp("2005-09-30"), keep_blank=keep["x"])
+    got = {b: g.x.tolist() for b, g in df.groupby("RSSD_ID")}
+    assert all(np.isnan(v) for v in got[1])        # annual filer: blank, not 0
+    assert got[2] == [0.0, 0.0] and got[3] == [0.0, 0.0]
+    assert got[4] == [3.0, 5.0]
+
+
 def test_zero_fill_respects_the_forms_an_item_is_collected_on():
     from bankpanel.build.zerofill import zero_fill_unless_reported
 

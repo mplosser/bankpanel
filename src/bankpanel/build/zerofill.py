@@ -11,6 +11,12 @@ zero it stands for -- with two exceptions, both of which the data can see:
   for smaller trust banks: a bank with $2bn under custody files it at Q4 and leaves Q1-Q3
   blank. Those blanks mean "collected annually", not "none", and a zero there would turn the
   series into 0, 0, 0, 2bn. They stay blank.
+* **The year is not finished and last year the bank reported only later in the year.** In
+  the newest year the build may end at Q2, before an annual filer's December report exists,
+  so "reports it in another quarter of the same year" cannot be seen yet. The bank's
+  prior-year pattern stands in for it: a bank whose reports last year all fell in quarters
+  that have not arrived this year keeps its blanks (the year build passes these banks as
+  ``keep_blank``). Once the year is complete, its own pattern decides as usual.
 * **The bank's form does not collect the item that quarter** -- no filer of that form
   reports any value in that quarter. That covers a form that never carries the item and a
   form that collects it only in some quarters (the 051 takes Schedule RC-T at Q4 only). A
@@ -39,6 +45,7 @@ def zero_fill_unless_reported(
     era_start: pd.Timestamp,
     era_end: pd.Timestamp | None = None,
     forms: frozenset[int] | None = None,
+    keep_blank: set | None = None,
 ) -> int:
     """Fill ``column`` in place over one bank-year panel. Returns the number of cells filled.
 
@@ -63,6 +70,9 @@ def zero_fill_unless_reported(
     form_collects = values.notna().groupby([form, pd.Series(dates, index=panel.index)]).transform("any")
 
     fill = values.isna() & window & form_collects & ~bank_reports
+    if keep_blank:
+        # unfinished year: last year these banks reported only in quarters not yet arrived
+        fill &= ~panel[id_col].isin(keep_blank)
     if forms is not None and "form_type" in panel:
         # The config says which forms carry the item. Two 051 filers volunteering a line the
         # 051 does not have must not turn 3,400 other 051 filers into zeros.
