@@ -7,7 +7,7 @@ Turns raw quarterly FFIEC Call Report and FR Y-9C files into analysis-ready pane
 year-to-date income items that must be differenced to obtain quarterly flows.
 
 > **Status: v1.7.0.** Two panels: **`bankpanel_call`** (Call Report, 1976Q1–2026Q2,
-> 1.96 million bank-quarters, ~1,210 columns; 1976–1984 carries a warning, see
+> 1.96 million bank-quarters, ~1,230 columns; 1976–1984 carries a warning, see
 > [below](#read-this-before-using-the-data)) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~900 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
