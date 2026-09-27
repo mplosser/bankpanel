@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.5.0 — 2026-09-27
+
+- **Annual filers' written zeros before 2005Q3 are published blank** (new config section
+  `[BLANK_ANNUAL_ZEROS]`, docs/CONFIG_FORMAT.md). Schedule RC-T is collected at Q4 only from
+  smaller trust departments. Until 2005Q2 the source wrote 0 for them in Q1-Q3, and from
+  2005Q3 it leaves a blank, so the same "not collected" meant 0 on one side of 2005Q3 and
+  blank on the other. Up to 2005Q2, a bank-year with no non-zero Q1-Q3 value and a non-zero Q4
+  value has its Q1-Q3 zeros blanked: 12,830 bank-quarters at 1,411 banks on each of the six
+  RC-T items (twelve columns). A scan of every published column 1985-2007 found no other item
+  with this pattern (docs/CAVEATS.md §11). Raw identity knows the rule: 0 differences.
+  Otherwise the build is identical to 1.4.1's; data-quality results unchanged.
+
 ## 1.4.1 — 2026-09-27
 
 - **Zero-fill in the unfinished newest year.** The in-era zero-fill leaves a blank alone when

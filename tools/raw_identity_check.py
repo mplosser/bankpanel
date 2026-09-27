@@ -3,7 +3,8 @@
 For each base variable in a config set, read the raw code (and, for a coalesced pair, the
 fallback code) from the quarterly files and compare cell for cell with the panel column,
 over a sample of quarters or all of them. A base column may differ from its raw code only
-where a config rule says so: the coalesce fallback, a zero-fill rule, or a text->number
+where a config rule says so: the coalesce fallback, a zero-fill rule, a [BLANK_ANNUAL_ZEROS]
+rule, the consolidated-vs-domestic rule, or a text->number
 coercion. Anything else is a construction defect.
 
 Usage: python tools/raw_identity_check.py --profile fry9c --raw-dir <dir> --panel-root <root>
@@ -43,6 +44,7 @@ def main() -> int:
     cs = ConfigSet.load(ROOT / CONFIG_DIRS[args.profile])
     profile = get_profile(args.profile)
     zero_filled = {r.column for r in cs.zero_fill}
+    blank_until = {r.column: pd.Timestamp(r.era_end) for r in cs.blank_annual_zeros}
     withheld = cs.intermediate_columns()
     base = [v for v in cs.base if v.variable_name not in withheld]
     fallback_of = dict(profile.coalesce_rules)
@@ -79,6 +81,13 @@ def main() -> int:
         panel = dataset.to_table(columns=[profile.id_col] + [v.variable_name for v in base if v.variable_name in dataset.schema.names],
                                  filter=ds.field(profile.date_col) == period).to_pandas()
         m = panel.merge(raw, on=profile.id_col, how="left")
+        # [BLANK_ANNUAL_ZEROS]: a Q1-Q3 zero may be published blank when the bank's Q4 value
+        # that year is non-zero (read from the panel's own Q4, which that rule never touches)
+        q4 = None
+        if period.quarter < 4 and any(period <= e for e in blank_until.values()):
+            cols = [c for c in blank_until if c in dataset.schema.names]
+            q4 = dataset.to_table(columns=[profile.id_col, *cols], filter=ds.field(profile.date_col) == pd.Timestamp(f"{period.year}-12-31")).to_pandas()
+            q4 = m[[profile.id_col]].merge(q4, on=profile.id_col, how="left")
         for v in base:
             n = v.variable_name
             if n not in m.columns:
@@ -101,6 +110,8 @@ def main() -> int:
             same = (got == expected) | (got.isna() & expected.isna())
             if n in zero_filled:
                 same |= got.eq(0) & expected.isna()
+            if q4 is not None and n in blank_until and period <= blank_until[n]:
+                same |= got.isna() & expected.eq(0) & q4[n].fillna(0).ne(0).to_numpy()
             bad = int((~same).sum())
             if bad:
                 rows.append({"quarter": f.stem, "column": n, "code": primary or fb, "n_rows": len(m), "n_diff": bad,

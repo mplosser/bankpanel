@@ -129,6 +129,23 @@ class DerivedVar:
 
 
 @dataclass(frozen=True)
+class BlankAnnualZerosRule:
+    """A column whose Q1-Q3 zeros, up to ``era_end``, mean "not collected this quarter".
+
+    Items collected only at Q4 from some banks (Schedule RC-T for smaller trust banks) were
+    written as 0 in Q1-Q3 by the source files until 2005Q2, and left blank from 2005Q3. Up
+    to ``era_end``, a bank-year whose Q1-Q3 values hold no non-zero figure while its Q4 value
+    is non-zero has those Q1-Q3 zeros published blank, so the column means the same thing on
+    both sides of 2005Q3. Applied by the year build, before zero-fill and quarterization.
+    """
+
+    column: str
+    era_end: str
+    reason: str
+    origin: Origin
+
+
+@dataclass(frozen=True)
 class ZeroFillRule:
     """A vetted column whose NaN verifiably means zero.
 
@@ -194,6 +211,7 @@ class Config:
     base: list[BaseVar] = field(default_factory=list)
     derived: list[DerivedVar] = field(default_factory=list)
     zero_fill: list[ZeroFillRule] = field(default_factory=list)
+    blank_annual_zeros: list[BlankAnnualZerosRule] = field(default_factory=list)
     checks: list[Check] = field(default_factory=list)
     intermediate: list[IntermediateRule] = field(default_factory=list)
 

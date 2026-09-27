@@ -36,6 +36,28 @@ from __future__ import annotations
 import pandas as pd
 
 
+def blank_annual_zeros(
+    panel: pd.DataFrame, column: str, *, id_col: str, date_col: str, era_end: pd.Timestamp
+) -> int:
+    """The mirror image of the 2005Q3 zero-fill (``[BLANK_ANNUAL_ZEROS]``): up to ``era_end``
+    the source wrote 0 in Q1-Q3 for a bank that files the item only at Q4. Where a bank-year's
+    Q1-Q3 values hold no non-zero figure and its Q4 value is non-zero, the Q1-Q3 zeros are
+    set blank. Returns the number of cells blanked."""
+    if column not in panel.columns:
+        return 0
+    dates = pd.DatetimeIndex(panel[date_col])
+    q = pd.Series(dates.quarter, index=panel.index)
+    key = [panel[id_col], pd.Series(dates.year, index=panel.index)]
+    v = panel[column]
+    nonzero = v.fillna(0).ne(0)
+    early_nonzero = (nonzero & q.lt(4)).groupby(key).transform("any")
+    q4_nonzero = (nonzero & q.eq(4)).groupby(key).transform("any")
+    blank = v.eq(0) & q.lt(4) & ~early_nonzero & q4_nonzero & pd.Series(dates <= era_end, index=panel.index)
+    if blank.any():
+        panel.loc[blank, column] = float("nan")
+    return int(blank.sum())
+
+
 def zero_fill_unless_reported(
     panel: pd.DataFrame,
     column: str,

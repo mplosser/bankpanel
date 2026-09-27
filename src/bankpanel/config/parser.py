@@ -20,6 +20,7 @@ from .model import (
     SIGNS,
     ZERO_FILL_SCOPES,
     BaseVar,
+    BlankAnnualZerosRule,
     Check,
     Config,
     ConfigError,
@@ -43,6 +44,7 @@ _SECTION_SPEC: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "ZERO_FILL": (("column", "scope", "reason"), ("era_start",)),
     "CHECKS": (("name", "expression", "severity", "description"), ()),
     "INTERMEDIATE": (("column", "reason"), ()),
+    "BLANK_ANNUAL_ZEROS": (("column", "era_end", "reason"), ()),
 }
 
 
@@ -265,6 +267,19 @@ def parse_config_file(path: str | Path) -> Config:
                     era_start=_opt(rec, "era_start"),
                     origin=origin,
                 )
+            )
+
+    if "BLANK_ANNUAL_ZEROS" in sections:
+        for origin, rec in sections["BLANK_ANNUAL_ZEROS"].records:
+            if not rec["reason"]:
+                raise ConfigError(
+                    f"{origin}: [BLANK_ANNUAL_ZEROS] entry for {rec['column']!r} has no reason. "
+                    f"Blanking a value the source wrote is a data-integrity decision and must "
+                    f"be justified."
+                )
+            cfg.blank_annual_zeros.append(
+                BlankAnnualZerosRule(column=rec["column"], era_end=rec["era_end"],
+                                     reason=rec["reason"], origin=origin)
             )
 
     if "INTERMEDIATE" in sections:

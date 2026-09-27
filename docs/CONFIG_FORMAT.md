@@ -119,6 +119,18 @@ is not put where the value is not required or not regularly reported.
 decision. `in_era` never fabricates a zero before the quarter collection actually began.
 Applied last, after coalesce and era-stitching, so it cannot mask a NaN those steps needed.
 
+## `[BLANK_ANNUAL_ZEROS]`
+
+`column, era_end, reason`. The mirror image of `in_era_unless_reported`: a zero the source
+wrote for a quarter in which the bank was not asked. Up to `era_end`, where a bank-year's
+Q1-Q3 values hold no non-zero figure and its Q4 value is non-zero, the Q1-Q3 zeros are
+published blank. Applied by the year build before zero-fill and quarterization. Used for
+Schedule RC-T, collected at Q4 only from smaller trust departments, whose Q1-Q3 zeros the
+source wrote until 2005Q2 and leaves blank from 2005Q3 (docs/CAVEATS.md §11). `reason` is
+required: blanking a value the source wrote is a data-integrity decision.
+`tools/raw_identity_check.py` accepts such a blank only where the bank's published Q4 value
+that year is non-zero.
+
 ## `[INTERMEDIATE]`
 
 `column, reason`. A column that is **built and used, then withheld** from the panel.

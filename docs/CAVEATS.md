@@ -251,13 +251,27 @@ which no filer of the bank's form reports the item, and forms outside the item's
 (the 051 has no credit-card fee lines, though two or three of its filers volunteer one).
 
 
-**The newest partial year is provisional.** "Reports the item in another quarter of the
-year" can only be judged on the quarters present. Until a year's Q4 is in the panel, a bank
-that files an item only at Q4 (Schedule RC-T for smaller trust banks, some 051 items) looks
-like a quarterly filer that left Q1-Q3 blank, and those cells are zero-filled. When Q4
-arrives they revert to blank. Measured when 2025Q4 was added: 3,176 cells in 2025Q1-Q3
-(fiduciary and custody items 3,155, the rest agricultural and credit-card lines), all
-0 -> blank, 88% on 051 filers. No reported value changes.
+**The newest partial year (from 1.4.1).** "Reports the item in another quarter of the year"
+can only be judged on the quarters present. Until 1.4.1 a bank that files an item only at Q4
+looked, in the newest year, like a quarterly filer that left Q1-Q3 blank, and those cells
+were zero-filled (3,176 cells in 2025Q1-Q3 before 2025Q4 arrived, 3,155 of them fiduciary and
+custody items). The unfinished year is now built after the finished one before it, and a
+bank whose reports last year all fell in quarters not yet arrived keeps its blanks.
+
+**The other side of 2005Q3: annual filers' written zeros (from 1.5).** Before 2005Q3 the
+source wrote a zero where it later leaves a blank, including for items a bank was not asked
+that quarter. Schedule RC-T is collected at Q4 only from smaller trust departments (median
+$13M under administration, against about $1bn for quarterly filers), and until 2005Q2 their
+Q1-Q3 values are 0 in the source: in 2003, of 1,773 banks with RC-T dollars at Q4, the June
+value is 0 for 1,218, blank for 182 and reported for 370. In 2007 it is 0 for 2 and blank
+for 1,248. Those zeros mean "not collected this quarter". Under `[BLANK_ANNUAL_ZEROS]`, up to
+2005Q2, a bank-year with no non-zero Q1-Q3 value and a non-zero Q4 value has its Q1-Q3 zeros
+published blank: 12,830 bank-quarters at 1,411 banks on each RC-T item. A bank with no trust
+business keeps its zeros. A scan of every published column 1985-2007 for items reported far
+more often at Q4 (or in June and December) than in the other quarters, with written zeros in
+between, found no other case. The candidates it raised were genuine: year-to-date charge-offs
+first incurred in Q4, annual dividends, and the one-time 1995Q4 reclassification of
+securities into available-for-sale.
 
 
 ---

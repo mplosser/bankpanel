@@ -11,6 +11,7 @@ from .model import (
     SIGNS,
     ZERO_FILL_SCOPES,
     BaseVar,
+    BlankAnnualZerosRule,
     Check,
     Config,
     ConfigError,
@@ -22,6 +23,7 @@ from .parser import parse_config_file
 
 __all__ = [
     "ConfigSet", "Config", "ConfigError", "BaseVar", "Check", "DerivedVar", "ZeroFillRule",
+    "BlankAnnualZerosRule",
     "Origin", "DependencyGraph", "build_graph", "LintIssue", "lint_configs",
     "has_errors", "parse_config_file", "FLOW_TYPES", "SCHEDULES", "FORM_SCOPES",
     "SIGNS", "ZERO_FILL_SCOPES", "SEVERITIES",

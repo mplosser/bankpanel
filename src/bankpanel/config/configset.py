@@ -10,6 +10,7 @@ from .graph import DependencyGraph, build_graph
 from .lint import LintIssue, has_errors, lint_configs
 from .model import (
     BaseVar,
+    BlankAnnualZerosRule,
     Check,
     Config,
     ConfigError,
@@ -60,6 +61,10 @@ class ConfigSet:
     @property
     def zero_fill(self) -> list[ZeroFillRule]:
         return [r for cfg in self.configs for r in cfg.zero_fill]
+
+    @property
+    def blank_annual_zeros(self) -> list[BlankAnnualZerosRule]:
+        return [r for cfg in self.configs for r in cfg.blank_annual_zeros]
 
     @property
     def intermediate(self) -> list[IntermediateRule]:

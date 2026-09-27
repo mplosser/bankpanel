@@ -109,6 +109,12 @@ def lint_configs(configs: list[Config], graph: DependencyGraph) -> list[LintIssu
     # --- zero-fill ------------------------------------------------------------------
     known = graph.all_names
     for cfg in configs:
+        for rule in cfg.blank_annual_zeros:
+            if rule.column not in known:
+                issues.append(LintIssue("error", f"{rule.origin}: [BLANK_ANNUAL_ZEROS] names "
+                                                 f"{rule.column!r}, which is not a variable in any config."))
+            if not _valid_date(rule.era_end):
+                issues.append(LintIssue("error", f"{rule.origin}: era_end={rule.era_end!r} is not an ISO date."))
         for rule in cfg.zero_fill:
             if rule.column not in known:
                 issues.append(

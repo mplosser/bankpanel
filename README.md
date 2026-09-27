@@ -8,7 +8,7 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.4.1.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
+> **Status: v1.5.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
 > 1.43 million bank-quarters, ~1,210 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~900 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
@@ -288,7 +288,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 1.2 | [Quarterly refresh](#each-new-quarter-refresh-and-revalidate): one command to fetch, rebuild and revalidate — **done** |
 | 1.3 | Core totals from the Kashyap–Stein notes (liabilities, deposits, net income, gross and consumer loans, securities, interest on deposits, operating income and expense) — **done** |
 | 1.4 | Consolidated means consolidated: the official RCFD-vs-RCON rule, driven by an MDRM validity table and checked every build (`validate scope`, [docs/VALIDATION.md §5](docs/VALIDATION.md)) — **done** |
-| 1.5 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.5 | Annual filers' written zeros before 2005Q3 published blank (Schedule RC-T), after a scan of every column — **done** |
+| 1.6 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

@@ -20,7 +20,7 @@ from .quarterize import quarterize
 from .schema import header_schema, panel_schema
 from .source import QuarterFile
 from .writer import write_partition
-from .zerofill import zero_fill_unless_reported
+from .zerofill import blank_annual_zeros, zero_fill_unless_reported
 
 
 @dataclass
@@ -73,6 +73,12 @@ def build_year(
 
     panel = pd.concat(panel_parts, ignore_index=True)
     header = pd.concat(header_parts, ignore_index=True)
+
+    # Written zeros that mean "not collected this quarter" (annual Q4-only filers before
+    # 2005Q3) are blanked first, so the column means the same thing on both sides of 2005Q3.
+    for rule in cs.blank_annual_zeros:
+        blank_annual_zeros(panel, rule.column, id_col=profile.id_col, date_col=profile.date_col,
+                           era_end=pd.Timestamp(rule.era_end))
 
     # Zero-fill that needs the bank's whole year. Before quarterization, so that a resolved
     # year-to-date zero yields a zero flow rather than an unknown one.

@@ -4,7 +4,7 @@ title: "bankpanel: time-consistent panels from US bank regulatory reports"
 authors:
   - family-names: Plosser
     given-names: Matthew
-version: 1.4.1
+version: 1.5.0
 date-released: 2026-09-27
 license: MIT
 repository-code: https://github.com/mplosser/bankpanel

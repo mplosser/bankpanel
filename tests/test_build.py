@@ -366,6 +366,27 @@ def test_unfinished_year_keeps_blanks_of_last_years_late_reporters(tmp_path):
     assert got[4] == [3.0, 5.0]
 
 
+def test_blank_annual_zeros_only_for_q4_only_filers_up_to_era_end():
+    from bankpanel.build.zerofill import blank_annual_zeros
+
+    rows = []
+    for y in (2004, 2006):
+        q = [pd.Timestamp(f"{y}-{m}") for m in ("03-31", "06-30", "09-30", "12-31")]
+        for bank, vals in [(1, [0.0, 0.0, 0.0, 50.0]),     # annual filer: Q1-Q3 zeros are "not collected"
+                           (2, [0.0, 0.0, 0.0, 0.0]),      # has none: zeros are zeros
+                           (3, [7.0, 0.0, 8.0, 9.0]),      # quarterly filer: its zero is a zero
+                           (4, [0.0, np.nan, 0.0, 30.0])]:  # annual filer with a blank
+            rows += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "x": v} for d, v in zip(q, vals, strict=True)]
+    df = pd.DataFrame(rows)
+    n = blank_annual_zeros(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD", era_end=pd.Timestamp("2005-06-30"))
+    got = {(b, y): g.x.tolist() for (b, y), g in df.groupby(["RSSD_ID", df.REPORTING_PERIOD.dt.year])}
+    assert all(np.isnan(v) for v in got[(1, 2004)][:3]) and got[(1, 2004)][3] == 50.0
+    assert got[(2, 2004)] == [0.0] * 4 and got[(3, 2004)] == [7.0, 0.0, 8.0, 9.0]
+    assert all(np.isnan(v) for v in got[(4, 2004)][:3])
+    assert got[(1, 2006)] == [0.0, 0.0, 0.0, 50.0]   # after era_end: untouched
+    assert n == 5
+
+
 def test_zero_fill_respects_the_forms_an_item_is_collected_on():
     from bankpanel.build.zerofill import zero_fill_unless_reported
 
