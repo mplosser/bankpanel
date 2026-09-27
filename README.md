@@ -57,7 +57,7 @@ Kashyap and Stein's notes on forming consistent Call Report time series
 ([Federal Reserve Bank of Chicago](https://www.chicagofed.org/-/media/others/banking/financial-institution-reports/notes-on-forming-consistent-time-series-pdf.pdf)),
 the data appendix to Kashyap, A. K., and J. C. Stein (2000), "What Do a Million Observations
 on Banks Say About the Transmission of Monetary Policy?", *American Economic Review* 90(3),
-407–428 (NBER Working Paper 6056, 1997), document splices for about 35 core series across the
+407–428, document splices for about 35 core series across the
 1976–1984 form revisions. bankpanel is consistent with their choices from 1985 on, publishes their core totals
 (`configs/call/core_series.csv`), and extends the approach to the full Call Report and FR Y-9C
 through the present. From 1.6 the Call panel starts in 1976, but 1976–1984 carries only the
