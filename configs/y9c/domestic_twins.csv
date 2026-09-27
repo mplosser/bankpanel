@@ -1,0 +1,18 @@
+# Derived from configs/call/domestic_twins.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,domestic_twins
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+BHDM1590,ln_agr_dom,HC-C,stock,all,,,,"LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS, domestic offices (domestic companion of ln_agr)."
+BHDM1975,ln_consumer_dom,HC-C,stock,all,,,,"LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY AND OTHER PERSONAL EXPENDITURES, domestic offices, as filed to 2010 (domestic companion of ln_consumer)."
+BHDM2123,unearned_income_ln_dom,HC-C,stock,all,,,,"UNEARNED INCOME ON LOANS, domestic offices (domestic companion of unearned_income_ln)."
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+

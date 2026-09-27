@@ -40,7 +40,7 @@ profile,ffiec_call
 
 [BASE_VARIABLES]
 mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
-RCFD2948,liabilities,RC,stock,all,,,,TOTAL LIABILITIES
+RCFD2948,liabilities_2948,RC,stock,all,1984-03-31,,,TOTAL LIABILITIES (filed from 1984Q1)
 RIAD4340,ytd_net_inc,RI,ytd,all,,,any,NET INCOME (LOSS)
 RIAD4020,ytd_int_inc_ffrepo,RI,ytd,all,,,nonneg,INCOME ON FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
 RIAD4180,ytd_int_exp_ffrepo,RI,ytd,all,,,nonneg,EXPENSE OF FEDERAL FUNDS PURCHASED AND SECURITIES SOLD UNDER AGREEMENTS TO REPURCHASE
@@ -55,6 +55,7 @@ RCFD2146,trad_ass_pre94,RC,stock,all,,1993-12-31,,ASSETS HELD IN TRADING ACCOUNT
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+liabilities,RC,stock,"Total liabilities (including minority interest before 2001): RCFD2948 as filed from 1984Q1. Where it is blank (before 1984, and ~2% of banks in 1984-85), liabilities net of subordinated debt (RCFD2950, filed 1976-2010) + subordinated debt (RCFD3200): exact, 2948 = 2950 + 3200 for 100% of banks in every 1984 quarter where both are filed (and liabilities_ex_subdebt shows the identity 1985-2010). For banks with foreign offices the FFIEC 014 did not collect consolidated subordinated debt in 1976-1983, so their total liabilities is total assets minus equity (RCFD2170 - RCFD3210), both collected from them throughout: on the FFIEC 031, 2948 = 2170 - 3210 for 98-100% of foreign-office banks 1984-2000.",liabilities_2948.fillna(liab_ex_subdebt_2950 + subdebt).fillna((assets - equity).where(yyyyq <= 19834)),thousands_usd,
 deposits,RC,stock,"Total deposits, consolidated: domestic offices (RCON2200) plus foreign offices (RCFN2200). Equals the reported RCFD2200 exactly before 2011; after 2011 RCFD2200 is not consolidated in the source files (see the header of core_series.csv).",(dep_tot_dom + foreign_dep.fillna(0)).where(dep_tot_dom.notna()),thousands_usd,nonneg
 liabilities_ex_subdebt,RC,stock,Total liabilities net of subordinated notes and debentures: RCFD2950 as filed to 2010; liabilities - subdebt after (identical 1985-2010).,liab_ex_subdebt_2950.fillna((liabilities - subdebt.fillna(0)).where(liabilities.notna())),thousands_usd,nonneg
 ln_gross,RC-C,stock,Total loans and leases gross of unearned income: RCFD1400 as filed to 2010; ll_tot (RCFD2122) + unearned income (RCFD2123) after (identical 1985-2010).,ln_gross_1400.fillna((ll_tot + unearned_income_ln.fillna(0)).where(ll_tot.notna())),thousands_usd,nonneg
@@ -66,6 +67,7 @@ securities,RC-B,stock,"Investment securities, excluding trading: total investmen
 
 [INTERMEDIATE]
 column,reason
+liabilities_2948,Reported piece of liabilities (filed from 1984Q1).
 liab_ex_subdebt_2950,Reported piece of liabilities_ex_subdebt (Chicago Fed files only).
 ln_gross_1400,Reported piece of ln_gross (Chicago Fed files only).
 ln_consumer_1975,Reported piece of ln_consumer (Chicago Fed files only).

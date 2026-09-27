@@ -1,0 +1,63 @@
+# Pre-1984 concepts published as their own series (bankpanel 1.7).
+#
+# The 1984 revision of the Call Report (the FFIEC 031-034 replacing the 010-014) introduced
+# new concepts rather than renaming old ones, so most series that start in 1984 have no
+# same-concept predecessor (docs/CAVEATS.md section 14). The older concepts below are
+# published under their own names instead. Several continue well past 1984, where the source
+# derives them from the new items, so they give long consistent series of the OLD concept:
+#
+#   series                     code      filed            note
+#   time_savings_dep_dom       RCON2350  1976Q1-2010Q4    the pre-1984 split (demand vs time and
+#                                                         savings, incl. NOW/ATS and Super NOW).
+#                                                         The filed item = total domestic deposits
+#                                                         - demand deposits (2200 - 2210) exactly for
+#                                                         99.3-99.8% of banks in every era, except
+#                                                         1984Q1-Q2: the new forms moved NOW/ATS and
+#                                                         Super NOW out of it (the $0.109tn gap at
+#                                                         1984Q1 = transaction - demand exactly) and
+#                                                         1984Q2 is filed by only 1,325 banks. Those
+#                                                         two quarters use 2200 - 2210 (= filed + NOW
+#                                                         accounts for 98.5% of banks in 1984Q1).
+#                                                         DOMESTIC offices: no consolidated series
+#                                                         exists (Kashyap-Stein), like demand deposits.
+#   ln_ci_incl_accept          RCFD1600  1976Q1-2000Q4    C&I loans INCLUDING bankers' acceptances;
+#                                                         from 1984 = acceptances of other banks
+#                                                         (1755) + C&I other (1766) (Kashyap-Stein);
+#                                                         consistent across 1984 (per bank, 48-59% of
+#                                                         banks within 10% at the 1984 transitions vs
+#                                                         53-63% in normal quarters)
+#   othbor_incl_demand_notes   RCFD2835  1978Q4-2000Q4    other borrowed money + demand notes issued
+#                                                         to the U.S. Treasury; volatile quarter to
+#                                                         quarter, no break at 1984
+#   deferred_inc_taxes_pre84   RCFD2935  1976Q1-1983Q4    deferred income taxes, total (gross; the
+#                                                         1984 items are net)
+#   sec_oth_bonds_stocks_pre84 RCFD0380  1976Q1-1983Q4    all other bonds, stocks and securities
+#                                                         (other securities 0950 + trading 1000)
+#   trad_acct_sec_pre84        RCFD1000  1976Q1-1983Q4    trading account securities at book value
+#                                                         (the 1984 item 2146 is at market value)
+#
+# RCFD codes are consolidated and the engine's RCFD/RCON rule applies (a domestic figure fills
+# in only for banks without foreign offices); time_savings_dep_dom is a domestic-offices series.
+
+[META]
+key,value
+panel_name,pre1984
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCON2350,time_savings_dep_2350,RC-E,stock,all,1976-03-31,2010-12-31,,"TOTAL TIME AND SAVINGS DEPOSITS in domestic offices, as filed (1976-2010)."
+RCFD1600,ln_ci_incl_accept,RC-C,stock,all,1976-03-31,2000-12-31,,"COMMERCIAL AND INDUSTRIAL LOANS including bankers' acceptances (the pre-1984 concept; from 1984 the source derives it as acceptances of other banks + C&I other)."
+RCFD2835,othbor_incl_demand_notes,RC,stock,all,1978-12-31,2000-12-31,,OTHER BORROWED MONEY AND DEMAND NOTES ISSUED TO THE U.S. TREASURY.
+RCFD2935,deferred_inc_taxes_pre84,RC,stock,all,1976-03-31,1983-12-31,,"DEFERRED INCOME TAXES - TOTAL (gross, pre-1984 forms)."
+RCFD0380,sec_oth_bonds_stocks_pre84,RC,stock,all,1976-03-31,1983-12-31,,"ALL OTHER BONDS, STOCKS AND SECURITIES (other securities + trading account securities, pre-1984 forms)."
+RCFD1000,trad_acct_sec_pre84,RC,stock,all,1976-03-31,1983-12-31,,"TRADING ACCOUNT SECURITIES; TOTAL, at book value (pre-1984 forms)."
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+time_savings_dep_dom,RC-E,stock,"Total time and savings deposits in domestic offices (the pre-1984 split: demand vs time and savings, including NOW/ATS and Super NOW accounts), 1976Q1-2010Q4; the domestic companion of demand_dep_tot. No consolidated series exists (the consolidated code is a copy of the domestic one in the source). The filed item equals total domestic deposits minus demand deposits (RCON2200 - RCON2210) exactly for 99.3-99.8% of banks in every era, except 1984Q1-Q2: there the new forms moved NOW/ATS and Super NOW accounts out of it (the $0.109tn gap at 1984Q1 is exactly transaction minus demand deposits), and 1984Q2 is filed by only 1,325 banks. For those two quarters the series is RCON2200 - RCON2210, which equals the filed item plus the NOW-type accounts for 98.5% of banks in 1984Q1.",time_savings_dep_2350.where((yyyyq <= 19834) | (yyyyq >= 19843)).fillna((dep_tot_dom - demand_dep_tot).where((yyyyq == 19841) | (yyyyq == 19842))),thousands_usd,
+
+[INTERMEDIATE]
+column,reason
+time_savings_dep_2350,Filed RCON2350 (1976-2010); piece of time_savings_dep_dom (1984Q1-Q2 replaced by domestic deposits - demand deposits).

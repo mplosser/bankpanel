@@ -31,14 +31,14 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 #: The forms whose MDRM windows say when a code is collected from a bank WITH foreign
-#: offices. Before 1984 the Call Report was a family of older forms -- FFIEC 014 the
-#: condition report of banks with foreign offices (the only pre-1984 form with RCFD codes),
-#: FFIEC 010/012 domestic condition, FFIEC 011/013 income -- used only up to 1983Q4 (the
-#: FFIEC 014 number was reused after 1984), so they change nothing from 1984 on.
-FORMS = {"ffiec_call": ("configs/call", ("FFIEC 031", "FFIEC 010", "FFIEC 011", "FFIEC 012",
-                                         "FFIEC 013", "FFIEC 014"), ("RCFD", "RCON")),
+#: offices -- the only banks the consolidated-vs-domestic rule applies to. From 1984 that is
+#: the FFIEC 031; before 1984 it is the FFIEC 014 (condition report of banks with domestic and
+#: foreign offices). The FFIEC 010/012 were filed by banks WITHOUT foreign offices, so their
+#: windows say nothing about what a foreign-office bank filed and are not used. The 014's
+#: windows are clipped at 1983Q4 (the number was reused after 1984 for another report).
+FORMS = {"ffiec_call": ("configs/call", ("FFIEC 031", "FFIEC 014"), ("RCFD", "RCON")),
          "fry9c": ("configs/y9c", ("FR Y-9C",), ("BHCK", "BHDM"))}
-PRE1984_FORMS = {"FFIEC 010", "FFIEC 011", "FFIEC 012", "FFIEC 013", "FFIEC 014"}
+PRE1984_FORMS = {"FFIEC 014"}
 PRE1984_END = pd.Timestamp("1983-12-31").date()
 
 

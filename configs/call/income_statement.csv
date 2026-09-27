@@ -67,7 +67,9 @@ RIAD4135,ytd_nonint_exp_comp,RI,ytd,all,,,nonneg,
 RIAD4217,ytd_nonint_exp_fass,RI,ytd,all,,,nonneg,
 RIAD4092,ytd_nonint_exp_oth,RI,ytd,all,,,nonneg,
 RIAD4093,ytd_nonint_exp,RI,ytd,all,,,nonneg,
-RIAD4302,ytd_taxes_inc,RI,ytd,all,,,,
+RIAD4302,ytd_taxes_inc_4302,RI,ytd,all,1984-03-31,,,APPLICABLE INCOME TAXES (filed from 1984Q1)
+RIAD4260,ytd_taxes_pre_secgains_pre84,RI,ytd,all,1976-06-30,1983-12-31,,APPLICABLE INCOME TAXES (before securities gains; FFIEC 011/013)
+RIAD4285,ytd_taxes_secgains_pre84,RI,ytd,all,1976-06-30,1983-12-31,,APPLICABLE INCOME TAXES ON SECURITIES GAINS (LOSSES) (FFIEC 011/013)
 RIAD4107,ytd_int_inc,RI,ytd,all,,,nonneg,
 RIAD4073,ytd_int_exp,RI,ytd,all,,,nonneg,
 RIAD4509,ytd_int_exp_savings_dep_dom_1_pre01,RI,ytd,all,,,nonneg,
@@ -86,6 +88,7 @@ RIADFT28,ytd_structflag_discontinued_ops,RI,ytd,all,,,,
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_taxes_inc,RI,ytd,"Applicable income taxes: RIAD4302 as filed from 1984Q1; before 1984 the income statement split taxes into those before securities gains (RIAD4260) and those on securities gains (RIAD4285), which together are the same concept. Validated through the total-applicable-income-taxes line RIAD4770 (filed 1969-1996, mostly at Q4): 4770 = 4260 + 4285 for 94.5% of banks in 1983Q4 and 4770 = 4302 for 97-99% at Q4 1984-1996; the rest differ by 1 (thousand dollars, rounding).",ytd_taxes_inc_4302.fillna((ytd_taxes_pre_secgains_pre84 + ytd_taxes_secgains_pre84).where(yyyyq <= 19834)),thousands_usd,
 ytd_int_inc_ln_cc_pre01,CROSS,ytd,"Interest Income on Credit Cards (pre-2001) [RIAD4054, RIAD4248]",ytd_int_inc_ln_cc_pre01_031032.fillna(ytd_int_inc_ln_cc_pre01_033034),thousands_usd,
 ytd_int_inc_lndom_re_agg,CROSS,ytd,"Interest Income on Domestic RE Loans (Aggregate) [RIAD4011, RIAD4246]",ytd_int_inc_lndom_re_agg_031032.fillna(ytd_int_inc_lndom_re_agg_033),thousands_usd,
 ytd_int_inc_ln_indiv_pre01,CROSS,ytd,Interest Income on Individual Loans (pre-2001) [RIAD4054/RIAD4248+RIAD4055],ytd_int_inc_ln_cc_pre01+ ytd_int_inc_ln_cons_pre01,thousands_usd,
@@ -101,3 +104,9 @@ column,scope,reason
 ytd_structflag_business_combo,in_era,"Schedule RI-A business combinations: a blank means no event once collection began, but means not collected before it did."
 ytd_structflag_restatement,in_era,"Schedule RI-A restatements: a blank means no event once collection began, but means not collected before it did."
 ytd_structflag_discontinued_ops,in_era,"Schedule RI-A discontinued operations: a blank means no event once collection began, but means not collected before it did."
+
+[INTERMEDIATE]
+column,reason
+ytd_taxes_inc_4302,Reported piece of ytd_taxes_inc (filed from 1984Q1).
+ytd_taxes_pre_secgains_pre84,Pre-1984 piece of ytd_taxes_inc (taxes before securities gains).
+ytd_taxes_secgains_pre84,Pre-1984 piece of ytd_taxes_inc (taxes on securities gains).

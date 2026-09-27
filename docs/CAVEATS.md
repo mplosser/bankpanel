@@ -399,7 +399,39 @@ measured and signed in the coverage ledger (`configs/call/coverage_expected.csv`
   while the balance-sheet reserve (RCFD3123) is non-zero; 684 such zeros are published blank
   (`[BLANK_ANNUAL_ZEROS]`, annual and semiannual patterns). A scan of every column 1976-1985
   for other not-collected zeros found none.
-- **Not yet mapped.** Pre-1984 item codes that differ from the later forms' codes are not
-  mapped to the published series, so coverage before 1984 is thinner than it could be. The
-  coverage findings in the ledger list where; Kashyap and Stein's splices (Prior work, in the
-  README) are the reference for a later mapping.
+- **The 1984 revision changed concepts, not just codes (from 1.7).** 67 published series are
+  filed from 1984 but not before. Each was tested for a same-concept predecessor: every
+  pre-1984 line (and every sum of two) that tracks it, scored bank by bank across the switch
+  against a same-code benchmark, and, where old and new coexist in 1984, in the same quarter.
+  Only two qualify, both as exact two-line links:
+  - **Total liabilities** = liabilities excluding subordinated debt (RCFD2950) + subordinated
+    debt (RCFD3200): 100% of banks in every 1984 quarter where both are filed. For banks with
+    foreign offices, whose report did not collect consolidated subordinated debt in 1976-1983,
+    it is total assets minus equity (both collected from them throughout; the identity holds
+    for 98-100% of them on the 031 in 1984-2000). The same two-line link also fills the ~2% of
+    banks with no filed total in 1984-85, so the series runs at ~94% of assets straight through.
+  - **Income taxes** = taxes before securities gains (RIAD4260) + taxes on securities gains
+    (RIAD4285), validated through the total-applicable-income-taxes line (RIAD4770): equal to
+    their sum for 94.5% of banks in 1983 and to the new code for 97-99% after 1984 (the rest by
+    $1 thousand, rounding).
+  The other 65 are genuinely new in 1984 (interest income and expense replace operating income
+  and expense, transaction/nontransaction deposits replace demand/time-and-savings, charge-offs
+  by loan type start), as Kashyap and Stein also found.
+- **Pre-1984 concepts published under their own names (from 1.7, `configs/call/pre1984.csv`).**
+  `time_savings_dep_dom` (1976-2010, domestic offices; equal to total domestic deposits minus
+  demand deposits for 99.3-99.8% of banks in every era; in 1984Q1-Q2, when the new forms
+  moved NOW/ATS and Super NOW accounts out of the item, it is that difference),
+  `ln_ci_incl_accept` (1976-2000), `othbor_incl_demand_notes` (1978-2000), and, to 1983,
+  `deferred_inc_taxes_pre84`, `sec_oth_bonds_stocks_pre84`, `trad_acct_sec_pre84`. Each was
+  checked for continuity across 1984 against its own quarter-to-quarter movement.
+- **Banks with foreign offices, as a class.** Their pre-1984 report (the FFIEC 014) collected
+  consolidated figures for about 22 of bankpanel's 501 consolidated items in 1976-78 and 39 by
+  1983 (56 on the 031 in 1985): the core totals throughout, most loan detail only from 1978Q4,
+  and subordinated debt, several loan types and accrued interest not at all. Where it did not,
+  the consolidated column is blank; the domestic figure is not a consolidated one (where the
+  031 later collected both, they differ for 10-70% of these banks). The domestic detail is
+  published beside it under `_dom` names (`configs/call/domestic_twins.csv`: `ibb_dom`,
+  `ln_gross_dom`, `ln_agr_dom`, `ln_ci_incl_accept_dom`, `ln_consumer_dom`, `subdebt_dom`,
+  ...). The MDRM validity table uses the FFIEC 014's windows alone for these years -- the
+  010/012 were filed by banks without foreign offices -- so a domestic figure the 014 did not
+  collect (most domestic detail before 1978Q4) is also recognised as a copy and discarded.

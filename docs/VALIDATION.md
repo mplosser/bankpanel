@@ -242,7 +242,14 @@ The windows are a committed table, `reference_data/scope_validity.csv`, generate
 by `tools/build_scope_validity.py`. Where filed data contradict MDRM, the correction and its
 evidence go in `reference_data/scope_validity_overrides.csv`. The one current override is
 `RCONF072`/`F073` (RC-P, a domestic-offices schedule, filed on the 031 2006-2018 although
-MDRM lists no 031 window).
+MDRM lists no 031 window). Before 1984 the windows are the FFIEC 014's (the report of banks
+with foreign offices), clipped at 1983Q4; the FFIEC 010/012, filed by banks without foreign
+offices, are not used, since the rule concerns only banks with foreign offices.
+
+The substitution gate compares a column with its twin only in quarters where MDRM says BOTH
+codes are collected from these banks. Where the twin is not, it is itself a copy, and its
+equality says nothing about the column (1.7: this removed a false alarm on the pre-1984
+domestic securities series, whose consolidated twin was the copy).
 
 Items that are domestic by nature (demand notes to the Treasury, the RC-P mortgage-banking
 items, the RC-K domestic averages) are published under RCON codes with "domestic offices" in

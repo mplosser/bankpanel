@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.7.0 — 2026-09-27
+
+- **Same-concept links across the 1984 revision.** Each of the 67 series filed from 1984 but
+  not before was tested for a predecessor (single lines and pairwise sums, bank by bank against
+  a same-code benchmark, and in-quarter where old and new coexist). Two exact links:
+  `liabilities` (before 1984: RCFD2950 + RCFD3200, 100% exact in every 1984 overlap quarter;
+  for banks with foreign offices, total assets - equity; the two-line link also fills the ~2%
+  of banks without a filed total in 1984-85) and `ytd_taxes_inc` (before 1984: RIAD4260 +
+  RIAD4285, validated through RIAD4770). The other 65 are new concepts in 1984.
+- **Pre-1984 concepts published** (`configs/call/pre1984.csv`): `time_savings_dep_dom`
+  (1976-2010; 1984Q1-Q2 as domestic deposits minus demand deposits, where the new forms moved
+  NOW accounts out of the item), `ln_ci_incl_accept`, `othbor_incl_demand_notes`,
+  `deferred_inc_taxes_pre84`, `sec_oth_bonds_stocks_pre84`, `trad_acct_sec_pre84`.
+- **Domestic series beside consolidated detail that is blank for banks with foreign offices
+  before 1984** (`configs/call/domestic_twins.csv`, 11 `_dom` columns). Three also publish on
+  the FR Y-9C (`ln_agr_dom`, `ln_consumer_dom`, `unearned_income_ln_dom`).
+- **Consolidated-vs-domestic rule, two refinements:** the pre-1984 validity windows are the
+  FFIEC 014's alone (the 010/012 were filed by banks without foreign offices), so domestic
+  figures the 014 did not collect -- most domestic detail of foreign-office banks before
+  1978Q4 -- are recognised as copies; and the substitution gate compares a column with its
+  twin only where MDRM says both are collected.
+- Ledgers: 19 Call and 2 FR Y-9C rows, by event. Coverage 0 new / 0 stale on both panels; raw
+  identity 0 differences (Call 172,912 column-quarters, FR Y-9C 99,520); scope gate clean.
+- Y-9C: `liabilities` and `ytd_taxes_inc` keep their names via formula overrides (the pre-1984
+  fallbacks do not apply from 1986).
+
 ## 1.6.0 — 2026-09-27
 
 - **The Call panel starts in 1976Q1** (was 1985Q1): 1.96 million bank-quarters. The 1976-1984

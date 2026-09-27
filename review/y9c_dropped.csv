@@ -83,6 +83,14 @@ core_series.csv,base,ln_gross_1400,RCFD1400,BHCK1400,translated code absent from
 core_series.csv,base,ytd_int_exp_dep_4170,RIAD4170,BHCK4170,translated code absent from every Y-9C quarter
 core_series.csv,base,ytd_op_inc_4000,RIAD4000,BHCK4000,translated code absent from every Y-9C quarter
 core_series.csv,base,ytd_op_exp_4130,RIAD4130,BHCK4130,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,ibb_dom,RCON0071,BHDM0071,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,securities_pre94_dom,RCON0390,BHDM0390,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,ln_gross_dom,RCON1400,BHDM1400,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,ln_ci_incl_accept_dom,RCON1600,BHDM1600,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,ln_cc_incl_revolving_pre01_dom,RCON2008,BHDM2008,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,accrued_int_loans_pre01_dom,RCON2164,BHDM2164,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,deferred_inc_taxes_pre84_dom,RCON2935,BHDM2935,translated code absent from every Y-9C quarter
+domestic_twins.csv,base,subdebt_dom,RCON3200,BHDM3200,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_lndom_re_agg_031032,RIAD4011,BHCK4011,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_ln_cc_pre01_031032,RIAD4054,BHCK4054,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_ln_cons_pre01,RIAD4055,BHCK4055,translated code absent from every Y-9C quarter
@@ -92,6 +100,8 @@ income_statement.csv,base,ytd_int_exp_savings_dep_dom_01,RIAD0093,BHCK0093,trans
 income_statement.csv,base,ytd_int_exp_oth_time_dep,RIAD4512,BHCK4512,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_nonint_inc_oth_fee,RIAD5407,BHCK5407,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_nonint_inc_all_oth,RIAD5408,BHCK5408,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_taxes_pre_secgains_pre84,RIAD4260,BHCK4260,translated code absent from every Y-9C quarter
+income_statement.csv,base,ytd_taxes_secgains_pre84,RIAD4285,BHCK4285,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_savings_dep_dom_1_pre01,RIAD4509,BHCK4509,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_exp_savings_dep_dom_2_pre01,RIAD4511,BHCK4511,translated code absent from every Y-9C quarter
 income_statement.csv,base,ytd_int_inc_lndom_re_agg_033,RIAD4246,BHCK4246,translated code absent from every Y-9C quarter
@@ -238,6 +248,12 @@ liabilities.csv,base,qavg_dep_time_ge100k,RCONA514,BHDMA514,translated code abse
 liabilities.csv,base,qavg_dep_time_lt100k,RCONA529,BHDMA529,translated code absent from every Y-9C quarter
 liabilities.csv,base,qavg_dep_time_le250k,RCONHK16,BHDMHK16,translated code absent from every Y-9C quarter
 liabilities.csv,base,qavg_dep_time_gt250k,RCONHK17,BHDMHK17,translated code absent from every Y-9C quarter
+pre1984.csv,base,time_savings_dep_2350,RCON2350,BHDM2350,translated code absent from every Y-9C quarter
+pre1984.csv,base,ln_ci_incl_accept,RCFD1600,BHCK1600,translated code absent from every Y-9C quarter
+pre1984.csv,base,othbor_incl_demand_notes,RCFD2835,BHCK2835,translated code absent from every Y-9C quarter
+pre1984.csv,base,deferred_inc_taxes_pre84,RCFD2935,BHCK2935,translated code absent from every Y-9C quarter
+pre1984.csv,base,sec_oth_bonds_stocks_pre84,RCFD0380,BHCK0380,translated code absent from every Y-9C quarter
+pre1984.csv,base,trad_acct_sec_pre84,RCFD1000,BHCK1000,translated code absent from every Y-9C quarter
 rc_b_securities.csv,base,debtsec_mat_repr_lte1yr,RCFDA248,BHCKA248,translated code absent from every Y-9C quarter
 rc_c_loans.csv,base,ln_statelocal_oblig,RCFD2107,BHCK2107,translated code absent from every Y-9C quarter
 rc_c_loans.csv,base,ln_oth_dom,RCONJ464,BHDMJ464,translated code absent from every Y-9C quarter
@@ -408,6 +424,7 @@ liabilities.csv,derived,time_gt100k_dep_post01,,,"input(s) not on the Y-9C: time
 liabilities.csv,derived,time_gt100k,,,"input(s) not on the Y-9C: time_gt100k_dep_9701, time_gt100k_dep_post01, time_gt100k_dep_pre97"
 liabilities.csv,derived,brokered_lt250k_dep_pre17,,,"input(s) not on the Y-9C: brokered_gt100k_lt250k_dep, brokered_lt100k_dep"
 liabilities.csv,derived,brokered_lt250k_dep,,,"input(s) not on the Y-9C: brokered_lt250k_dep_17, brokered_lt250k_dep_pre17"
+pre1984.csv,derived,time_savings_dep_dom,,,"input(s) not on the Y-9C: demand_dep_tot, dep_tot_dom, time_savings_dep_2350, yyyyq"
 rc_c_loans.csv,derived,amt_ln_smallbiz_ci,,,"input(s) not on the Y-9C: amt_ln_ci_100k_250k, amt_ln_ci_250k_1m, amt_ln_ci_lte100k"
 rc_c_loans.csv,derived,amt_ln_smallbiz_nfnres,,,"input(s) not on the Y-9C: amt_ln_nfnres_100k_250k, amt_ln_nfnres_250k_1m, amt_ln_nfnres_lte100k"
 rc_c_loans.csv,derived,amt_ln_smallbiz_tot,,,"input(s) not on the Y-9C: amt_ln_smallbiz_ci, amt_ln_smallbiz_nfnres"

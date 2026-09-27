@@ -6,7 +6,7 @@ Turns raw quarterly FFIEC Call Report and FR Y-9C files into analysis-ready pane
 `(RSSD_ID, REPORTING_PERIOD)`, handling definitional changes over time and
 year-to-date income items that must be differenced to obtain quarterly flows.
 
-> **Status: v1.6.0.** Two panels: **`bankpanel_call`** (Call Report, 1976Q1–2026Q2,
+> **Status: v1.7.0.** Two panels: **`bankpanel_call`** (Call Report, 1976Q1–2026Q2,
 > 1.96 million bank-quarters, ~1,210 columns; 1976–1984 carries a warning, see
 > [below](#read-this-before-using-the-data)) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~900 columns). Every published base column is
@@ -58,8 +58,10 @@ on Banks Say About the Transmission of Monetary Policy?", *American Economic Rev
 407–428, document splices for about 35 core series across the
 1976–1984 form revisions. bankpanel is consistent with their choices from 1985 on, publishes their core totals
 (`configs/call/core_series.csv`), and extends the approach to the full Call Report and FR Y-9C
-through the present. From 1.6 the Call panel starts in 1976, but 1976–1984 carries only the
-item codes the later forms use: their pre-1984 splices are not yet applied (see
+through the present. From 1.6 the Call panel starts in 1976. The 1984 revision introduced new
+concepts rather than renaming old ones, so most series that start in 1984 have no pre-1984
+equivalent; where the same concept exists it is linked exactly (total liabilities, income
+taxes), and the older concepts are published under their own names (from 1.7; see
 [docs/CAVEATS.md §14](docs/CAVEATS.md)).
 
 ## Install
@@ -299,11 +301,12 @@ cleaning decision is reproducible and reviewable rather than baked in. See
     interpolated or spread.
   - **Many items are collected only from larger banks** from 1978Q4 to 1983Q4 (the FFIEC
     010/012/014 forms), and 1976Q4 and 1983Q2–Q4 have source-file gaps.
-  - **Consolidated series for the ~150–200 banks with foreign offices are blank where the
-    consolidated item was not collected** (for example loans before 1978Q4); the domestic
-    figure is not substituted.
-  - Only item codes the later forms use are published; pre-1984 codes that differ are not
-    yet mapped. Coverage is therefore thinner than from 1985 on.
+  - **Consolidated detail for the ~150–220 banks with foreign offices (54% of assets in
+    1983) is blank where the consolidated item was not collected** (for example loans before
+    1978Q4); the domestic figure is not substituted, but it is published under its own `_dom`
+    name. The core totals (assets, equity, deposits, total liabilities) cover these banks.
+  - Many series begin in 1984 because the concept did; the pre-1984 concepts (time and
+    savings deposits, C&I loans including acceptances, and others) are published separately.
 - Values are thousands of USD. The panel is by filer RSSD, with no merger or
   survivorship adjustment.
 
@@ -327,7 +330,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 1.4 | Consolidated means consolidated: the official RCFD-vs-RCON rule, driven by an MDRM validity table and checked every build (`validate scope`, [docs/VALIDATION.md §5](docs/VALIDATION.md)) — **done** |
 | 1.5 | Annual filers' written zeros before 2005Q3 published blank (Schedule RC-T), after a scan of every column — **done** |
 | 1.6 | Call Report back to 1976Q1 (existing item codes; pre-1984 foreign-office rule, form family, source gaps and 1984 written zeros documented and signed) — **done** |
-| 1.7 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.7 | 1984 revision: exact same-concept links (total liabilities, income taxes), pre-1984 concepts published, domestic series for foreign-office banks' blank consolidated detail — **done** |
+| 1.8 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

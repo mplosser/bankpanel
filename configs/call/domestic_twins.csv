@@ -1,0 +1,43 @@
+# Domestic-offices series published beside consolidated ones that are blank for banks with
+# foreign offices before 1984 (bankpanel 1.7).
+#
+# Before 1984 the report of banks with foreign offices (FFIEC 014) collected consolidated
+# figures for the core totals (total assets, equity, deposits, liabilities excluding
+# subordinated debt, fed funds purchased, the loan-loss reserve) but not for most detail items,
+# or only from 1978Q4 (docs/CAVEATS.md section 14). Those consolidated columns are therefore
+# blank for the ~140-220 banks with foreign offices (54% of bank assets in 1983) where the item
+# was not collected; the domestic figure is not a consolidated one (where the 031 later
+# collected both, they differ for 10-70% of these banks). The domestic series below are
+# published under their own names so the domestic detail of these banks is available, clearly
+# labelled. For banks without foreign offices a domestic series equals the consolidated one.
+#
+# The consolidated-vs-domestic rule still applies to these RCON codes: a domestic value the
+# form did not collect from a foreign-office bank that quarter (MDRM, FFIEC 014 / 031 windows)
+# and that equals its consolidated twin is an upstream copy and is discarded.
+#
+# Already published as domestic series (not repeated): ln_multi (RCON1460), ln_farm
+# (RCON1420), ln_re_dom (real estate, component sum), demand_dep_tot (RCON2210),
+# time_savings_dep_dom (RCON2350).
+
+[META]
+key,value
+panel_name,domestic_twins
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+RCON0071,ibb_dom,RC,stock,all,,,,"INTEREST-BEARING BALANCES DUE FROM DEPOSITORY INSTITUTIONS, domestic offices (domestic companion of ibb)."
+RCON0390,securities_pre94_dom,RC-B,stock,all,,1993-12-31,,"TOTAL INVESTMENT SECURITIES, domestic offices, to 1993 (domestic companion of the pre-1994 securities total)."
+RCON1400,ln_gross_dom,RC-C,stock,all,,2010-12-31,,"TOTAL LOANS AND LEASES, GROSS, domestic offices, as filed to 2010 (domestic companion of ln_gross)."
+RCON1590,ln_agr_dom,RC-C,stock,all,,,,"LOANS TO FINANCE AGRICULTURAL PRODUCTION AND OTHER LOANS TO FARMERS, domestic offices (domestic companion of ln_agr)."
+RCON1600,ln_ci_incl_accept_dom,RC-C,stock,all,,2000-12-31,,"COMMERCIAL AND INDUSTRIAL LOANS including bankers' acceptances, domestic offices (domestic companion of ln_ci_incl_accept)."
+RCON1975,ln_consumer_dom,RC-C,stock,all,,2010-12-31,,"LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY AND OTHER PERSONAL EXPENDITURES, domestic offices, as filed to 2010 (domestic companion of ln_consumer)."
+RCON2008,ln_cc_incl_revolving_pre01_dom,RC-C,stock,all,,2000-12-31,,"CREDIT CARDS AND RELATED PLANS, domestic offices, to 2000 (domestic companion of ln_cc_incl_revolving_pre01)."
+RCON2123,unearned_income_ln_dom,RC-C,stock,all,,,,"UNEARNED INCOME ON LOANS, domestic offices (domestic companion of unearned_income_ln)."
+RCON2164,accrued_int_loans_pre01_dom,RC,stock,all,,2000-12-31,,"INCOME EARNED, NOT COLLECTED ON LOANS, domestic offices, to 2000 (domestic companion of accrued_int_loans_pre01)."
+RCON2935,deferred_inc_taxes_pre84_dom,RC,stock,all,1976-03-31,1983-12-31,,"DEFERRED INCOME TAXES - TOTAL, domestic offices, pre-1984 forms (domestic companion of deferred_inc_taxes_pre84)."
+RCON3200,subdebt_dom,RC,stock,all,,,,"SUBORDINATED NOTES AND DEBENTURES, domestic offices (domestic companion of subdebt)."
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign

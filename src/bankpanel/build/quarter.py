@@ -135,7 +135,10 @@ def build_quarter(
             same = p.notna() & t.notna() & p.eq(t)
             copies = intl & outside & same
             kept = intl & outside & p.notna() & ~same   # filed although MDRM says not collected
-            both = p.notna() & t.notna() & intl & material & p.ne(0) & ~copies
+            # compare only where BOTH codes are collected from these banks this quarter: if the twin
+            # is not, it is itself a copy and its equality says nothing about this column
+            twin_collected = scope_ref.collected(profile.name, twin_code, period)
+            both = p.notna() & t.notna() & intl & material & p.ne(0) & ~copies & twin_collected
             stats = {
                 "column": name, "code": primary_code, "n_international": int(intl.sum()),
                 "blocked": int((p.isna() & t.notna() & intl).sum()) if is_domestic_pair else 0,

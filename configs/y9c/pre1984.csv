@@ -1,0 +1,15 @@
+# Derived from configs/call/pre1984.csv by tools/derive_y9c_configs.py -- FR Y-9C (BHCK/BHDM).
+# Base rows kept only where the translated code exists in the Y-9C files; see review/y9c_dropped.csv.
+
+[META]
+key,value
+panel_name,pre1984
+schedule,CROSS
+profile,ffiec_call
+
+[BASE_VARIABLES]
+mdrm_code,variable_name,schedule,flow_type,form_scope,era_start,era_end,sign,notes
+
+[DERIVED_VARIABLES]
+variable_name,schedule,flow_type,description,formula,unit,sign
+

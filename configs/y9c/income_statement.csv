@@ -57,7 +57,7 @@ BHCK4135,ytd_nonint_exp_comp,HI,ytd,all,,,nonneg,
 BHCK4217,ytd_nonint_exp_fass,HI,ytd,all,,,nonneg,
 BHCK4092,ytd_nonint_exp_oth,HI,ytd,all,,,nonneg,
 BHCK4093,ytd_nonint_exp,HI,ytd,all,,,nonneg,
-BHCK4302,ytd_taxes_inc,HI,ytd,all,,,,
+BHCK4302,ytd_taxes_inc_4302,HI,ytd,all,,,,APPLICABLE INCOME TAXES (filed from 1984Q1)
 BHCK4107,ytd_int_inc,HI,ytd,all,,,nonneg,
 BHCK4073,ytd_int_exp,HI,ytd,all,,,nonneg,
 BHCK4077,ytd_tradrev_inc_1_pre01,HI,ytd,all,,,,
@@ -75,6 +75,7 @@ BHCK4504,ytd_int_inc_ln_taxexempt_pre01,HI,ytd,all,,,nonneg,INTEREST AND FEE INC
 
 [DERIVED_VARIABLES]
 variable_name,schedule,flow_type,description,formula,unit,sign
+ytd_taxes_inc,HI,ytd,"Applicable income taxes: RIAD4302 as filed from 1984Q1; before 1984 the income statement split taxes into those before securities gains (RIAD4260) and those on securities gains (RIAD4285), which together are the same concept. Validated through the total-applicable-income-taxes line RIAD4770 (filed 1969-1996, mostly at Q4): 4770 = 4260 + 4285 for 94.5% of banks in 1983Q4 and 4770 = 4302 for 97-99% at Q4 1984-1996; the rest differ by 1 (thousand dollars, rounding). On the FR Y-9C (from 1986) the filed BHCK4302; the pre-1984 Call Report fallback does not apply.",ytd_taxes_inc_4302,thousands_usd,
 ytd_nonint_inc_sales,CROSS,ytd,Noninterest Income on Sales [RIAD5416+RIAD5415+RIADB496],ytd_nonint_inc_net_gain_ll+ytd_nonint_inc_oreo+ytd_nonint_inc_net_gain_oth_ass,thousands_usd,
 ytd_int_exp_time_gt100k_dom,CROSS,ytd,"Interest on Time Deposits of $100,000 or more [RIADA517 / RIAD4174]",ytd_int_exp_time_gt100k_dom_97.fillna(ytd_int_exp_time_gt100k_dom_pre97),thousands_usd,
 ytd_int_inc_ln,HI,ytd,"ytd_int_inc_ln on the FR Y-9C, same definition as the Call Report column. Y-9C: BHCK4393 through 2000Q4 (excludes tax-exempt obligations of states, BHCK4504, kept separately); the total BHCK4010 2001-2007; from 2008 the sum of 1-4 family (4435) + other real estate (4436) + all other domestic (F821) + foreign offices (4059).",ytd_int_inc_ln_4010.fillna(ytd_int_inc_ln_pre01).fillna(ytd_int_inc_ln_rre_08 + ytd_int_inc_ln_oth_re_08 + ytd_int_inc_ln_alloth_dom_08 + ytd_int_inc_ln_foreign.fillna(0)),thousands_usd,nonneg
@@ -87,4 +88,5 @@ ytd_int_inc_ln_foreign,in_era_unless_reported,"From 2025Q2 the FR Y-9 files stop
 [INTERMEDIATE]
 column,reason
 ytd_int_inc_ln_4010,Era piece of the Call-named column rebuilt on the Y-9C.
+ytd_taxes_inc_4302,Reported piece of ytd_taxes_inc (filed from 1984Q1).
 
