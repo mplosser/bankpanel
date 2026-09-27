@@ -2,11 +2,9 @@
 
 **Time-consistent panels from US bank regulatory reports.**
 
-Turns raw quarterly FFIEC Call Report and FR Y-9C files into analysis-ready panels keyed
-`(RSSD_ID, REPORTING_PERIOD)`, with the same variable names on both, handling the things that make forty years of bank
-regulatory data hard to use: MDRM codes that change when a definition changes,
-year-to-date income items that must be differenced, and a short form that most banks now
-file which omits some items entirely and collects others only twice a year.
+Turns raw quarterly FFIEC Call Report and FR Y-9C files into analysis-ready panels
+`(RSSD_ID, REPORTING_PERIOD)`, handling definitional changes over time and
+year-to-date income items that must be differenced to obtain quarterly flows.
 
 > **Status: v1.6.0.** Two panels: **`bankpanel_call`** (Call Report, 1976Q1–2026Q2,
 > 1.96 million bank-quarters, ~1,210 columns; 1976–1984 carries a warning, see
