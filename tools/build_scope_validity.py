@@ -30,8 +30,16 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-FORMS = {"ffiec_call": ("configs/call", "FFIEC 031", ("RCFD", "RCON")),
-         "fry9c": ("configs/y9c", "FR Y-9C", ("BHCK", "BHDM"))}
+#: The forms whose MDRM windows say when a code is collected from a bank WITH foreign
+#: offices. Before 1984 the Call Report was a family of older forms -- FFIEC 014 the
+#: condition report of banks with foreign offices (the only pre-1984 form with RCFD codes),
+#: FFIEC 010/012 domestic condition, FFIEC 011/013 income -- used only up to 1983Q4 (the
+#: FFIEC 014 number was reused after 1984), so they change nothing from 1984 on.
+FORMS = {"ffiec_call": ("configs/call", ("FFIEC 031", "FFIEC 010", "FFIEC 011", "FFIEC 012",
+                                         "FFIEC 013", "FFIEC 014"), ("RCFD", "RCON")),
+         "fry9c": ("configs/y9c", ("FR Y-9C",), ("BHCK", "BHDM"))}
+PRE1984_FORMS = {"FFIEC 010", "FFIEC 011", "FFIEC 012", "FFIEC 013", "FFIEC 014"}
+PRE1984_END = pd.Timestamp("1983-12-31").date()
 
 
 def config_codes(config_dir: Path, prefixes: tuple[str, str]) -> set[str]:
@@ -59,12 +67,23 @@ def main() -> int:
     rows = []
     for profile, (cfg, form, prefixes) in FORMS.items():
         for code in sorted(config_codes(ROOT / cfg, prefixes)):
-            r = m[(m.code == code) & (m["Reporting Form"].str.strip() == form)]
+            r = m[(m.code == code) & (m["Reporting Form"].str.strip().isin(form))]
             if r.empty:
                 rows.append((profile, code, "", ""))
                 continue
-            for s, e in sorted({(pd.to_datetime(a.split()[0]).date(), pd.to_datetime(b.split()[0]).date())
-                                for a, b in r[["Start Date", "End Date"]].values}):
+            spans = set()
+            for f, a, b in r[["Reporting Form", "Start Date", "End Date"]].values:
+                s, e = pd.to_datetime(a.split()[0]).date(), pd.to_datetime(b.split()[0]).date()
+                if f.strip() in PRE1984_FORMS:
+                    # the form number was reused after 1984 for another report: pre-1984 only
+                    if s > PRE1984_END:
+                        continue
+                    e = min(e, PRE1984_END)
+                spans.add((s, e))
+            if not spans:
+                rows.append((profile, code, "", ""))
+                continue
+            for s, e in sorted(spans):
                 rows.append((profile, code, str(s), "" if e.year >= 9999 else str(e)))
     out = pd.DataFrame(rows, columns=["profile", "code", "start", "end"])
     # Curated corrections where the filed data contradict MDRM, each with its evidence.

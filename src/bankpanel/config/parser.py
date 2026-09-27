@@ -13,6 +13,7 @@ import csv
 from pathlib import Path
 
 from .model import (
+    BLANK_ZERO_PATTERNS,
     FLOW_TYPES,
     FORM_SCOPES,
     SCHEDULES,
@@ -44,7 +45,7 @@ _SECTION_SPEC: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "ZERO_FILL": (("column", "scope", "reason"), ("era_start",)),
     "CHECKS": (("name", "expression", "severity", "description"), ()),
     "INTERMEDIATE": (("column", "reason"), ()),
-    "BLANK_ANNUAL_ZEROS": (("column", "era_end", "reason"), ()),
+    "BLANK_ANNUAL_ZEROS": (("column", "era_end", "reason"), ("era_start", "pattern")),
 }
 
 
@@ -279,7 +280,10 @@ def parse_config_file(path: str | Path) -> Config:
                 )
             cfg.blank_annual_zeros.append(
                 BlankAnnualZerosRule(column=rec["column"], era_end=rec["era_end"],
-                                     reason=rec["reason"], origin=origin)
+                                     reason=rec["reason"], origin=origin,
+                                     era_start=_opt(rec, "era_start"),
+                                     pattern=_check_enum(origin, "pattern", rec.get("pattern") or "annual",
+                                                         BLANK_ZERO_PATTERNS))
             )
 
     if "INTERMEDIATE" in sections:

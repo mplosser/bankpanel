@@ -114,6 +114,14 @@ applied to guess further.
 About 95 rows across the whole panel (mostly 1985-1988) have a reporting level that is
 neither 1 nor 2; their `form_type` is left null rather than guessed.
 
+**Before 1984 the reporting level code carries no information** (level 1 for 0-6 banks a
+quarter, against 140-200 banks reporting foreign-office items; from 1984Q1 the two line up).
+There `form_type` is 31 for a bank with foreign offices -- it reports any foreign-office
+(RCFN) item, or its consolidated total assets differ from its domestic total assets -- and
+41 otherwise (`form_type_source = pre1984_foreign_items`). The forms of the time were the
+FFIEC 010-014, not the 031-034, so 31/41 here means "with / without foreign offices", which
+is what the consolidated-vs-domestic rule needs (§13).
+
 ---
 
 ## 5. Year-to-date conversion has two failure modes, and they are reported
@@ -321,3 +329,51 @@ per Y-9C schedule recording the exceptions listed in [FR-Y-9C.md](FR-Y-9C.md) (t
 tier, the 2019Q4 burden relief, the predecessor memorandum) next to the corresponding
 Call Report note.
 
+
+---
+
+## 14. 1976-1984: a different reporting regime (from 1.6)
+
+The Call panel starts in 1976Q1 from 1.6. The Chicago Fed files for 1976-1984 are the same
+source as 1985-2010, but the reports behind them differ, and the first pass publishes only
+the item codes the later forms use. Read the period with these in mind; each point is
+measured and signed in the coverage ledger (`configs/call/coverage_expected.csv`).
+
+- **Income is semiannual through 1982.** Most banks filed the income report only in June and
+  December: the March and September files carry income for 1-3% of domestic banks, against
+  95-99% in June and December. From 1983 income is quarterly. Year-to-date values are
+  published as filed; the quarterly `q_` flows follow the general rule (§5) and are blank
+  wherever no clean one-quarter difference exists, which before 1983 is most banks. Nothing
+  is interpolated or spread across quarters.
+- **Dividends at mid-year** are carried for only 14-16% of domestic banks in 1980, 1981 and
+  1984Q1-Q3, against 95-97% in the other years; year-end values are complete.
+- **A family of forms, not the 031-034.** Before 1984 the Call Report was the FFIEC 010/012
+  (domestic condition), 014 (condition of banks with foreign offices) and 011/013 (income).
+  From 1978Q4 many items -- interest-bearing balances, other assets and liabilities,
+  acceptances, other borrowed money, total securities -- are collected on the 012 and 014 but
+  not the 010, so about 27% of domestic banks report them (reporters' median assets $83M
+  against $22M, with no clean size cutoff). Minority interest is not collected at all from
+  1978Q4 to 1983Q4. Everything returns for every bank with the 031-034 in 1984Q1; some items
+  then move to the larger banks' forms only (fiduciary income, the past-due lines, other
+  loans).
+- **Source-file gaps.** The 1976Q4 file has a smaller layout (about 1,000 columns, no
+  entity-type field, no foreign-office items): foreign deposits, total securities and large
+  time deposits are missing that quarter. The 1983Q2-Q4 files omit the same items and
+  deposits in foreign offices. Intangible assets are missing for most banks with foreign
+  offices in 1983Q4. Entity types for 1976Q4 are borrowed from 1977Q1 and 1976Q3 by RSSD ID
+  (see the data_call_report README).
+- **Consolidated means consolidated here too.** For the 140-200 banks with foreign offices,
+  a consolidated code the forms did not collect (MDRM: FFIEC 014 windows, e.g. consolidated
+  loans and interest-bearing balances only from 1978Q4) carries a copy of the domestic figure
+  in the source; it is discarded (about 39,700 cells), so those consolidated series are blank
+  for these banks where the item was not collected. The MDRM validity table includes the
+  pre-1984 forms, clipped at 1983Q4 because the FFIEC 014 number was later reused.
+- **Written zeros in 1984.** In the first year of the 031-034 forms the source writes 0 for
+  the end-of-period loan-loss allowance (RIAD3123) in quarters a bank did not report it,
+  while the balance-sheet reserve (RCFD3123) is non-zero; 684 such zeros are published blank
+  (`[BLANK_ANNUAL_ZEROS]`, annual and semiannual patterns). A scan of every column 1976-1985
+  for other not-collected zeros found none.
+- **Not yet mapped.** Pre-1984 item codes that differ from the later forms' codes are not
+  mapped to the published series, so coverage before 1984 is thinner than it could be. The
+  coverage findings in the ledger list where; Kashyap and Stein's splices (Prior work, in the
+  README) are the reference for a later mapping.

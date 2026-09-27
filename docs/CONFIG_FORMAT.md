@@ -121,13 +121,16 @@ Applied last, after coalesce and era-stitching, so it cannot mask a NaN those st
 
 ## `[BLANK_ANNUAL_ZEROS]`
 
-`column, era_end, reason`. The mirror image of `in_era_unless_reported`: a zero the source
+`column, era_end, reason` (+ optional `era_start`, `pattern`). The mirror image of `in_era_unless_reported`: a zero the source
 wrote for a quarter in which the bank was not asked. Up to `era_end`, where a bank-year's
 Q1-Q3 values hold no non-zero figure and its Q4 value is non-zero, the Q1-Q3 zeros are
 published blank. Applied by the year build before zero-fill and quarterization. Used for
 Schedule RC-T, collected at Q4 only from smaller trust departments, whose Q1-Q3 zeros the
 source wrote until 2005Q2 and leaves blank from 2005Q3 (docs/CAVEATS.md §11). `reason` is
-required: blanking a value the source wrote is a data-integrity decision.
+required: blanking a value the source wrote is a data-integrity decision. `pattern` is
+`annual` (default, as above) or `semiannual`: collected in June and December only, so a
+bank-year whose March and September hold no non-zero value while June and December both do
+has its March and September zeros published blank (the 1984 loan-loss allowance).
 `tools/raw_identity_check.py` accepts such a blank only where the bank's published Q4 value
 that year is non-zero.
 

@@ -37,7 +37,8 @@ import pandas as pd
 
 
 def blank_annual_zeros(
-    panel: pd.DataFrame, column: str, *, id_col: str, date_col: str, era_end: pd.Timestamp
+    panel: pd.DataFrame, column: str, *, id_col: str, date_col: str, era_end: pd.Timestamp,
+    era_start: pd.Timestamp | None = None, pattern: str = "annual",
 ) -> int:
     """The mirror image of the 2005Q3 zero-fill (``[BLANK_ANNUAL_ZEROS]``): up to ``era_end``
     the source wrote 0 in Q1-Q3 for a bank that files the item only at Q4. Where a bank-year's
@@ -50,9 +51,20 @@ def blank_annual_zeros(
     key = [panel[id_col], pd.Series(dates.year, index=panel.index)]
     v = panel[column]
     nonzero = v.fillna(0).ne(0)
-    early_nonzero = (nonzero & q.lt(4)).groupby(key).transform("any")
-    q4_nonzero = (nonzero & q.eq(4)).groupby(key).transform("any")
-    blank = v.eq(0) & q.lt(4) & ~early_nonzero & q4_nonzero & pd.Series(dates <= era_end, index=panel.index)
+    window = pd.Series(dates <= era_end, index=panel.index)
+    if era_start is not None:
+        window &= pd.Series(dates >= era_start, index=panel.index)
+    if pattern == "semiannual":
+        # collected in June and December only: Q1/Q3 hold no non-zero value, Q2 and Q4 both do
+        off = q.isin([1, 3])
+        off_nonzero = (nonzero & off).groupby(key).transform("any")
+        q2 = (nonzero & q.eq(2)).groupby(key).transform("any")
+        q4 = (nonzero & q.eq(4)).groupby(key).transform("any")
+        blank = v.eq(0) & off & ~off_nonzero & q2 & q4 & window
+    else:
+        early_nonzero = (nonzero & q.lt(4)).groupby(key).transform("any")
+        q4_nonzero = (nonzero & q.eq(4)).groupby(key).transform("any")
+        blank = v.eq(0) & q.lt(4) & ~early_nonzero & q4_nonzero & window
     if blank.any():
         panel.loc[blank, column] = float("nan")
     return int(blank.sum())

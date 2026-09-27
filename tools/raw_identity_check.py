@@ -44,7 +44,7 @@ def main() -> int:
     cs = ConfigSet.load(ROOT / CONFIG_DIRS[args.profile])
     profile = get_profile(args.profile)
     zero_filled = {r.column for r in cs.zero_fill}
-    blank_until = {r.column: pd.Timestamp(r.era_end) for r in cs.blank_annual_zeros}
+    blank_rules = cs.blank_annual_zeros
     withheld = cs.intermediate_columns()
     base = [v for v in cs.base if v.variable_name not in withheld]
     fallback_of = dict(profile.coalesce_rules)
@@ -71,6 +71,7 @@ def main() -> int:
         extra = [c for c in profile.source_columns if c in names]
         need = sorted({c for pair in codes.values() for c in pair if c} | set(twins.values()) | set(extra) | {profile.id_col})
         raw = pq.read_table(f, columns=need).to_pandas()
+        raw[profile.date_col] = period   # the form-type resolver's pre-1984 rule reads the period
         # the official consolidated-vs-domestic rule, re-derived here from the raw file so the check
         # stays independent of the builder: international banks get no domestic fill, and a code
         # outside its MDRM window that equals its twin is an upstream copy (blank)
@@ -81,13 +82,24 @@ def main() -> int:
         panel = dataset.to_table(columns=[profile.id_col] + [v.variable_name for v in base if v.variable_name in dataset.schema.names],
                                  filter=ds.field(profile.date_col) == period).to_pandas()
         m = panel.merge(raw, on=profile.id_col, how="left")
-        # [BLANK_ANNUAL_ZEROS]: a Q1-Q3 zero may be published blank when the bank's Q4 value
-        # that year is non-zero (read from the panel's own Q4, which that rule never touches)
-        q4 = None
-        if period.quarter < 4 and any(period <= e for e in blank_until.values()):
-            cols = [c for c in blank_until if c in dataset.schema.names]
-            q4 = dataset.to_table(columns=[profile.id_col, *cols], filter=ds.field(profile.date_col) == pd.Timestamp(f"{period.year}-12-31")).to_pandas()
-            q4 = m[[profile.id_col]].merge(q4, on=profile.id_col, how="left")
+        # [BLANK_ANNUAL_ZEROS]: a zero may be published blank in a quarter the rule's pattern says
+        # was not collected, when the bank's collected quarters that year are non-zero (read from
+        # the panel's own Q2/Q4, which that rule never touches)
+        def _q(month, cols, year=period.year, keys=m[[profile.id_col]]):
+            t = dataset.to_table(columns=[profile.id_col, *cols], filter=ds.field(profile.date_col) == pd.Timestamp(f"{year}-{month}")).to_pandas()
+            return keys.merge(t, on=profile.id_col, how="left")
+        live = [r for r in blank_rules if r.column in dataset.schema.names and period <= pd.Timestamp(r.era_end)
+                and (r.era_start is None or period >= pd.Timestamp(r.era_start))
+                and (period.quarter < 4 if r.pattern == "annual" else period.quarter in (1, 3))]
+        allowed_blank: dict[str, np.ndarray] = {}
+        if live:
+            cols = sorted({r.column for r in live})
+            q4, q2 = _q("12-31", cols), _q("06-30", cols)
+            for r in live:
+                ok = q4[r.column].fillna(0).ne(0).to_numpy().copy()
+                if r.pattern == "semiannual":
+                    ok &= q2[r.column].fillna(0).ne(0).to_numpy()
+                allowed_blank[r.column] = allowed_blank.get(r.column, np.zeros(len(m), bool)) | ok
         for v in base:
             n = v.variable_name
             if n not in m.columns:
@@ -110,8 +122,8 @@ def main() -> int:
             same = (got == expected) | (got.isna() & expected.isna())
             if n in zero_filled:
                 same |= got.eq(0) & expected.isna()
-            if q4 is not None and n in blank_until and period <= blank_until[n]:
-                same |= got.isna() & expected.eq(0) & q4[n].fillna(0).ne(0).to_numpy()
+            if n in allowed_blank:
+                same |= got.isna() & expected.eq(0) & allowed_blank[n]
             bad = int((~same).sum())
             if bad:
                 rows.append({"quarter": f.stem, "column": n, "code": primary or fb, "n_rows": len(m), "n_diff": bad,

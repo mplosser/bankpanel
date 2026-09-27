@@ -143,6 +143,14 @@ class BlankAnnualZerosRule:
     era_end: str
     reason: str
     origin: Origin
+    era_start: str | None = None
+    #: ``annual``: collected at Q4 only (Q1-Q3 zeros blanked when Q4 is non-zero).
+    #: ``semiannual``: collected in June and December only (Q1 and Q3 zeros blanked when Q2
+    #: and Q4 are both non-zero).
+    pattern: str = "annual"
+
+
+BLANK_ZERO_PATTERNS = frozenset({"annual", "semiannual"})
 
 
 @dataclass(frozen=True)

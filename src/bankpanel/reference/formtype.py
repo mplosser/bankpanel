@@ -1,4 +1,4 @@
-"""Which FFIEC form a bank filed, over the whole 1985-2025 panel.
+"""Which FFIEC form a bank filed, over the whole 1976-2026 panel.
 
 This matters far more than it looks. Since 2017 the *majority* of filers use the FFIEC
 051 short form, which (a) omits many items entirely and (b) collects hundreds of others
@@ -62,6 +62,20 @@ LEGACY_ENTITY_TYPE_COL = "RSSD9331"
 
 VALID_FORM_TYPES = (31, 41, 51)
 
+#: **Before 1984 the reporting level code carries no information** (level 1 for 0-6 banks a
+#: quarter, against 140-200 banks reporting foreign-office items; from 1984Q1 the two line
+#: up). So before 1984 a bank has foreign offices -- form 31 in the panel's terms -- when it
+#: reports ANY foreign-office (RCFN) item, or its consolidated total assets differ from its
+#: domestic total assets. Two signals because the files differ: 1983Q2-Q4 carry foreign-office
+#: items but not RCFN2200 (197 banks), and 1976Q4 carries no RCFN item at all but consolidated
+#: and domestic totals (133 banks differ). Where both exist, the asset test flags at most one
+#: bank a quarter without foreign items. About 10 foreign-office banks a quarter have equal
+#: totals; in 1976Q4 they are missed, and for them a domestic fill changes almost nothing.
+PRE1984_END = pd.Timestamp("1983-12-31")
+PRE1984_FOREIGN_ITEMS = ("RCFN2200", "RCFN2330", "RCFN2650", "RCFN3360", "RCFN6636",
+                         "RCFN1403", "RCFN1404", "RCFN1407", "RCFN2077", "RCFN2621")
+PRE1984_TOTAL_ASSETS = ("RCFD2170", "RCON2170")
+
 #: Identity columns to carry into the narrow header dataset, by era.
 CDR_HEADER_COLUMNS = (
     "FDIC CERTIFICATE NUMBER",
@@ -123,7 +137,14 @@ def resolver_source_columns() -> tuple[str, ...]:
     """What to read from a raw quarter: the header columns plus the foreign-office item the
     pre-2011 form rule needs. The latter is a balance-sheet value, not identity, so it is
     read for the resolver and kept out of the header dataset."""
-    return header_source_columns() + (LEGACY_FOREIGN_OFFICE_COL,)
+    return header_source_columns() + tuple(dict.fromkeys(
+        (LEGACY_FOREIGN_OFFICE_COL, *PRE1984_FOREIGN_ITEMS, *PRE1984_TOTAL_ASSETS)))
+
+
+def _is_pre1984(df: pd.DataFrame) -> bool:
+    if "REPORTING_PERIOD" not in df.columns or df.empty:
+        return False
+    return bool(pd.to_datetime(df["REPORTING_PERIOD"]).max() <= PRE1984_END)
 
 
 def resolve_form_type(df: pd.DataFrame) -> pd.DataFrame:
@@ -136,6 +157,13 @@ def resolve_form_type(df: pd.DataFrame) -> pd.DataFrame:
         raw = pd.to_numeric(df[CDR_FILING_TYPE_COL], errors="coerce")
         form_type = raw.where(raw.isin(VALID_FORM_TYPES))
         source = pd.Series(np.where(form_type.notna(), "cdr_field", "unknown"), index=df.index)
+    elif _is_pre1984(df):
+        foreign = df[[c for c in PRE1984_FOREIGN_ITEMS if c in df.columns]].notna().any(axis=1)
+        if all(c in df.columns for c in PRE1984_TOTAL_ASSETS):
+            cons, dom = (pd.to_numeric(df[c], errors="coerce") for c in PRE1984_TOTAL_ASSETS)
+            foreign |= cons.notna() & dom.notna() & cons.ne(dom)
+        form_type = pd.Series(np.where(foreign, 31.0, 41.0), index=df.index)
+        source = pd.Series("pre1984_foreign_items", index=df.index)
     elif LEGACY_REPORTING_LEVEL_COL in df.columns:
         level = pd.to_numeric(df[LEGACY_REPORTING_LEVEL_COL], errors="coerce")
         # 1 = consolidated incl. foreign offices -> form 031; 2 = domestic only -> 041.

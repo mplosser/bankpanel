@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.6.0 — 2026-09-27
+
+- **The Call panel starts in 1976Q1** (was 1985Q1): 1.96 million bank-quarters. The 1976-1984
+  Chicago Fed files are parsed by data_call_report (1976Q4, which has no entity-type field,
+  borrows it from 1977Q1/1976Q3 by RSSD ID). First pass: the existing item codes only; pre-1984
+  codes that differ are not yet mapped. 1985-2026 is identical to 1.5.0's build.
+- **Foreign offices before 1984**: the reporting level code carries no information then, so
+  `form_type` is 31 for a bank reporting any foreign-office item or whose consolidated and
+  domestic total assets differ (`form_type_source = pre1984_foreign_items`).
+- **The MDRM validity table includes the pre-1984 Call forms** (FFIEC 010-014), clipped at
+  1983Q4; nothing from 1984 on changes. About 39,700 pre-1984 consolidated values that copy
+  the domestic figure where the consolidated item was not collected are discarded.
+- **`[BLANK_ANNUAL_ZEROS]` gains optional `era_start` and `pattern`** (`annual` or
+  `semiannual`). Used for the 1984 loan-loss allowance: 684 written zeros in quarters the
+  bank did not report it are published blank.
+- **66 coverage ledger rows** for 1976-1984, grouped by event: the 1976Q4 and 1983Q2-Q4
+  source-file gaps, the 1978Q4 form revision, the 1984 introduction of the 031-034, mid-year
+  dividends in 1980-81, and single-item changes. docs/CAVEATS.md §14 describes the period; the
+  README flags semiannual income through 1982.
+- **Raw identity** re-derives the pre-1984 rule and both zero patterns: 0 differences on all
+  202 quarters (the check now passes the reporting date to the form-type resolver).
+
 ## 1.5.0 — 2026-09-27
 
 - **Annual filers' written zeros before 2005Q3 are published blank** (new config section

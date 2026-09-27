@@ -78,7 +78,9 @@ def build_year(
     # 2005Q3) are blanked first, so the column means the same thing on both sides of 2005Q3.
     for rule in cs.blank_annual_zeros:
         blank_annual_zeros(panel, rule.column, id_col=profile.id_col, date_col=profile.date_col,
-                           era_end=pd.Timestamp(rule.era_end))
+                           era_end=pd.Timestamp(rule.era_end),
+                           era_start=pd.Timestamp(rule.era_start) if rule.era_start else None,
+                           pattern=rule.pattern)
 
     # Zero-fill that needs the bank's whole year. Before quarterization, so that a resolved
     # year-to-date zero yields a zero flow rather than an unknown one.

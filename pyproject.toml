@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bankpanel"
-version = "1.5.0"
+version = "1.6.0"
 description = "Time-consistent panels from US bank regulatory reports (FFIEC Call Report and FR Y-9C)"
 readme = "README.md"
 requires-python = ">=3.10"

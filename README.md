@@ -8,8 +8,9 @@ regulatory data hard to use: MDRM codes that change when a definition changes,
 year-to-date income items that must be differenced, and a short form that most banks now
 file which omits some items entirely and collects others only twice a year.
 
-> **Status: v1.5.0.** Two panels: **`bankpanel_call`** (FFIEC 031/041/051, 1985Q1–2026Q2,
-> 1.43 million bank-quarters, ~1,210 columns) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
+> **Status: v1.6.0.** Two panels: **`bankpanel_call`** (Call Report, 1976Q1–2026Q2,
+> 1.96 million bank-quarters, ~1,210 columns; 1976–1984 carries a warning, see
+> [below](#read-this-before-using-the-data)) and **`bankpanel_y9c`** (FR Y-9C, 1986Q3–2026Q2,
 > 189 thousand holding-company-quarters, ~900 columns). Every published base column is
 > verified cell for cell against its raw MDRM code over every quarter, every coverage
 > discontinuity is explained in a signed ledger, and derived columns are constructed to
@@ -57,9 +58,11 @@ Kashyap and Stein's notes on forming consistent Call Report time series
 the data appendix to Kashyap, A. K., and J. C. Stein (2000), "What Do a Million Observations
 on Banks Say About the Transmission of Monetary Policy?", *American Economic Review* 90(3),
 407–428 (NBER Working Paper 6056, 1997), document splices for about 35 core series across the
-1976–1984 form revisions. bankpanel is consistent with their choices where the two overlap
-(1985 onward), publishes their core totals (`configs/call/core_series.csv`), and extends the
-approach to the full Call Report and FR Y-9C through the present.
+1976–1984 form revisions. bankpanel is consistent with their choices from 1985 on, publishes their core totals
+(`configs/call/core_series.csv`), and extends the approach to the full Call Report and FR Y-9C
+through the present. From 1.6 the Call panel starts in 1976, but 1976–1984 carries only the
+item codes the later forms use: their pre-1984 splices are not yet applied (see
+[docs/CAVEATS.md §14](docs/CAVEATS.md)).
 
 ## Install
 
@@ -166,7 +169,7 @@ git clone https://github.com/mplosser/bankpanel && cd bankpanel
 pip install -e ".[dev,examples]"
 bankpanel lint && pytest -q                       # configs and engine, no data needed
 
-# 3. the Call Report panel (1.4 million rows x ~1,180 columns; ~1.1 GB on disk)
+# 3. the Call Report panel (2.0 million rows x ~1,210 columns; ~1.3 GB on disk)
 bankpanel build --raw-dir ../data_call_report/data/processed/FFIEC_031_041 --out panel_root --jobs 8
 bankpanel expectations build --panel-root panel_root
 bankpanel validate all --panel-root panel_root --save
@@ -267,6 +270,18 @@ cleaning decision is reproducible and reviewable rather than baked in. See
   Q2 and Q4. A quarterly average over 2017+ that ignores this is a 041-only sample.
 - The upstream source changes provider at 2010Q4→2011Q1, and some legacy items disappear
   there for reasons that are about the source, not about the form.
+- **1976–1984 is a different reporting regime** ([docs/CAVEATS.md §14](docs/CAVEATS.md)):
+  - **Income is semiannual through 1982.** Most banks report income only in June and
+    December; the March and September reports cover 1–3% of banks. So `ytd_` values are as
+    filed and the quarterly `q_` flows are blank for most banks until 1983. Nothing is
+    interpolated or spread.
+  - **Many items are collected only from larger banks** from 1978Q4 to 1983Q4 (the FFIEC
+    010/012/014 forms), and 1976Q4 and 1983Q2–Q4 have source-file gaps.
+  - **Consolidated series for the ~150–200 banks with foreign offices are blank where the
+    consolidated item was not collected** (for example loans before 1978Q4); the domestic
+    figure is not substituted.
+  - Only item codes the later forms use are published; pre-1984 codes that differ are not
+    yet mapped. Coverage is therefore thinner than from 1985 on.
 - Values are thousands of USD. The panel is by filer RSSD, with no merger or
   survivorship adjustment.
 
@@ -289,7 +304,8 @@ cleaning decision is reproducible and reviewable rather than baked in. See
 | 1.3 | Core totals from the Kashyap–Stein notes (liabilities, deposits, net income, gross and consumer loans, securities, interest on deposits, operating income and expense) — **done** |
 | 1.4 | Consolidated means consolidated: the official RCFD-vs-RCON rule, driven by an MDRM validity table and checked every build (`validate scope`, [docs/VALIDATION.md §5](docs/VALIDATION.md)) — **done** |
 | 1.5 | Annual filers' written zeros before 2005Q3 published blank (Schedule RC-T), after a scan of every column — **done** |
-| 1.6 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
+| 1.6 | Call Report back to 1976Q1 (existing item codes; pre-1984 foreign-office rule, form family, source gaps and 1984 written zeros documented and signed) — **done** |
+| 1.7 | FR Y-9C items before 1990 whose codes differ from the Call Report's; Schedule HC/HI notes (see [docs/CAVEATS.md §12](docs/CAVEATS.md)) |
 
 ## License
 

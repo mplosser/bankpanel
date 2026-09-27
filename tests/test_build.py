@@ -366,6 +366,43 @@ def test_unfinished_year_keeps_blanks_of_last_years_late_reporters(tmp_path):
     assert got[4] == [3.0, 5.0]
 
 
+def test_blank_semiannual_zeros_within_era():
+    from bankpanel.build.zerofill import blank_annual_zeros
+
+    q = [pd.Timestamp(f"1984-{m}") for m in ("03-31", "06-30", "09-30", "12-31")]
+    rows = []
+    for bank, vals in [(1, [0.0, 5.0, 0.0, 6.0]),   # June/December only: March and September zeros blank
+                       (2, [0.0, 5.0, 0.0, 0.0]),   # December zero: not the pattern, untouched
+                       (3, [4.0, 5.0, 0.0, 6.0])]:  # reports March: its September zero is a zero
+        rows += [{"RSSD_ID": bank, "REPORTING_PERIOD": d, "x": v} for d, v in zip(q, vals, strict=True)]
+    df = pd.DataFrame(rows)
+    n = blank_annual_zeros(df, "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD", era_end=pd.Timestamp("1984-12-31"),
+                           era_start=pd.Timestamp("1984-03-31"), pattern="semiannual")
+    got = {b: g.x.tolist() for b, g in df.groupby("RSSD_ID")}
+    assert np.isnan(got[1][0]) and np.isnan(got[1][2]) and got[1][1::2] == [5.0, 6.0]
+    assert got[2] == [0.0, 5.0, 0.0, 0.0] and got[3] == [4.0, 5.0, 0.0, 6.0]
+    assert n == 2
+    assert blank_annual_zeros(df.assign(x=[0.0, 5.0, 0.0, 6.0] * 3), "x", id_col="RSSD_ID", date_col="REPORTING_PERIOD",
+                              era_end=pd.Timestamp("1983-12-31"), pattern="semiannual") == 0   # outside the era
+
+
+def test_pre1984_form_type_from_foreign_items_or_differing_totals():
+    from bankpanel.reference.formtype import resolve_form_type
+
+    raw = pd.DataFrame({
+        "REPORTING_PERIOD": pd.Timestamp("1983-06-30"),
+        "CALL8786": [2.0, 2.0, 2.0, 2.0],                       # level code: no information pre-1984
+        "RCFN2330": [5.0, np.nan, np.nan, np.nan],              # a foreign-office item
+        "RCFD2170": [100.0, 120.0, 90.0, np.nan],
+        "RCON2170": [80.0, 100.0, 90.0, 50.0],                  # bank 2 differs: consolidated != domestic
+    })
+    out = resolve_form_type(raw)
+    assert out.form_type.tolist() == [31, 31, 41, 41]
+    assert set(out.form_type_source) == {"pre1984_foreign_items"}
+    later = raw.assign(REPORTING_PERIOD=pd.Timestamp("1985-06-30"))
+    assert resolve_form_type(later).form_type.tolist() == [41, 41, 41, 41]   # level code rules from 1984
+
+
 def test_blank_annual_zeros_only_for_q4_only_filers_up_to_era_end():
     from bankpanel.build.zerofill import blank_annual_zeros
 
