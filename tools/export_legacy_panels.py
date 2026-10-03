@@ -58,6 +58,9 @@ PASSTHROUGH = {
         "ln_consumer_oth",          # p1/a1 cons_share (consistent 1984-present)
         "ln_revolving_oth",         # B539, 2001-; kept next to the two above for audit
     ],
+    "liabilities": [
+        "pref_stock",               # RCFD3838, 1990-; a3 TCE / MATCE subtract it (STATA a3_combine_v2.do:91-94)
+    ],
 }
 
 
@@ -74,7 +77,7 @@ def to_legacy(name: str, renamed: dict[str, str]) -> str:
     return renamed.get(name, name)
 
 
-def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
+def export(panel_root: Path, legacy_dir: Path, out: Path, start: str | None = None) -> None:
     out.mkdir(parents=True, exist_ok=True)
     dataset = ds.dataset(panel_root / "panel", partitioning="hive")
     renamed = legacy_map()
@@ -95,7 +98,10 @@ def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
         # held once; the sort is an index permutation and rows are written in slices.
         import pyarrow.compute as pc
 
-        table = dataset.to_table(columns=KEYS + [ours_by_legacy[c] for c in have] + extra)
+        flt = None
+        if start:   # e.g. BEC's panels begin 1985Q1 even though the build runs from 1976
+            flt = ds.field("REPORTING_PERIOD") >= pa.scalar(pd.Timestamp(start).to_pydatetime(), pa.timestamp("us"))
+        table = dataset.to_table(columns=KEYS + [ours_by_legacy[c] for c in have] + extra, filter=flt)
         table = table.rename_columns([{**{ours_by_legacy[c]: c for c in have}}.get(n, n) for n in table.column_names])
         have = have + extra   # the passthrough columns keep their own names
         order = pc.sort_indices(table.select(KEYS), sort_keys=[(k, "ascending") for k in KEYS])
@@ -104,8 +110,8 @@ def export(panel_root: Path, legacy_dir: Path, out: Path) -> None:
             fields.append(pa.field(c, pa.large_string() if c in BOOLEAN_TEXT else pa.float64()))
         schema = pa.schema(fields)
         with pq.ParquetWriter(out / f"{name}.parquet", schema, compression="snappy") as writer:
-            for start in range(0, len(order), 200_000):
-                chunk = table.take(order.slice(start, 200_000)).select([f.name for f in fields])
+            for row0 in range(0, len(order), 200_000):
+                chunk = table.take(order.slice(row0, 200_000)).select([f.name for f in fields])
                 cols = []
                 for f in fields:
                     col = chunk[f.name]
@@ -132,5 +138,6 @@ if __name__ == "__main__":
         "--legacy-dir",
         default=os.environ.get("BANKPANEL_LEGACY_PANELS", "../bec_migration/data/call_reports/panels"),
     )
+    ap.add_argument("--start", default=None, help="first REPORTING_PERIOD to export (YYYY-MM-DD)")
     args = ap.parse_args()
-    export(Path(args.panel_root), Path(args.legacy_dir), Path(args.out))
+    export(Path(args.panel_root), Path(args.legacy_dir), Path(args.out), args.start)

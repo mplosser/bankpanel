@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0 — 2026-10-03
+
+- **`pref_stock`**: perpetual preferred stock and related surplus (RC item 23, RCFD/RCON 3838),
+  1990Q1 onward, under the consolidated-vs-domestic rule. Needed for tangible common equity
+  (equity − intangibles − preferred). The earlier "preferred stock; total" (3220, 1969–1996) is
+  par value only and includes limited-life preferred, a different concept, so it is not spliced
+  in. Coverage 0 new / 0 stale; raw identity 0 differences (173,114 column-quarters, +202 for the
+  new column); quality checks identical to 1.7.
+- `tools/export_legacy_panels.py`: `--start` limits the export to quarters from a date (BEC's
+  panels begin 1985Q1); `pref_stock` is passed through on the liabilities file; fixed a loop
+  variable that shadowed the start date for the second and later files.
+
 ## 1.7.0 — 2026-09-27
 
 - **Same-concept links across the 1984 revision.** Each of the 67 series filed from 1984 but
